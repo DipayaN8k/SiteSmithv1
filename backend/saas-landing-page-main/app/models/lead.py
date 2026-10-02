@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Index, String, UniqueConstraint, func
+from sqlalchemy import Boolean, DateTime, ForeignKey, Index, String, Text, UniqueConstraint, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, utcnow
@@ -16,6 +16,9 @@ class Lead(Base):
     phone: Mapped[str | None] = mapped_column(String(30))
     business_type: Mapped[str] = mapped_column(String(50))
     business_type_other: Mapped[str | None] = mapped_column(String(200))
+    project_type: Mapped[str | None] = mapped_column(String(100))
+    budget: Mapped[str | None] = mapped_column(String(100))
+    message: Mapped[str | None] = mapped_column(Text)
     assigned_to: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
     consent: Mapped[bool] = mapped_column(Boolean)
     created_at: Mapped[datetime] = mapped_column(

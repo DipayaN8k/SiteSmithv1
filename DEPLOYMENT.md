@@ -62,6 +62,7 @@ If the provider requires TLS, append `?sslmode=require`. Confirm automatic backu
 | `CORS_ORIGINS` | `https://yourcompany.com,https://admin.yourcompany.com` (exact origins, `https`, no trailing slash, no paths) |
 | `FORWARDED_ALLOW_IPS` | ⚠️ `*` on a managed host. See 3.4 |
 | `CONTACT_RATE_LIMIT` / `LOGIN_RATE_LIMIT` | optional, defaults `5/hour` and `10/minute` |
+| `EMAIL_CHECK_DELIVERABILITY` | optional, default `true`. The contact form looks up the email's domain in DNS and rejects domains that cannot receive mail. Lookup failures are let through. Set `false` only if the host blocks outbound DNS |
 
 Never commit `.env`. The local `.env` and `dev.db` in the backend folder are for development only and
 are git-ignored.
@@ -122,8 +123,14 @@ only. Do not reuse it, do not commit it, and delete the file when no longer need
 
 - The backend sends **no email of any kind**. New requests are visible only in the dashboard, so
   someone must check it (see 8.2).
-- It stores only: name, email, phone, business type (+ "other" text), consent. See 8.1 for the fields
-  the website sends but the backend drops.
+- It stores everything the form collects: name, email, phone, business type (+ "other" text), project
+  type, budget, message and consent. The first deploy of this version needs the `0002` migration (the start
+  command applies it, see 3.3).
+- The contact form rejects emails whose domain doesn't exist (DNS lookup) and a list of known typo
+  domains (`gamil.com` and similar, in `app/schemas/contact.py`).
+- Team members can **delete a lead** (permanently: its stages, comments, requirements and activity) and
+  keep a per-stage **client requirements** checklist (backend / frontend / deployment) on each lead.
+  There are no roles yet: every team account can delete.
 - Security headers (HSTS, nosniff, frame deny, no-store) are set by the app; it also strips HTML from input.
 - Logs go to stdout (`app.audit` logger records account changes). Collect them via the host.
 
@@ -175,24 +182,20 @@ Use `https://` everywhere: the backend sends HSTS, and browsers block mixed cont
 After the three URLs exist, set the backend's `CORS_ORIGINS` to exactly
 `https://yourcompany.com,https://admin.yourcompany.com` (add `https://www.yourcompany.com` if you serve
 www directly) and restart it. A missing origin shows up as a CORS error in the browser console and a
-form/login that "does nothing". Only `GET`, `POST` and `PATCH` are allowed by the backend.
+form/login that "does nothing". Only `GET`, `POST`, `PATCH` and `DELETE` are allowed by the backend.
 
 ## 8. Before launch
 
-### 8.1 Open decision: data the website collects but the backend drops
+### 8.1 Project details are stored
 
-The form sends `project_type`, `budget` and `message`, but the backend has no
-columns for them and ignores unknown fields. Today only name, email, phone, business type and consent
-are stored. Decide with the backend team: add the fields (needs a model change, an Alembic migration,
-schema + dashboard display) or remove the questions from the form
-(`frontend/src/components/StartWizard.tsx`). Nothing is wrong on the frontend side once they exist; it
-already sends them.
+`project_type`, `budget` and `message` are now stored on the lead and shown in the dashboard (migration
+`0002`). Leads received before that migration have these fields empty.
 
 ### 8.1b "See your website" previews
 
 The preview library lives in `frontend/src/lib/previews.ts` (copy + colours per business type, three layouts).
 It is frontend-only today: nothing is stored when a visitor uses it. When a visitor books from a preview, the
-chosen design is written into the form's `message`, so it only reaches the team once the backend stores
+chosen design is written into the form's `message`, so it reaches the team through the stored
 `message` (see 8.1). Moving the library to the backend later means a read-only endpoint returning the same shape.
 
 ### 8.2 Someone has to watch the dashboard
@@ -237,8 +240,7 @@ Replace the URLs. All should pass before announcing the site.
    (e.g. "DEPLOY TEST"). Expect the success screen.
 4. **It reached the database:** sign in at `https://admin.yourcompany.com`, confirm the lead is in
    **Leads**, open it, move Backend to In progress, add a comment, then see all three in **Activity**.
-   Then clean up: the dashboard cannot delete, so ask the backend owner to remove the test row, or
-   mark it clearly and ignore it.
+   Then clean up: delete the test lead with the dashboard's **Delete this request** button.
 5. **Rate limit is per visitor (⚠️ 3.4):** from two different networks (e.g. laptop and phone data),
    submit the form. Both must succeed. Then check that one network gets "Too many submissions" on the
    6th try while the other still works. If the second network is blocked too, `FORWARDED_ALLOW_IPS` is not set.

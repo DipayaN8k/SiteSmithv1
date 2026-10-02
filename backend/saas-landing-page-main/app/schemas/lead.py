@@ -3,7 +3,7 @@ from typing import Self
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-from app.core.constants import STAGE_STATUSES
+from app.core.constants import STAGE_STATUSES, STAGES
 from app.core.sanitize import strip_html
 
 
@@ -22,6 +22,9 @@ class LeadSummary(BaseModel):
     phone: str | None
     business_type: str
     business_type_other: str | None
+    project_type: str | None
+    budget: str | None
+    message: str | None
     assigned_to: int | None
     assigned_to_name: str | None
     consent: bool
@@ -55,9 +58,22 @@ class ActivityOut(BaseModel):
     created_at: datetime
 
 
+class RequirementOut(BaseModel):
+    id: int
+    lead_id: int
+    stage: str
+    text: str
+    done: bool
+    created_by_name: str
+    done_by_name: str | None
+    done_at: datetime | None
+    created_at: datetime
+
+
 class LeadDetail(LeadSummary):
     comments: list[CommentOut]
     activity: list[ActivityOut]
+    requirements: list[RequirementOut]
 
 
 class LeadList(BaseModel):
@@ -99,6 +115,39 @@ class StageUpdate(BaseModel):
 class MutationOut(BaseModel):
     lead: LeadSummary
     warnings: list[str]
+
+
+class RequirementIn(BaseModel):
+    stage: str
+    text: str = Field(min_length=1, max_length=1000)
+
+    @field_validator("stage")
+    @classmethod
+    def _check_stage(cls, v: str) -> str:
+        if v not in STAGES:
+            raise ValueError(f"stage must be one of: {', '.join(STAGES)}")
+        return v
+
+    @field_validator("text", mode="before")
+    @classmethod
+    def _clean_text(cls, v):
+        return strip_html(v, multiline=True) if isinstance(v, str) else v
+
+
+class RequirementUpdate(BaseModel):
+    text: str | None = Field(default=None, min_length=1, max_length=1000)
+    done: bool | None = None
+
+    @field_validator("text", mode="before")
+    @classmethod
+    def _clean_text(cls, v):
+        return strip_html(v, multiline=True) if isinstance(v, str) else v
+
+    @model_validator(mode="after")
+    def _need_something(self) -> Self:
+        if self.text is None and self.done is None:
+            raise ValueError("Provide text and/or done")
+        return self
 
 
 class CommentIn(BaseModel):

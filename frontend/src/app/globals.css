@@ -364,6 +364,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .field input, .field textarea { width: 100%; font: inherit; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-s); background: var(--surface); }
 .field input:focus, .field textarea:focus { outline: none; border-color: var(--purple); box-shadow: 0 0 0 4px rgba(150, 47, 191, 0.15); }
 .field__err { color: var(--err); font-size: var(--step--1); margin-top: 4px; }
+.field__hint { font-size: var(--step--1); margin-top: 4px; }
+.field__hint .link { background: none; border: 0; padding: 0; font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; color: inherit; }
 .wizard__nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 32px; }
 .done h2 { font-size: var(--step-3); }
 .done__icon { width: 64px; height: 64px; border-radius: 20px; background: var(--grad); color: #fff; display: grid; place-items: center; margin-bottom: 20px; }
