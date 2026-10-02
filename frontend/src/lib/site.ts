@@ -1,7 +1,7 @@
 // Single source of truth for brand + copy. Change the name here and it updates everywhere.
 export const brand = {
   name: "Sitesmith", // placeholder until the team finalises the name
-  tagline: "AI can make a website. We make yours.",
+  tagline: "More customers. Not more templates.",
   email: "hello@sitesmith.studio",
   whatsapp: "+91 90000 00000",
   instagram: "@sitesmith.studio",
@@ -11,6 +11,7 @@ export const brand = {
 export const nav = [
   { href: "/", label: "Home" },
   { href: "/#services", label: "Services" },
+  { href: "/preview", label: "See your website first" },
   { href: "/work", label: "Work" },
   { href: "/why-us", label: "Why us" },
   { href: "/about", label: "About" },
@@ -24,9 +25,9 @@ export const navMore = [
 
 // Hero hook. Positioning: hand-coded by engineers, AI used as a tool — never a generated template.
 export const hero = {
-  line1: "AI can make a website.",
-  line2: "We make yours.",
-  sub: "Built by humans. Sharpened by AI. Our engineers hand-code every site around your business — no templates, no prompt-and-pray.",
+  line1: "More customers.",
+  line2: "Not more templates.",
+  sub: "Look as good online as you are in person. Our engineers design and build every site around your business, using AI to move faster, never to cut corners. Live in a week.",
 };
 
 // Draggable story-bubble stickers around the hero builder (percent of the hero box).
@@ -84,7 +85,7 @@ export const services = [
     tone: "bloom",
     title: "Online stores",
     line: "Stop taking orders in DMs.",
-    points: ["Payments + shipping", "Product catalogue", "WhatsApp order alerts"],
+    points: ["Mobile-first storefront", "Product catalogue", "WhatsApp order alerts"],
   },
   {
     tone: "dusk",
@@ -103,29 +104,17 @@ export type Project = {
   headline: string;
 };
 
-// Placeholder projects until real portfolio screenshots are ready.
+// Placeholder projects until real client work (with testimonials) is ready. Keep this list short.
 export const projects: Project[] = [
   { slug: "trailpeak", name: "Trailpeak Treks", kind: "Travel website", result: "3× more enquiries", palette: ["#1d3b5c", "#e9f0f6", "#ffb703"], headline: "Walk where the map ends." },
   { slug: "clayhouse", name: "Clayhouse", kind: "E-commerce", result: "₹4.2L in month one", palette: ["#5a2e1f", "#f4e6d8", "#d77a3d"], headline: "Handmade, slowly." },
-  { slug: "tinytales", name: "Tiny Tales Toys", kind: "E-commerce", result: "41% repeat buyers", palette: ["#2b6e4f", "#fdf6e3", "#f25c54"], headline: "Toys that outlive trends." },
-  { slug: "goldleaf", name: "Goldleaf Jewellers", kind: "Catalogue site", result: "2× walk-ins", palette: ["#1c1c1c", "#f7f0e1", "#c9a227"], headline: "Gold, the honest way." },
-  { slug: "fitfuel", name: "FitFuel Kitchen", kind: "Landing page", result: "18% conversion", palette: ["#0f3d2e", "#eef7ee", "#ff6b35"], headline: "Meals that keep up." },
-  { slug: "lexcounsel", name: "Lex Counsel", kind: "Business website", result: "Page 1 on Google", palette: ["#1b2a4a", "#f2f2ef", "#8c6d3f"], headline: "Advice you can act on." },
-];
-
-// Placeholder numbers — replace with real ones before launch.
-export const stats = [
-  { value: 48, suffix: "+", label: "sites launched" },
-  { value: 32, suffix: "+", label: "happy clients" },
-  { value: 7, suffix: "", label: "days to launch, on average" },
-  { value: 24, suffix: "h", label: "max reply time" },
 ];
 
 export const steps = [
   { title: "Say hi", body: "Message us or fill the 3-question form. We call you within a day." },
   { title: "See it first", body: "You get a design to approve before a single line of code is written." },
   { title: "Watch it build", body: "A live preview link updates as we go. Comment on anything." },
-  { title: "Go live", body: "Domain, hosting, SEO and analytics set up. We stay on for support." },
+  { title: "Go live", body: "Domain and hosting set up, your site goes live. SEO and analytics follow in steps as it grows." },
 ];
 
 export const faqs = [
@@ -136,14 +125,13 @@ export const faqs = [
   { q: "What if I don't like the design?", a: "You approve the design before we build, and revisions are part of the process." },
 ];
 
-// Site background. "night" is the chosen look; "lavender" and "white" also exist in globals.css.
-export const DEFAULT_THEME: "night" | "lavender" | "white" = "night";
+// Visitor-selectable backgrounds (theme button in the nav). Night is the default; colours live in globals.css.
+export const THEMES = [
+  { id: "night", label: "Night", mode: "Dark", swatch: "#120a1a" },
+  { id: "cream", label: "Cream", mode: "Light", swatch: "#faf3e5" },
+  { id: "lavender", label: "Lavender", mode: "Light", swatch: "#f3ecfb" },
+] as const;
+export type Theme = (typeof THEMES)[number]["id"];
+export const DEFAULT_THEME: Theme = "night";
+export const THEME_KEY = "site-theme-v1";
 
-// The flywheel: sparks hidden across the site. Finding all of them unlocks the perk.
-export const SPARK_IDS = ["hero", "scratch", "work", "process", "footer"] as const;
-export type SparkId = (typeof SPARK_IDS)[number];
-export const perk = {
-  title: "You found every spark",
-  body: "Free logo refresh + one month of priority support with your project.",
-  code: "SPARK5",
-};

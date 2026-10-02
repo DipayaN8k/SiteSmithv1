@@ -1,6 +1,6 @@
 # Agency website — frontend
 
-Next.js 16 (App Router) + TypeScript + plain CSS. Fonts: Bricolage Grotesque (display) + Instrument Sans (body) + Geist Mono (accent only: labels, nav, captions, code). Palette: Instagram gradient on a Night (deep purple-black) background — `DEFAULT_THEME` in `site.ts`. Positioning: "AI can make a website. We make yours." — hand-coded by engineers, AI used as a tool. No backend integration yet; all API calls are mocked.
+Next.js 16 (App Router) + TypeScript + plain CSS. Fonts: Bricolage Grotesque (display) + Instrument Sans (body) + Geist Mono (accent only: labels, nav, captions, code). Palette: Instagram gradient with a background picker in the top bar (Night by default, plus Cream, Lavender) — `THEMES` / `DEFAULT_THEME` in `site.ts`. Positioning: "More customers. Not more templates." — hand-coded by engineers (AI only as a tool, never leading the message). The "Book a project" form posts to the backend (see "Backend integration" below); with no `NEXT_PUBLIC_API_URL` set it falls back to a mock.
 
 ## Run
 
@@ -15,29 +15,27 @@ npm run build   # production build
 | What | File |
 | --- | --- |
 | Brand name, copy, services, projects, prices, FAQs | `src/lib/site.ts` |
-| All backend calls (currently mocked) | `src/lib/api.ts` |
+| All backend calls (real API; mock only if `NEXT_PUBLIC_API_URL` is empty) | `src/lib/api.ts` |
 | Design tokens (colors, type, spacing) | `src/app/globals.css` (`:root`) |
 | Hero hand-coding editor (code types itself, site builds line by line) | `src/components/HandCoded.tsx` |
 | Scratch ticket (3D tilt, coin teaser, reveals at 20%) | `src/components/ScratchServices.tsx` |
-| Spark hunt (hidden collectibles → perk) | `src/components/Sparks.tsx` |
 | Start-a-project wizard | `src/components/StartWizard.tsx` |
 
 ## Pages
 
-- `/` — hero with hand-coding editor, scratch ticket (services), work, stats, process, FAQ, contact CTA
+- `/` — hero with hand-coding editor, scratch ticket (services), work, process, FAQ, contact CTA
+- `/preview` — **"See your website" (main USP):** business name + type (+ what they do) → 3 ready-made designs (Bold, Clean, Editorial) with their name in, desktop/mobile toggle, "book it" pre-fills the booking form. Designs library: `src/lib/previews.ts` (8 categories incl. a generic "Something else"). Home page has a teaser that hands the typed name to /preview.
 - `/why-us` — "Not prompted. Engineered." comparison + process
 - `/work` — filterable project grid
 - `/about` — studio + team
-- `/start` — 3-question wizard (project type, business type, budget + timing) + contact form with consent and honeypot. Accepts `?plan=` and `?perk=`
+- `/start` — 3-question wizard (project type, business type, budget + timing) + contact form with consent and honeypot. Pre-filled when the visitor comes from a /preview design
 - `/privacy` — draft privacy policy (linked from the consent checkbox; needs legal review)
 
-## The flywheel
+## How visitors are pulled in
 
-1. **Hook** — the hero editor shows a site being hand-coded line by line; the scratch card hides the services; draggable stickers.
-2. **Explore** — 5 sparks are hidden across the site (hero, scratch card, work, process, footer). A counter appears after the first one.
-3. **Reward** — finding all 5 unlocks a perk code.
-4. **Convert** — "Claim with a project" opens the wizard with the perk code attached.
-5. **Share** — "Dare a friend to beat it" shares the site with the visitor's spark-hunt time.
+1. **Hook** — the hero code editor builds a site line by line; the scratch ticket hides the services.
+2. **See it** — "See your website first" (/preview) shows three designs with the visitor's own business name.
+3. **Convert** — "I like this one — book it" opens the booking form with business type and chosen design pre-filled.
 
 ## Backend integration (done)
 
@@ -60,12 +58,11 @@ cd frontend && npm install && npm run dev
 
 Before production: set the backend's `CORS_ORIGINS` to the live site address and `NEXT_PUBLIC_API_URL` to the live API address.
 
-**Open question for the backend team:** `project_type`, `budget`, `timeline`, `message` and `perk_code` are sent but the backend has no fields for them yet, so it ignores them. Only name, email, phone, business type and consent are stored today.
+**Open question for the backend team:** `project_type`, `budget` and `message` are sent but the backend has no fields for them yet, so it ignores them. Only name, email, phone, business type and consent are stored today.
 
 ## Placeholder content to replace before launch
 
 - Brand name "Sitesmith", email, WhatsApp, Instagram, city
 - Project names, results and the illustrated mockups (swap for real screenshots)
-- Stats, team names and initials
+- Team names and initials
 - Testimonials and pricing were removed on purpose until real ones exist
-- Perk offer (`perk` in `site.ts`)

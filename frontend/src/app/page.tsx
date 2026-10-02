@@ -1,6 +1,6 @@
 import { Hero } from "@/components/Hero";
 import { ScratchServices } from "@/components/ScratchServices";
-import { Stats } from "@/components/Stats";
+import { PreviewTeaser } from "@/components/PreviewTeaser";
 import { Faq, FinalCta, Process, Work } from "@/components/Sections";
 
 export default function Home() {
@@ -8,8 +8,8 @@ export default function Home() {
     <>
       <Hero />
       <ScratchServices />
+      <PreviewTeaser />
       <Work />
-      <Stats />
       <Process />
       <Faq />
       <FinalCta />

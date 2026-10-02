@@ -2,10 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { services } from "@/lib/site";
-import { useSparks } from "./Sparks";
 
 // Reveal after 20% is scratched — enough to feel the scratch, short enough that nobody gives up.
 const REVEAL_AT = 0.2;
+// Fixed ticket number on the stub. 999 = charm number: reads as "under a thousand", feels lucky and rare.
+const TICKET_NO = "No. 999";
 const BRUSH = (w: number) => Math.max(56, w / 16);
 
 // A holographic lottery ticket: foil gradient, light bands, faint "?" pattern, a stub with a ticket number.
@@ -73,7 +74,7 @@ function paintCover(canvas: HTMLCanvasElement) {
     ctx.rotate(-Math.PI / 2);
     ctx.fillStyle = "rgba(255,255,255,0.92)";
     ctx.font = `600 18px ${mono}, monospace`;
-    ctx.fillText("No. 0024", 0, -10);
+    ctx.fillText(TICKET_NO, 0, -10);
     ctx.font = `500 11px ${mono}, monospace`;
     ctx.fillStyle = "rgba(255,255,255,0.7)";
     ctx.fillText("ONE CARD PER VISITOR", 0, 12);
@@ -150,7 +151,6 @@ export function ScratchServices() {
   const [pct, setPct] = useState(0);
   const [done, setDone] = useState(false);
   const [scratching, setScratching] = useState(false);
-  const { find } = useSparks();
 
   useEffect(() => {
     const c = canvasRef.current;
@@ -166,8 +166,7 @@ export function ScratchServices() {
   const reveal = useCallback(() => {
     setDone(true);
     setPct(1);
-    find("scratch");
-  }, [find]);
+  }, []);
 
   const measure = () => {
     const c = canvasRef.current!;

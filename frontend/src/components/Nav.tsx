@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { nav } from "@/lib/site";
 import { Logo } from "./Logo";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Nav() {
   const [open, setOpen] = useState(false);
@@ -14,6 +15,7 @@ export function Nav() {
         <nav className="nav__links" aria-label="Main">
           {nav.map((n) => <Link key={n.href} href={n.href}>{n.label}</Link>)}
         </nav>
+        <ThemeToggle />
         <button className="nav__burger" aria-label="Menu" aria-expanded={open} onClick={() => setOpen(!open)}>
           <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true">
             {open

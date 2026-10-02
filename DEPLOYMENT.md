@@ -181,12 +181,19 @@ form/login that "does nothing". Only `GET`, `POST` and `PATCH` are allowed by th
 
 ### 8.1 Open decision: data the website collects but the backend drops
 
-The form sends `project_type`, `budget`, `timeline`, `message` and `perk_code`, but the backend has no
+The form sends `project_type`, `budget` and `message`, but the backend has no
 columns for them and ignores unknown fields. Today only name, email, phone, business type and consent
 are stored. Decide with the backend team: add the fields (needs a model change, an Alembic migration,
 schema + dashboard display) or remove the questions from the form
 (`frontend/src/components/StartWizard.tsx`). Nothing is wrong on the frontend side once they exist; it
 already sends them.
+
+### 8.1b "See your website" previews
+
+The preview library lives in `frontend/src/lib/previews.ts` (copy + colours per business type, three layouts).
+It is frontend-only today: nothing is stored when a visitor uses it. When a visitor books from a preview, the
+chosen design is written into the form's `message`, so it only reaches the team once the backend stores
+`message` (see 8.1). Moving the library to the backend later means a read-only endpoint returning the same shape.
 
 ### 8.2 Someone has to watch the dashboard
 
@@ -199,13 +206,11 @@ All in `frontend/src/lib/site.ts` unless noted. Search for these before launch:
 
 - Brand name **"Sitesmith"** (placeholder; also in the `README`s), email, WhatsApp number, Instagram
   handle, city. ⚠️ The "WhatsApp us" button builds a `wa.me` link from the placeholder number.
-- Hero, stickers and claims: "Live in 1 week", "Landing pages in 2 days", "We reply within 24 hours",
-  the stats (48+ sites, 32+ clients, 7 days, 24h). Confirm each is true and deliverable.
+- Claims: "Live in 1 week", "Landing pages in 2 days", "Free trial included" on every budget, and the
+  "get back to you within 24 hours" line on the form's thank-you screen. Confirm each is true and deliverable.
 - Work projects: names, results and the illustrated mockups are invented; replace with real client work
   and screenshots.
 - About page team: `frontend/src/app/about/page.tsx` has placeholder names and initials.
-- Perk offer ("Free logo refresh + one month of priority support", code `SPARK5`): confirm the business
-  will honour it, and tell whoever reads leads what `SPARK5` means (it arrives only if the backend stores it, see 8.1).
 - Privacy policy (`frontend/src/app/privacy/page.tsx`) is marked **draft**: needs legal review (the
   consent checkbox links to it; the backend requires consent under India's DPDP Act).
 - Not yet built for the main site: favicon / app icon, social share (Open Graph) image, `sitemap.xml`,
@@ -214,8 +219,9 @@ All in `frontend/src/lib/site.ts` unless noted. Search for these before launch:
 
 ### 8.4 Code hygiene
 
-- `frontend/src/lib/site.ts` → `DEFAULT_THEME` is `"night"`. The Lavender/White theme CSS still exists
-  but is unused; remove it if you want a smaller stylesheet.
+- Visitors can pick a background (Night, Cream, Lavender) from the button in the top bar; the
+  choice is stored in their browser (`localStorage`). `DEFAULT_THEME` in `frontend/src/lib/site.ts` sets
+  what first-time visitors see (`"night"`).
 - Do not commit: `.env`, `.env.local`, `dev.db`, `.venv`, `dev-admin-login.txt`.
 
 ## 9. Smoke tests after deploying

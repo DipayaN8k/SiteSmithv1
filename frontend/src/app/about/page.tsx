@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { FinalCta } from "@/components/Sections";
-import { Stats } from "@/components/Stats";
 import { brand } from "@/lib/site";
 
 export const metadata: Metadata = { title: `About — ${brand.name}` };
@@ -13,7 +12,7 @@ const team = [
 const values = [
   { t: "You talk to makers", b: "No account managers in between. The people on the call are the people building your site." },
   { t: "Fixed price, fixed date", b: "You know the cost and the launch day before we start. No hourly meters running." },
-  { t: "Built to be found", b: "SEO, speed and analytics are set up on day one, not sold as an upgrade later." },
+  { t: "Built to be found", b: "We add SEO, speed and analytics step by step as your site grows, so it keeps getting easier to find." },
 ];
 
 export default function AboutPage() {
@@ -22,9 +21,9 @@ export default function AboutPage() {
       <section className="page-head">
         <div className="wrap">
           <p className="kicker">About us</p>
-          <h1 className="display page-head__title">Small studio.<span className="grad-text">Serious websites.</span></h1>
+          <h1 className="display page-head__title">Real engineers.<span className="grad-text">Serious websites.</span></h1>
           <p className="lede" style={{ maxWidth: "52ch" }}>
-            {brand.name} is a small web studio. We design and build websites, online stores and landing pages for
+            {brand.name} is a web studio of hands-on designers and engineers. We design and build websites, online stores and landing pages for
             businesses that want their site to bring in customers, not just sit there looking nice.
           </p>
           <div className="chips">
@@ -53,7 +52,6 @@ export default function AboutPage() {
           </div>
         </div>
       </section>
-      <Stats />
       <FinalCta />
     </>
   );

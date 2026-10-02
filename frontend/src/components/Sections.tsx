@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { brand, compare, faqs, projects, steps, type Project } from "@/lib/site";
-import { Spark } from "./Sparks";
 
 // Illustrated browser mock — stand-in until real project screenshots are added.
 export function SiteMock({ p }: { p: Project }) {
@@ -34,29 +33,29 @@ export function WorkCard({ p }: { p: Project }) {
   );
 }
 
+// The projects plus a closing "your business could be next" banner. Used on the home page and /work.
+export function ProjectGrid() {
+  return (
+    <div className="work-grid">
+      {projects.map((p) => <WorkCard key={p.slug} p={p} />)}
+      <div className="next-card">
+        <div>
+          <p className="next-card__title display">Your business could be next.</p>
+          <p className="next-card__text">Tell us what you sell and who you sell to. We&apos;ll come back with a plan and a first look.</p>
+        </div>
+        <Link href="/start" className="btn btn--grad">Get your website</Link>
+      </div>
+    </div>
+  );
+}
+
 export function Work() {
   return (
     <section id="work" className="section" style={{ paddingTop: 0 }}>
       <div className="wrap">
-        <div className="head-row">
-          <div>
-            <p className="kicker">Recent work</p>
-            <h2 className="display h2">Sites people<br />stop scrolling for.</h2>
-          </div>
-          <Link href="/work" className="btn">All projects</Link>
-        </div>
-        <div className="work-grid">
-          {projects.slice(0, 4).map((p, i) => (
-            <div key={p.slug} style={{ position: "relative" }}>
-              {i === 3 && <Spark id="work" style={{ position: "absolute", right: -14, top: -14, zIndex: 3 }} />}
-              <WorkCard p={p} />
-            </div>
-          ))}
-        </div>
-        <div className="work__cta">
-          <Link href="/start" className="btn btn--grad">Get your website</Link>
-          <span className="reply-badge"><i aria-hidden="true" />We reply within 24 hours</span>
-        </div>
+        <p className="kicker">Recent work</p>
+        <h2 className="display h2">Sites people<br />stop scrolling for.</h2>
+        <ProjectGrid />
       </div>
     </section>
   );
@@ -94,9 +93,7 @@ export function Process() {
     <section id="process" className="section night">
       <div className="wrap">
         <p className="kicker">How it works</p>
-        <h2 className="display h2" style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-          From DM to live site<Spark id="process" style={{ color: "var(--yellow)" }} />
-        </h2>
+        <h2 className="display h2">From DM to live site</h2>
         <ol className="steps">
           {steps.map((s) => (
             <li className="step" key={s.title}>

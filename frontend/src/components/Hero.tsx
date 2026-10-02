@@ -46,7 +46,7 @@ export function Hero() {
           <p className="hero__sub">{hero.sub}</p>
           <div className="hero__ctas">
             <Link className="btn btn--grad" href="/start">Book a project</Link>
-            <Link className="btn" href="/work">See our work</Link>
+            <Link className="btn" href="/preview">See your website first</Link>
           </div>
           <p className="hero__hint">Every site we ship is typed like this, by a person. Pick a business and watch.</p>
         </div>

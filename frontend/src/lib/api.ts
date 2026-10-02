@@ -33,9 +33,7 @@ export type ContactRequest = {
 export type ProjectDetails = {
   project_type: string;
   budget: string;
-  timeline: string;
   message: string | null;
-  perk_code: string | null;
 };
 
 export type ContactResult =

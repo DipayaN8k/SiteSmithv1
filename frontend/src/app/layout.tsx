@@ -3,9 +3,8 @@ import { Bricolage_Grotesque, Geist_Mono, Instrument_Sans } from "next/font/goog
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import { SparkProvider } from "@/components/Sparks";
 import { ScrollManager } from "@/components/ScrollManager";
-import { brand, DEFAULT_THEME } from "@/lib/site";
+import { brand, DEFAULT_THEME, THEME_KEY, THEMES } from "@/lib/site";
 
 const display = Bricolage_Grotesque({ subsets: ["latin"], axes: ["opsz"], variable: "--font-display", display: "swap" });
 const body = Instrument_Sans({ subsets: ["latin"], variable: "--font-body", display: "swap" });
@@ -14,19 +13,24 @@ const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono", display: 
 
 export const metadata: Metadata = {
   title: `${brand.name} — ${brand.tagline}`,
-  description: "Websites and online stores for businesses that have outgrown \u201cDM to order\u201d. See yours in 5 seconds.",
+  description: "Websites and online stores, hand-coded by real engineers, for businesses that have outgrown \u201cDM to order\u201d.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" data-theme={DEFAULT_THEME} className={`${display.variable} ${body.variable} ${mono.variable}`} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{var t=localStorage.getItem(${JSON.stringify(THEME_KEY)});if(t==="bright"||t==="beige"||t==="dotted")t="cream";if(${JSON.stringify(THEMES.map((t) => t.id))}.indexOf(t)>-1)document.documentElement.dataset.theme=t}catch(e){}`,
+          }}
+        />
+      </head>
       <body>
         <ScrollManager />
-        <SparkProvider>
           <Nav />
           <main>{children}</main>
           <Footer />
-        </SparkProvider>
       </body>
     </html>
   );
