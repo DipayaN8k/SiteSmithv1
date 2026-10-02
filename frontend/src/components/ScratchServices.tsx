@@ -180,7 +180,8 @@ export function ScratchServices() {
   };
 
   const strokeTo = (x: number, y: number, width: number) => {
-    const ctx = canvasRef.current!.getContext("2d")!;
+    const ctx = canvasRef.current?.getContext("2d");
+    if (!ctx) return; // card was removed (page left) while the teaser was still running
     ctx.globalCompositeOperation = "destination-out";
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
@@ -204,11 +205,14 @@ export function ScratchServices() {
   useEffect(() => {
     const c = canvasRef.current;
     if (!c || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let coinTimer: ReturnType<typeof setTimeout> | undefined;
     const io = new IntersectionObserver(([entry]) => {
       if (!entry.isIntersecting || teased.current || done) return;
       teased.current = true;
       io.disconnect();
-      setTimeout(() => {
+      timer = setTimeout(() => {
         const w = c.clientWidth, h = c.clientHeight;
         const pts = [[0.93, 0.72], [0.82, 0.8], [0.92, 0.86], [0.8, 0.93], [0.9, 0.98]].map(([px, py]) => ({ x: px * w, y: py * h }));
         const coin = coinRef.current;
@@ -224,14 +228,15 @@ export function ScratchServices() {
           const p = { x: pts[i].x + (pts[i + 1].x - pts[i].x) * (f - i), y: pts[i].y + (pts[i + 1].y - pts[i].y) * (f - i) };
           strokeTo(p.x, p.y, 30);
           if (coin) coin.style.transform = `translate(${p.x - 18}px, ${p.y - 18}px) rotate(${k * 300}deg)`;
-          if (k < 1) requestAnimationFrame(step);
-          else { last.current = null; setTimeout(() => { if (coin) coin.dataset.on = "false"; }, 400); }
+          if (k < 1) raf = requestAnimationFrame(step);
+          else { last.current = null; coinTimer = setTimeout(() => { if (coin) coin.dataset.on = "false"; }, 400); }
         };
-        requestAnimationFrame(step);
+        raf = requestAnimationFrame(step);
       }, 600);
     }, { threshold: 0.6 });
     io.observe(c);
-    return () => io.disconnect();
+    // Stop everything if the visitor leaves the page mid-animation.
+    return () => { io.disconnect(); cancelAnimationFrame(raf); clearTimeout(timer); clearTimeout(coinTimer); };
   }, [done]);
 
   // 3D tilt + glare that follows the cursor (mouse only; flattens while scratching).
