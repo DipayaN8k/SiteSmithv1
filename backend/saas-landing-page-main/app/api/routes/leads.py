@@ -50,7 +50,13 @@ def update_lead(
     return _mutation_response(db, lead_id)
 
 
-@router.patch("/{lead_id}/stages/{stage}", response_model=MutationOut)
+@router.delete("/{lead_id}", status_code=204)
+def delete_lead(lead_id: int, db: Session = Depends(get_db)):
+    svc.delete_lead(db, svc.get_lead(db, lead_id))
+    db.commit()
+
+
+@router.patch("/{lead_id}/stages/{stage}",response_model=MutationOut)
 def update_stage(
     lead_id: int,
     stage: str,

@@ -4,7 +4,7 @@ from fastapi.responses import JSONResponse
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 
-from app.api.routes import activity, auth, comments, contact, health, leads, users
+from app.api.routes import activity, auth, comments, contact, health, leads, requirements, users
 from app.core.config import settings
 from app.core.errors import ServiceError
 from app.core.limiter import limiter
@@ -42,7 +42,7 @@ async def security_headers(request: Request, call_next):
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origin_list,
-    allow_methods=["GET", "POST", "PATCH"],
+    allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["Authorization", "Content-Type"],
 )
 
@@ -51,5 +51,6 @@ app.include_router(contact.router)
 app.include_router(auth.router)
 app.include_router(leads.router)
 app.include_router(comments.router)
+app.include_router(requirements.router)
 app.include_router(activity.router)
 app.include_router(users.router)

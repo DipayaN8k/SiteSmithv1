@@ -7,7 +7,7 @@ from tests.conftest import contact_payload
 # Public by design. Login has to be reachable without a token.
 PUBLIC = {("POST", "/api/contact"), ("GET", "/health"), ("POST", "/auth/login")}
 
-PATH_VALUES = {"lead_id": "1", "stage": "backend"}
+PATH_VALUES = {"lead_id": "1", "stage": "backend", "requirement_id": "1"}
 
 
 def _all_endpoints() -> set[tuple[str, str]]:

@@ -1,12 +1,14 @@
 from collections.abc import Iterable
 
-from sqlalchemy import func, or_, select
+from sqlalchemy import delete, func, or_, select
 from sqlalchemy.orm import Session, joinedload, selectinload
 
 from app.core.constants import (
     COMMENT_ADDED,
     LEAD_ASSIGNED,
     LEAD_CREATED,
+    REQUIREMENT_ADDED,
+    REQUIREMENT_TOGGLED,
     STAGE_ASSIGNED,
     STAGE_STATUS_CHANGED,
     STAGES,
@@ -16,6 +18,7 @@ from app.db.base import utcnow
 from app.models.activity import ActivityLog
 from app.models.comment import Comment
 from app.models.lead import Lead, LeadStage
+from app.models.requirement import Requirement
 from app.models.user import User
 from app.schemas.contact import ContactIn
 from app.schemas.lead import (
@@ -24,6 +27,9 @@ from app.schemas.lead import (
     CommentOut,
     LeadDetail,
     LeadSummary,
+    RequirementIn,
+    RequirementOut,
+    RequirementUpdate,
     StageOut,
 )
 from app.services.activity import log_activity
@@ -102,6 +108,9 @@ def to_summary(lead: Lead, duplicate: bool) -> LeadSummary:
         phone=lead.phone,
         business_type=lead.business_type,
         business_type_other=lead.business_type_other,
+        project_type=lead.project_type,
+        budget=lead.budget,
+        message=lead.message,
         assigned_to=lead.assigned_to,
         assigned_to_name=lead.assignee.name if lead.assignee else None,
         consent=lead.consent,
@@ -153,6 +162,31 @@ def comment_to_out(row: Comment) -> CommentOut:
     )
 
 
+def requirement_to_out(row: Requirement) -> RequirementOut:
+    return RequirementOut(
+        id=row.id,
+        lead_id=row.lead_id,
+        stage=row.stage,
+        text=row.text,
+        done=row.done,
+        created_by_name=row.author.name,
+        done_by_name=row.closer.name if row.closer else None,
+        done_at=row.done_at,
+        created_at=row.created_at,
+    )
+
+
+def get_requirement(db: Session, lead_id: int, requirement_id: int) -> Requirement:
+    row = db.scalar(
+        select(Requirement).where(
+            Requirement.id == requirement_id, Requirement.lead_id == lead_id
+        )
+    )
+    if row is None:
+        raise ServiceError(404, "Requirement not found")
+    return row
+
+
 def lead_detail(db: Session, lead_id: int) -> LeadDetail:
     lead = get_lead(db, lead_id)
     summary = summarize(db, lead)
@@ -168,10 +202,17 @@ def lead_detail(db: Session, lead_id: int) -> LeadDetail:
         .options(joinedload(ActivityLog.user))
         .order_by(ActivityLog.id.desc())
     )
+    requirements = db.scalars(
+        select(Requirement)
+        .where(Requirement.lead_id == lead_id)
+        .options(joinedload(Requirement.author), joinedload(Requirement.closer))
+        .order_by(Requirement.id)
+    )
     return LeadDetail(
         **summary.model_dump(),
         comments=[comment_to_out(c) for c in comments],
         activity=[activity_to_out(a) for a in activity],
+        requirements=[requirement_to_out(r) for r in requirements],
     )
 
 
@@ -234,6 +275,9 @@ def create_lead(db: Session, data: ContactIn) -> Lead:
         phone=data.phone,
         business_type=data.business_type,
         business_type_other=data.business_type_other,
+        project_type=data.project_type,
+        budget=data.budget,
+        message=data.message,
         consent=data.consent,
     )
     lead.stages = [LeadStage(stage=s, status="pending") for s in STAGES]
@@ -319,6 +363,44 @@ def update_stage(
     if changed:
         row.updated_at = utcnow()
         lead.updated_at = utcnow()
+
+
+def delete_lead(db: Session, lead: Lead) -> None:
+    """Hard delete: the lead, its stages, comments and activity history."""
+    # activity_log is append-only at the ORM level (see models/activity.py); a Core
+    # DELETE bypasses those guards, which is intended here: the whole record goes.
+    db.execute(delete(ActivityLog).where(ActivityLog.lead_id == lead.id))
+    db.execute(delete(Comment).where(Comment.lead_id == lead.id))
+    db.execute(delete(Requirement).where(Requirement.lead_id == lead.id))
+    db.delete(lead)  # stages go with it via the cascade
+
+
+def add_requirement(db: Session, lead: Lead, actor: User, data: RequirementIn) -> Requirement:
+    row = Requirement(lead_id=lead.id, stage=data.stage, text=data.text, created_by=actor.id)
+    db.add(row)
+    db.flush()
+    lead.updated_at = utcnow()
+    log_activity(
+        db, lead.id, actor.id, REQUIREMENT_ADDED, data.stage,
+        message=f"{actor.name} added a {_title(data.stage)} requirement",
+    )  # fmt: skip
+    return row
+
+
+def update_requirement(db: Session, row: Requirement, actor: User, data: RequirementUpdate) -> None:
+    if data.text is not None:
+        row.text = data.text
+    if data.done is not None and data.done != row.done:
+        row.done = data.done
+        row.done_by = actor.id if data.done else None
+        row.done_at = utcnow() if data.done else None
+        verb = "marked a requirement as met" if data.done else "reopened a requirement"
+        log_activity(
+            db, row.lead_id, actor.id, REQUIREMENT_TOGGLED, row.stage,
+            "open" if data.done else "met", "met" if data.done else "open",
+            message=f"{actor.name} {verb} on {_title(row.stage)}",
+        )  # fmt: skip
+    db.get(Lead, row.lead_id).updated_at = utcnow()
 
 
 def add_comment(db: Session, lead: Lead, actor: User, data: CommentIn) -> Comment:

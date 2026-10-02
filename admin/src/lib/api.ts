@@ -58,6 +58,7 @@ export type Stage = { stage: StageName; status: Status; assigned_to: number | nu
 export type Lead = {
   id: number; full_name: string; email: string; phone: string | null;
   business_type: string; business_type_other: string | null;
+  project_type: string | null; budget: string | null; message: string | null;
   assigned_to: number | null; assigned_to_name: string | null;
   consent: boolean; created_at: string; updated_at: string;
   status: Status; duplicate_email: boolean; stages: Stage[];
@@ -69,7 +70,11 @@ export type Activity = {
   action: string; stage: StageName | null; old_value: string | null; new_value: string | null;
   message: string; created_at: string;
 };
-export type LeadDetail = Lead & { comments: Comment[]; activity: Activity[] };
+export type Requirement = {
+  id: number; lead_id: number; stage: StageName; text: string; done: boolean;
+  created_by_name: string; done_by_name: string | null; done_at: string | null; created_at: string;
+};
+export type LeadDetail = Lead & { comments: Comment[]; activity: Activity[]; requirements: Requirement[] };
 export type ActivityPage = { items: Activity[]; next_before: number | null };
 
 let teamCache: TeamMember[] | null = null;

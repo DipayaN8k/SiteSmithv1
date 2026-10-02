@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     contact_rate_limit: str = "5/hour"
     login_rate_limit: str = "10/minute"
 
+    # DNS/MX lookup on the contact form email. Turn off for offline dev and tests.
+    email_check_deliverability: bool = True
+
     @field_validator("database_url")
     @classmethod
     def _normalize_database_url(cls, v: str) -> str:

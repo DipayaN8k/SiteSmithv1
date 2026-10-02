@@ -6,6 +6,7 @@ os.environ.update(
     DATABASE_URL="sqlite://",
     JWT_SECRET="test-secret-test-secret-test-secret-123456",
     RATE_LIMIT_ENABLED="false",
+    EMAIL_CHECK_DELIVERABILITY="false",  # tests must not hit DNS
     CORS_ORIGINS="http://landing.test,http://admin.test",
 )
 
