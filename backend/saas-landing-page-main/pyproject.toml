@@ -1,0 +1,17 @@
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["B008"]  # FastAPI uses Depends()/Query() in argument defaults
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E501"]
+
+[tool.ruff.lint.isort]
+known-third-party = ["alembic"]  # our ./alembic folder is not the package
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

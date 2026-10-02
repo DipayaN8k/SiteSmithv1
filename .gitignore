@@ -1,0 +1,21 @@
+# secrets and local-only files — never commit
+.env
+.env.*
+!.env.example
+dev-admin-login.txt
+*.db
+.claude/
+.DS_Store
+
+# dependencies and build output
+node_modules/
+.next/
+out/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.tsbuildinfo
+next-env.d.ts
