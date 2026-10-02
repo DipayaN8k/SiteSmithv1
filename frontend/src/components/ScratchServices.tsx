@@ -207,23 +207,29 @@ export function ScratchServices() {
     let raf = 0;
     let timer: ReturnType<typeof setTimeout> | undefined;
     let coinTimer: ReturnType<typeof setTimeout> | undefined;
+    console.log("[teaser] effect mount", { teased: teased.current, done });
     const io = new IntersectionObserver(([entry]) => {
+      console.log("[teaser] io", { hit: entry.isIntersecting, ratio: entry.intersectionRatio, teased: teased.current });
       if (!entry.isIntersecting || teased.current || done) return;
       teased.current = true;
       io.disconnect();
       timer = setTimeout(() => {
+        console.log("[teaser] timer fired");
         const w = c.clientWidth, h = c.clientHeight;
         const pts = [[0.93, 0.72], [0.82, 0.8], [0.92, 0.86], [0.8, 0.93], [0.9, 0.98]].map(([px, py]) => ({ x: px * w, y: py * h }));
         const coin = coinRef.current;
         const dur = 1100;
         const t0 = performance.now();
         last.current = null;
+        moves.current += 1; // the teaser counts as scratching, so a later repaint of the cover can't erase it
         if (coin) coin.dataset.on = "true";
         const step = (t: number) => {
           if (drawing.current) { if (coin) coin.dataset.on = "false"; return; }
-          const k = Math.min(1, (t - t0) / dur);
+          // Safari can stamp the first frame slightly *before* t0, so clamp progress to 0..1
+          // (a negative value used to index pts[-1] and crash).
+          const k = Math.max(0, Math.min(1, (t - t0) / dur));
           const f = k * (pts.length - 1);
-          const i = Math.min(pts.length - 2, Math.floor(f));
+          const i = Math.max(0, Math.min(pts.length - 2, Math.floor(f)));
           const p = { x: pts[i].x + (pts[i + 1].x - pts[i].x) * (f - i), y: pts[i].y + (pts[i + 1].y - pts[i].y) * (f - i) };
           strokeTo(p.x, p.y, 30);
           if (coin) coin.style.transform = `translate(${p.x - 18}px, ${p.y - 18}px) rotate(${k * 300}deg)`;
@@ -234,8 +240,9 @@ export function ScratchServices() {
       }, 600);
     }, { threshold: 0.6 });
     io.observe(c);
+    setTimeout(() => console.log("[teaser] watched canvas still on page?", c.isConnected, "same as current?", c === canvasRef.current), 1500);
     // Stop everything if the visitor leaves the page mid-animation.
-    return () => { io.disconnect(); cancelAnimationFrame(raf); clearTimeout(timer); clearTimeout(coinTimer); };
+    return () => { console.log("[teaser] cleanup"); io.disconnect(); cancelAnimationFrame(raf); clearTimeout(timer); clearTimeout(coinTimer); };
   }, [done]);
 
   // 3D tilt + glare that follows the cursor (mouse only; flattens while scratching).

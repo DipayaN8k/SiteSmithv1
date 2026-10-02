@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/AuthProvider";
 import { ApiError } from "@/lib/api";
+import { BrandMark } from "@/components/BrandMark";
 
 export default function LoginPage() {
   const { user, ready, login } = useAuth();
@@ -31,7 +32,7 @@ export default function LoginPage() {
   return (
     <div className="login">
       <form className="login__card" onSubmit={submit}>
-        <div className="brand brand--big"><span className="brand__mark" aria-hidden="true" />Sitesmith <small>Admin</small></div>
+        <div className="brand brand--big"><BrandMark />Sitesmith <small>Admin</small></div>
         <h1 className="display">Team sign-in</h1>
         <p className="muted">Only for the {`team`}. Accounts are created by an admin, there is no sign-up.</p>
         <label htmlFor="email">Email</label>

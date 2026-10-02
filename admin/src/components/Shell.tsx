@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuth } from "./AuthProvider";
+import { BrandMark } from "./BrandMark";
 
 const links = [
   { href: "/", label: "Leads" },
@@ -23,7 +24,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
     <div className="shell">
       <header className="top">
         <div className="wrap top__in">
-          <Link href="/" className="brand"><span className="brand__mark" aria-hidden="true" />Sitesmith <small>Admin</small></Link>
+          <Link href="/" className="brand"><BrandMark />Sitesmith <small>Admin</small></Link>
           <nav className="top__nav" aria-label="Main">
             {links.map((l) => {
               const active = l.href === "/" ? path === "/" || path.startsWith("/leads") : path.startsWith(l.href);

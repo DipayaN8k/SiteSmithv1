@@ -68,8 +68,15 @@
 :root[data-theme="lavender"] {
   --bg: #f3ecfb;
   --surface: #fdfbff;
-  --muted: #625573;
-  --line: rgba(60, 20, 90, 0.14);
+  --ink: #180b2b;
+  --muted: #3b2d4f;      /* body text 10.9:1 (was #625573, 5.9:1 — read pale) */
+  --line: rgba(60, 20, 90, 0.16);
+  /* the Instagram gradient, deepened so it stays rich on light lilac (orange was 2.3:1, now 4.3:1) */
+  --pink: #b3145c;
+  --purple: #7d1fa6;
+  --blue: #3b46c0;
+  --grad: linear-gradient(45deg, #d48a0c 0%, #c4480c 24%, #b3145c 50%, #7d1fa6 76%, #3b46c0 100%);
+  --grad-x: linear-gradient(90deg, #c4480c 0%, #b3145c 40%, #7d1fa6 70%, #3b46c0 100%);
 }
 
 
@@ -127,7 +134,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
 .nav__in { display: flex; align-items: center; gap: 28px; min-height: 68px; }
 .logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 800; font-size: 1.2rem; letter-spacing: -0.03em; }
-.logo__mark { width: 32px; height: 32px; border-radius: 10px; background: var(--grad); display: grid; place-items: center; }
+.logo__mark { flex: none; color: var(--ink); }
 .nav__links { display: flex; gap: clamp(16px, 2.2vw, 30px); margin-left: auto; font-weight: 500; font-size: 0.95rem; color: var(--muted); }
 .nav__links a:hover { color: var(--ink); }
 .nav__burger { display: none; margin-left: auto; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
