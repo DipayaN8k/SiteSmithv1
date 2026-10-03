@@ -119,6 +119,36 @@ each person should change their password on the dashboard's **Account** page.
 ⚠️ The local test password in `dev-admin-login.txt` (project root) belongs to the **local** database
 only. Do not reuse it, do not commit it, and delete the file when no longer needed.
 
+#### Checklist: your first admin on the live site
+
+The live database starts with **no accounts** (the local `admin@dev.local` login does not exist there), so
+the first admin has to be created from the host's shell. Do this once after the backend is deployed:
+
+1. **Backend is up.** `https://api.yourcompany.com/health` returns `{"status":"ok"}` (the start command has
+   already applied the migrations).
+2. **Open a shell on the host** (Render: the **Shell** tab; Railway: `railway run ...`; Fly: `fly ssh console`;
+   VPS: SSH, activate the virtualenv, `cd` into the backend folder). Check you are in the backend folder
+   (`ls` shows `scripts/` and `app/`) and that `ENV=prod` and the Postgres `DATABASE_URL` are set on the host,
+   not copied from your laptop.
+3. **Create the account:**
+   ```bash
+   python scripts/manage_users.py create --name "Full Name" --email you@yourcompany.com
+   ```
+   Type a strong password (12+ characters) at the prompt and confirm it. Use a password-manager password,
+   not one from this document or `dev-admin-login.txt`.
+4. **Confirm it exists:** `python scripts/manage_users.py list` shows your email as `active`.
+5. **Sign in** at `https://admin.yourcompany.com`. A wrong password shows "Invalid email or password"; if
+   the page can't reach the server, check `NEXT_PUBLIC_API_URL` and `CORS_ORIGINS` (section 7).
+6. **Change the password** on the dashboard's **Account** page if someone else typed the first one.
+7. **Add the rest of the team** the same way (step 3), one account per person. Send each person their
+   password privately (not in a public channel) and ask them to change it on the Account page at first login.
+8. **Remove access when someone leaves:** `python scripts/manage_users.py deactivate --email person@company.com`.
+   A forgotten password is `reset-password --email ...`; there is no "forgot password" email.
+9. **Clean up:** delete your local `dev-admin-login.txt`, and never reuse its password on the live site.
+
+Remember that every account can do everything, including permanently deleting leads (there are no roles
+yet), so only create accounts for people you trust with that.
+
 ### 3.6 Behaviour to know about
 
 - The backend sends **no email of any kind**. New requests are visible only in the dashboard, so
