@@ -56,7 +56,7 @@ export function StartWizard() {
       setProjectType(c.catId === "fashion" ? "Online store" : "Business website");
       const b = CATEGORY_TO_BUSINESS[c.catId];
       if (b) setBusiness(b as BusinessType);
-      setForm((f) => (f.message ? f : { ...f, message: `Business name: ${c.name}. I liked the ${c.design} design for ${c.category} in the free preview.` }));
+      setForm((f) => (f.message ? f : { ...f, message: `Business name: ${c.name}. I liked the ${c.design} design${c.style ? ` (${c.style})` : ""} for ${c.category} in the free preview.` }));
     } catch {}
   }, []);
 
