@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { StageDots, StatusBadge } from "@/components/Badges";
 import { api, STATUS_LABEL, type LeadList, type Status } from "@/lib/api";
@@ -10,6 +11,7 @@ const PAGE_SIZE = 20;
 const FILTERS: (Status | "")[] = ["", "pending", "in_progress", "completed"];
 
 export default function LeadsPage() {
+  const router = useRouter();
   const [status, setStatus] = useState<Status | "">("");
   const [q, setQ] = useState("");
   const [debounced, setDebounced] = useState("");
@@ -76,7 +78,7 @@ export default function LeadsPage() {
             </thead>
             <tbody>
               {data.items.map((l) => (
-                <tr key={l.id}>
+                <tr key={l.id} className="row-link" onClick={() => router.push(`/leads/${l.id}`)}>
                   <td>
                     <Link href={`/leads/${l.id}`} className="lead-link">{l.full_name}</Link>
                     {l.duplicate_email && <span className="repeat" title="Someone already submitted with this email">repeat</span>}

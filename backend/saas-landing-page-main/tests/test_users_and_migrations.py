@@ -70,9 +70,12 @@ def test_migrations_run_clean_from_empty_db(tmp_path):
     command.upgrade(cfg, "head")
 
     inspector = inspect(create_engine(url))
-    assert {"users", "leads", "lead_stages", "comments", "activity_log"} <= set(
+    assert {"users", "leads", "lead_stages", "comments", "activity_log", "requirements"} <= set(
         inspector.get_table_names()
     )
+    assert {"project_type", "budget", "message"} <= {
+        c["name"] for c in inspector.get_columns("leads")
+    }
     index_names = {i["name"] for t in inspector.get_table_names() for i in inspector.get_indexes(t)}
     assert {
         "ix_leads_created_at",

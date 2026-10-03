@@ -27,9 +27,7 @@ export type ContactRequest = {
   website: string; // honeypot — always empty for real users
 };
 
-// Collected by the form but NOT stored by the backend yet: it has no columns for these and
-// silently ignores unknown fields. They are sent anyway so storing them later only needs a
-// backend change. Pending a team decision.
+// Sent with the contact request; the backend stores all three on the lead.
 export type ProjectDetails = {
   project_type: string;
   budget: string;

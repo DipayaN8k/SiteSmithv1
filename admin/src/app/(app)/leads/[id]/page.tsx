@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { StatusBadge } from "@/components/Badges";
 import {
@@ -31,6 +31,9 @@ export default function LeadPage() {
   const [comment, setComment] = useState("");
   const [commentStage, setCommentStage] = useState<StageName | "">("");
   const [posting, setPosting] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [newReq, setNewReq] = useState<Record<StageName, string>>({ backend: "", frontend: "", deployment: "" });
+  const router = useRouter();
 
   const load = useCallback(async () => {
     try { setLead(await api<LeadDetail>(`/api/leads/${id}`)); setError(""); }
@@ -60,6 +63,35 @@ export default function LeadPage() {
       await load();
     } catch (err) { setError((err as Error).message); }
     setPosting(false);
+  };
+
+  const reqCall = async (suffix: string, method: "PATCH" | "DELETE", body?: object) => {
+    try {
+      await api(`/api/leads/${id}/requirements${suffix}`, { method, ...(body ? { body: JSON.stringify(body) } : {}) });
+      setError("");
+      await load();
+    } catch (e) { setError((e as Error).message); }
+  };
+
+  const addReq = async (stage: StageName) => {
+    const text = newReq[stage].trim();
+    if (!text) return;
+    try {
+      await api(`/api/leads/${id}/requirements`, { method: "POST", body: JSON.stringify({ stage, text }) });
+      setNewReq((n) => ({ ...n, [stage]: "" }));
+      setError("");
+      await load();
+    } catch (e) { setError((e as Error).message); }
+  };
+
+  const remove = async () => {
+    if (!lead) return;
+    if (!window.confirm(`Permanently delete request #${lead.id} from ${lead.full_name}? Their details, comments and activity will be erased. This can't be undone.`)) return;
+    setDeleting(true);
+    try {
+      await api(`/api/leads/${lead.id}`, { method: "DELETE" });
+      router.push("/");
+    } catch (e) { setError((e as Error).message); setDeleting(false); }
   };
 
   if (notFound) return <div className="empty"><h2 className="display">Lead not found</h2><p><Link href="/" className="btn btn--sm">Back to leads</Link></p></div>;
@@ -93,6 +125,9 @@ export default function LeadPage() {
             <dt>Email</dt><dd><a href={`mailto:${lead.email}`}>{lead.email}</a></dd>
             <dt>Phone</dt><dd>{lead.phone ? <a href={`tel:${lead.phone.replace(/[^\d+]/g, "")}`}>{lead.phone}</a> : <span className="muted">Not given</span>}</dd>
             <dt>Business</dt><dd>{businessLabel(lead)}</dd>
+            <dt>Project</dt><dd>{lead.project_type ?? <span className="muted">Not given</span>}</dd>
+            <dt>Budget</dt><dd>{lead.budget ?? <span className="muted">Not given</span>}</dd>
+            <dt>Message</dt><dd className="prewrap">{lead.message ?? <span className="muted">Not given</span>}</dd>
             <dt>Consent</dt><dd>{lead.consent ? "Agreed to be contacted" : "No"}</dd>
             <dt>Received</dt><dd>{formatDate(lead.created_at)}</dd>
           </dl>
@@ -121,6 +156,50 @@ export default function LeadPage() {
           </ul>
         </section>
       </div>
+
+      <section className="card requirements">
+        <h2 className="card__title">Client requirements</h2>
+        <p className="muted small">Write down what the client asked for, per area. Tick each one once it&apos;s delivered.</p>
+        <div className="req-cols">
+          {STAGES.map((s) => {
+            const items = lead.requirements.filter((r) => r.stage === s);
+            const met = items.filter((r) => r.done).length;
+            return (
+              <div key={s} className="req-col">
+                <div className="req-col__head">
+                  <strong>{STAGE_LABEL[s]}</strong>
+                  {items.length > 0 && <span className={`req-count${met === items.length ? " req-count--all" : ""}`}>{met}/{items.length} met</span>}
+                </div>
+                {items.length === 0 && <p className="muted small">No requirements yet.</p>}
+                <ul className="req-list">
+                  {items.map((r) => (
+                    <li key={r.id} className={r.done ? "req req--done" : "req"}>
+                      <button type="button" className="req__tick" aria-pressed={r.done} aria-label={r.done ? "Mark as not met" : "Mark as met"}
+                        onClick={() => reqCall(`/${r.id}`, "PATCH", { done: !r.done })}>
+                        {r.done ? "✓" : ""}
+                      </button>
+                      <div className="req__body">
+                        <span className="prewrap">{r.text}</span>
+                        <span className="muted small">
+                          {r.done && r.done_by_name ? `Met by ${r.done_by_name}, ${timeAgo(r.done_at!)}` : `Added by ${r.created_by_name}`}
+                        </span>
+                      </div>
+                      <button type="button" className="req__x" aria-label="Remove requirement"
+                        onClick={() => { if (window.confirm("Remove this requirement?")) reqCall(`/${r.id}`, "DELETE"); }}>×</button>
+                    </li>
+                  ))}
+                </ul>
+                <form className="req-add" onSubmit={(e) => { e.preventDefault(); addReq(s); }}>
+                  <label className="sr-only" htmlFor={`req-${s}`}>New {STAGE_LABEL[s]} requirement</label>
+                  <input id={`req-${s}`} maxLength={1000} placeholder="Add a requirement…" value={newReq[s]}
+                    onChange={(e) => setNewReq({ ...newReq, [s]: e.target.value })} />
+                  <button className="btn btn--sm btn--grad" disabled={!newReq[s].trim()}>Add</button>
+                </form>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
       <div className="grid">
         <section className="card">
@@ -160,6 +239,10 @@ export default function LeadPage() {
             ))}
           </ul>
         </section>
+      </div>
+
+      <div className="danger-zone">
+        <button className="btn btn--sm btn--danger" onClick={remove} disabled={deleting}>{deleting ? "Deleting…" : "Delete this request"}</button>
       </div>
     </>
   );

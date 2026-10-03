@@ -16,6 +16,27 @@ const budgets = ["Under ₹5k", "₹5k – ₹10k", "₹10k – ₹15k", "₹15k
 const STEPS = ["project", "business", "scope", "contact"] as const;
 const PHONE_RE = /^[0-9+\-() .]{5,30}$/; // same rule as the backend
 
+const COMMON_DOMAINS = ["gmail.com", "yahoo.com", "yahoo.in", "outlook.com", "hotmail.com", "icloud.com", "rediffmail.com", "proton.me"];
+
+function editDistance(a: string, b: string) {
+  const d = Array.from({ length: a.length + 1 }, (_, i) => [i, ...Array(b.length).fill(0)]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++)
+    for (let j = 1; j <= b.length; j++)
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return d[a.length][b.length];
+}
+
+/** "me@gmial.com" -> "me@gmail.com"; null when the domain is fine or nothing is close. */
+function suggestEmail(email: string) {
+  const m = email.trim().match(/^(\S+)@(\S+\.\S+)$/);
+  if (!m) return null;
+  const domain = m[2].toLowerCase();
+  if (COMMON_DOMAINS.includes(domain)) return null;
+  const best = COMMON_DOMAINS.map((c) => [c, editDistance(domain, c)] as const).sort((x, y) => x[1] - y[1])[0];
+  return best[1] <= 2 ? `${m[1]}@${best[0]}` : null;
+}
+
 export function StartWizard() {
   const [step, setStep] = useState(0);
   const [projectType, setProjectType] = useState("");
@@ -43,7 +64,8 @@ export function StartWizard() {
   const back = () => setStep((s) => Math.max(s - 1, 0));
   const advanceSoon = () => setTimeout(next, 220);
 
-  const businessReady = business !== "" && (business !== "Other" || businessOther.trim() !== "");
+  const emailHint = suggestEmail(form.email);
+  const businessReady =business !== "" && (business !== "Other" || businessOther.trim() !== "");
 
   const validate = () => {
     const e: Record<string, string> = {};
@@ -167,6 +189,12 @@ export function StartWizard() {
                   aria-describedby={errors[k] ? `${k}-err` : undefined}
                   onChange={(e) => setForm({ ...form, [k]: e.target.value })} />
                 {errors[k] && <div className="field__err" id={`${k}-err`}>{errors[k]}</div>}
+                {k === "email" && emailHint && (
+                  <div className="field__hint">
+                    Did you mean{" "}
+                    <button type="button" className="link" onClick={() => setForm({ ...form, email: emailHint })}>{emailHint}</button>?
+                  </div>
+                )}
               </div>
             ))}
             <div className="field">

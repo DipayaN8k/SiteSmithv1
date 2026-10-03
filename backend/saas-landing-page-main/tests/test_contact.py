@@ -53,6 +53,44 @@ def test_rejects_unknown_business_type_bad_email_and_no_consent(client):
     assert client.post("/api/contact", json=contact_payload(consent=False)).status_code == 422
 
 
+def test_undeliverable_email_domain_rejected(client, monkeypatch):
+    from email_validator import EmailUndeliverableError
+
+    from app.core.config import settings
+    from app.schemas import contact
+
+    monkeypatch.setattr(settings, "email_check_deliverability", True)
+
+    def fake(email, **kwargs):
+        raise EmailUndeliverableError("The domain name gmial.con does not exist.")
+
+    monkeypatch.setattr(contact, "validate_email", fake)
+    resp = client.post("/api/contact", json=contact_payload(email="me@gmial.con"))
+    assert resp.status_code == 422
+
+
+def test_known_typo_domains_rejected_with_suggestion(client):
+    resp = client.post("/api/contact", json=contact_payload(email="me@Gamil.com"))
+    assert resp.status_code == 422
+    assert "gmail.com" in resp.text
+    assert client.post("/api/contact", json=contact_payload(email="me@gmail.com")).status_code == 201
+
+
+def test_dns_lookup_failure_does_not_block_lead(client, monkeypatch):
+    from email_validator import EmailUndeliverableError
+
+    from app.core.config import settings
+    from app.schemas import contact
+
+    monkeypatch.setattr(settings, "email_check_deliverability", True)
+
+    def fake(email, **kwargs):
+        raise EmailUndeliverableError("There was an error while checking the domain.")
+
+    monkeypatch.setattr(contact, "validate_email", fake)
+    assert client.post("/api/contact", json=contact_payload()).status_code == 201
+
+
 def test_html_is_stripped(client, db):
     client.post(
         "/api/contact",
@@ -66,6 +104,87 @@ def test_honeypot_fakes_success_and_stores_nothing(client, db):
     assert resp.status_code == 201
     assert db.scalar(select(func.count()).select_from(Lead)) == 0
     assert db.scalar(select(func.count()).select_from(ActivityLog)) == 0
+
+
+def test_budget_project_type_and_message_are_stored(client, db, headers, make_lead):
+    lead_id = make_lead(
+        project_type="Online store", budget="₹5k – ₹10k", message="<b>Need</b> a catalogue"
+    )
+    lead = db.get(Lead, lead_id)
+    assert (lead.project_type, lead.budget, lead.message) == (
+        "Online store", "₹5k – ₹10k", "Need a catalogue",
+    )
+    body = client.get(f"/api/leads/{lead_id}", headers=headers).json()
+    assert body["budget"] == "₹5k – ₹10k"
+
+
+def test_optional_project_details_may_be_missing(client, db, make_lead):
+    lead = db.get(Lead, make_lead())
+    assert lead.budget is None and lead.project_type is None and lead.message is None
+
+
+def test_requirements_flow(client, headers, make_lead):
+    lead_id = make_lead()
+    base = f"/api/leads/{lead_id}/requirements"
+
+    bad = client.post(base, json={"stage": "design", "text": "x"}, headers=headers)
+    assert bad.status_code == 422
+    assert client.post(base, json={"stage": "backend", "text": "x"}).status_code == 401
+
+    made = client.post(base, json={"stage": "backend", "text": "Login with Google"}, headers=headers)
+    assert made.status_code == 201
+    req = made.json()
+    assert (req["stage"], req["done"], req["done_by_name"]) == ("backend", False, None)
+
+    done = client.patch(f"{base}/{req['id']}", json={"done": True}, headers=headers).json()
+    assert done["done"] is True and done["done_by_name"] == "Soumava" and done["done_at"]
+
+    detail = client.get(f"/api/leads/{lead_id}", headers=headers).json()
+    assert [r["text"] for r in detail["requirements"]] == ["Login with Google"]
+    messages = " | ".join(a["message"] for a in detail["activity"])
+    assert "added a Backend requirement" in messages and "marked a requirement as met" in messages
+
+    reopened = client.patch(f"{base}/{req['id']}", json={"done": False}, headers=headers).json()
+    assert reopened["done"] is False and reopened["done_by_name"] is None
+
+    assert client.patch(f"{base}/{req['id']}", json={}, headers=headers).status_code == 422
+    assert client.delete(f"{base}/{req['id']}", headers=headers).status_code == 204
+    assert client.delete(f"{base}/{req['id']}", headers=headers).status_code == 404
+
+
+def test_requirement_must_belong_to_the_lead(client, headers, make_lead):
+    a, b = make_lead(), make_lead(email="b@example.com")
+    req = client.post(
+        f"/api/leads/{a}/requirements", json={"stage": "frontend", "text": "Dark mode"}, headers=headers
+    ).json()
+    assert client.patch(f"/api/leads/{b}/requirements/{req['id']}", json={"done": True}, headers=headers).status_code == 404
+
+
+def test_delete_lead_removes_everything(client, db, headers, make_lead):
+    from app.models.comment import Comment
+    from app.models.requirement import Requirement
+
+    lead_id = make_lead()
+    other_id = make_lead(email="other@example.com")
+    client.post(f"/api/leads/{lead_id}/comments", json={"body": "not a fit"}, headers=headers)
+    client.post(f"/api/leads/{lead_id}/requirements", json={"stage": "backend", "text": "API"}, headers=headers)
+
+    assert client.delete(f"/api/leads/{lead_id}", headers=headers).status_code == 204
+    db.expire_all()
+
+    assert client.get(f"/api/leads/{lead_id}", headers=headers).status_code == 404
+    assert db.scalar(select(func.count()).select_from(LeadStage).where(LeadStage.lead_id == lead_id)) == 0
+    assert db.scalar(select(func.count()).select_from(Comment).where(Comment.lead_id == lead_id)) == 0
+    assert db.scalar(select(func.count()).select_from(Requirement).where(Requirement.lead_id == lead_id)) == 0
+    assert db.scalar(select(func.count()).select_from(ActivityLog).where(ActivityLog.lead_id == lead_id)) == 0
+    # other leads untouched
+    assert client.get(f"/api/leads/{other_id}", headers=headers).status_code == 200
+    assert client.delete(f"/api/leads/{lead_id}", headers=headers).status_code == 404
+
+
+def test_delete_lead_requires_login(client, make_lead):
+    lead_id = make_lead()
+    assert client.delete(f"/api/leads/{lead_id}").status_code == 401
 
 
 def test_duplicate_email_is_flagged_not_blocked(client, user, headers):
