@@ -7,7 +7,8 @@
     "max_input_length": 300
   },
   "contact": {
-    "_help": "Used in answers as {whatsapp} {phone} {email} {instagram} {city} {hours}, and for the WhatsApp / Email / Instagram / Call buttons. Keep in sync with brand in src/lib/site.ts.",
+    "_help": "Used in answers as {brand} {whatsapp} {phone} {email} {instagram} {city} {hours}, and for the WhatsApp / Email / Instagram / Call buttons. Keep in sync with brand in src/lib/site.ts.",
+    "brand": "Sitesmith",
     "whatsapp": "+91 90000 00000",
     "whatsapp_prefill": "Hi! I found you through your website and have a question.",
     "phone": "+91 90000 00000",
@@ -36,12 +37,12 @@
     "An editor so you can change text and images yourself"
   ],
   "welcome": {
-    "_help": "First message when the chat opens, plus the buttons under it. quick_replies are topic ids from the topics list below.",
-    "message": "Hi, I'm SmithBot. Ask me about timelines, pricing or how to get started.",
+    "_help": "First message when the chat opens, plus the buttons under it. quick_replies are topic ids from the topics list below. The message should say who we are and what we do, because a new visitor has no context. The buttons use each topic's 'title', so write titles that make sense on their own.",
+    "message": "Hi, I'm SmithBot, the assistant for {brand}. We build websites, online stores and landing pages for businesses. Tap a question below or type your own.",
     "quick_replies": [
-      "delivery",
-      "pricing",
       "services",
+      "pricing",
+      "delivery",
       "process",
       "contact"
     ]
@@ -108,7 +109,7 @@
     {
       "_help": "A topic with 'ask' first asks a question, then answers based on the option chosen. This one gives a delivery estimate.",
       "id": "delivery",
-      "title": "How long will it take?",
+      "title": "How long does a website take?",
       "keywords": [
         "how long",
         "delivery",
@@ -208,7 +209,7 @@
     },
     {
       "id": "pricing_concern",
-      "title": "Pricing too high?",
+      "title": "Can the price be negotiated?",
       "keywords": [
         "too expensive",
         "too costly",
@@ -273,7 +274,7 @@
     {
       "_help": "Same pattern for pricing. PLACEHOLDER prices: replace with yours.",
       "id": "pricing",
-      "title": "How much does it cost?",
+      "title": "How much does a website cost?",
       "keywords": [
         "price",
         "prices",
@@ -400,7 +401,7 @@
     },
     {
       "id": "services",
-      "title": "What do you offer?",
+      "title": "What services do you offer?",
       "keywords": [
         "services",
         "service",
@@ -426,7 +427,7 @@
     },
     {
       "id": "deployment",
-      "title": "Domain and hosting",
+      "title": "Do you set up the domain and hosting?",
       "keywords": [
         "deployment",
         "deploy",
@@ -446,7 +447,7 @@
     },
     {
       "id": "process",
-      "title": "How does it work?",
+      "title": "How does your process work?",
       "keywords": [
         "process",
         "steps",
@@ -495,7 +496,7 @@
     },
     {
       "id": "social",
-      "title": "Social media",
+      "title": "Are you on Instagram?",
       "keywords": [
         "instagram",
         "insta",
@@ -517,7 +518,7 @@
     },
     {
       "id": "whatsapp",
-      "title": "Talk on WhatsApp",
+      "title": "Can I talk to you on WhatsApp?",
       "keywords": [
         "whatsapp",
         "wa",
@@ -604,7 +605,7 @@
     },
     {
       "id": "human",
-      "title": "Talk to a person",
+      "title": "Can I talk to a person?",
       "keywords": [
         "human",
         "person",
@@ -627,7 +628,7 @@
     },
     {
       "id": "content",
-      "title": "Do I need to write the content?",
+      "title": "Do I need to write my own website content?",
       "keywords": [
         "content",
         "text",
@@ -651,7 +652,7 @@
     },
     {
       "id": "editing",
-      "title": "Can I edit the site later?",
+      "title": "Can I edit my website later?",
       "keywords": [
         "edit",
         "editing",
@@ -702,7 +703,7 @@
     },
     {
       "id": "preview",
-      "title": "See my website first",
+      "title": "Can I see my website before I commit?",
       "keywords": [
         "preview",
         "demo",
@@ -729,7 +730,7 @@
     },
     {
       "id": "work",
-      "title": "Show me your work",
+      "title": "Can I see your past work?",
       "keywords": [
         "portfolio",
         "projects",
@@ -758,7 +759,7 @@
     },
     {
       "id": "ecommerce",
-      "title": "Do you build online stores?",
+      "title": "Can you build an online store?",
       "keywords": [
         "online store",
         "ecommerce",
@@ -785,7 +786,7 @@
     },
     {
       "id": "seo",
-      "title": "Will Google find me?",
+      "title": "Will my website show up on Google?",
       "keywords": [
         "seo",
         "google",
@@ -804,7 +805,7 @@
     },
     {
       "id": "why",
-      "title": "Why choose you?",
+      "title": "Why choose you over a template builder?",
       "keywords": [
         "why you",
         "why choose",
@@ -827,7 +828,7 @@
     },
     {
       "id": "book",
-      "title": "I want to start",
+      "title": "How do I start a project?",
       "keywords": [
         "start",
         "book",
@@ -851,7 +852,7 @@
     },
     {
       "id": "mobile",
-      "title": "Will it work on mobile?",
+      "title": "Will my website work on mobile?",
       "keywords": [
         "mobile",
         "responsive",
@@ -871,7 +872,7 @@
     },
     {
       "id": "security",
-      "title": "Is it secure?",
+      "title": "Is my website secure?",
       "keywords": [
         "secure",
         "security",
@@ -917,7 +918,7 @@
     },
     {
       "id": "pages",
-      "title": "How many pages can I have?",
+      "title": "How many pages can my website have?",
       "keywords": [
         "how many pages",
         "number of pages",
@@ -936,7 +937,7 @@
     },
     {
       "id": "languages",
-      "title": "Can the site be in another language?",
+      "title": "Can my website be in another language?",
       "keywords": [
         "hindi",
         "bengali",
@@ -961,7 +962,7 @@
     },
     {
       "id": "integrations",
-      "title": "Can you connect other tools?",
+      "title": "Can you connect my website to other tools?",
       "keywords": [
         "integrate",
         "integration",
@@ -1059,7 +1060,7 @@
     },
     {
       "id": "custom",
-      "title": "Can you build custom features?",
+      "title": "Can you build custom features or apps?",
       "keywords": [
         "custom",
         "custom feature",
@@ -1088,7 +1089,7 @@
     },
     {
       "id": "team",
-      "title": "Who will build my site?",
+      "title": "Who will build my website?",
       "keywords": [
         "who will build",
         "who builds",
@@ -1112,7 +1113,7 @@
     },
     {
       "id": "outside_india",
-      "title": "Do you work outside India?",
+      "title": "Do you work with clients outside India?",
       "keywords": [
         "outside india",
         "abroad",
@@ -1169,7 +1170,7 @@
     },
     {
       "id": "cancel",
-      "title": "What if I want to cancel?",
+      "title": "What if I want to cancel the project?",
       "keywords": [
         "cancel",
         "cancellation",
@@ -1190,7 +1191,7 @@
     },
     {
       "id": "business_email",
-      "title": "Can I get email addresses on my domain?",
+      "title": "Can I get email addresses on my own domain?",
       "keywords": [
         "business email",
         "professional email",
@@ -1212,7 +1213,7 @@
     },
     {
       "id": "training",
-      "title": "Will you show me how to use it?",
+      "title": "Will you show me how to use my website?",
       "keywords": [
         "training",
         "tutorial",

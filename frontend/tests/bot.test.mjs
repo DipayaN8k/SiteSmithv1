@@ -210,6 +210,31 @@ test("phrases also match their plural", () => {
   assert.match(ask("do you build online stores").message.text, /mobile-first/);
 });
 
+test("a first-time visitor gets context: the welcome says who we are, buttons make sense alone", () => {
+  const w = bot.welcome();
+  assert.match(w.text, /SmithBot/);
+  assert.match(w.text, /Sitesmith/, "brand is filled in");
+  assert.match(w.text, /websites/i, "says what we build");
+  assert.doesNotMatch(w.text, /[{}]/, "no unfilled placeholders");
+  for (const b of w.buttons) {
+    assert.ok(b.label.split(" ").length >= 4, `starter button too short: ${b.label}`);
+    assert.doesNotMatch(b.label, /it/i, `starter button relies on context ("it"): ${b.label}`);
+  }
+});
+
+test("every topic title stands on its own (no 'it' that needs context)", () => {
+  for (const t of config.topics) assert.doesNotMatch(t.title, /it/i, t.title);
+});
+
+test("no answer shows an unfilled {placeholder} or 'undefined'", () => {
+  for (const t of config.topics) {
+    const r = bot.topic(t.id);
+    for (const text of [r.message.text, ...(t.ask?.options ?? []).map((o) => bot.reply(o.label, r.state).message.text)]) {
+      assert.doesNotMatch(text, /[{}]|undefined/, `${t.id}: ${text}`);
+    }
+  }
+});
+
 test("typos still match", () => {
   assert.match(ask("pricng").message.text, /what do you need/i);
   assert.match(ask("whats the deliverry time").message.text, /what are you looking to build/i);

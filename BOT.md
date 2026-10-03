@@ -56,7 +56,7 @@ Open `smithbot.json`, find the `"topics"` list and add an object. Mind the comma
 | Field | Required | Meaning |
 | --- | --- | --- |
 | `id` | yes | Short unique name, no spaces. Other topics link to it as `"topic:warranty"` |
-| `title` | yes | The label on a button when another topic links here |
+| `title` | yes | The label on a button (the starter buttons and follow-up buttons). **Write it so a new visitor understands it with no context**: "How long does a website take?", not "How long will it take?" |
 | `keywords` | yes | Words or phrases visitors might use (section 5) |
 | `answer` | yes (unless `ask`) | What the bot replies. `\n` makes a new line |
 | `buttons` | no | Buttons shown under the answer (section 6) |
@@ -69,7 +69,7 @@ Write these in an answer and the bot fills them in from the file:
 
 | Write | Becomes |
 | --- | --- |
-| `{whatsapp}` `{phone}` `{email}` | The values in the `contact` section |
+| `{brand}` `{whatsapp}` `{phone}` `{email}` | The values in the `contact` section |
 | `{instagram}` `{city}` `{hours}` | Same |
 | `{budgets}` | The list in `budgets`, joined with " · " |
 | `{pricing_note}` | The sentence in `pricing_note` at the top of the file: *"Not happy with the pricing? Contact us on WhatsApp ... "*. Already used in every pricing and budget answer. Put it in any answer where you want to invite unhappy visitors to WhatsApp, and edit the sentence once to change it everywhere |
@@ -160,7 +160,7 @@ Buttons go in a topic's `buttons` list (and in `fallback.buttons` and `exits.but
 | `pricing_note` | The reusable "not happy with the pricing? contact us on WhatsApp" sentence (see the table in section 3) |
 | `budgets` | The budget ranges you work with |
 | `services` | Your features and services, including deployment |
-| `welcome` | The opening message and the starter buttons |
+| `welcome` | The opening message and the starter buttons. The message should say who you are and what you build, because a first-time visitor has no context. Starter buttons use each topic's `title` |
 | `greetings` | `triggers` (words that count as hello) and one-line `replies`, picked at random |
 | `exits` | The same for thanks and goodbye |
 | `fallback` | The reply for gibberish and off-topic messages. Keep a WhatsApp and a Book button here |
