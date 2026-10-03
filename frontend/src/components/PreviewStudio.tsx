@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { CATEGORIES, DESIGNS, PREVIEW_CHOICE_KEY, PREVIEW_DRAFT_KEY, type DesignId } from "@/lib/previews";
+import { CATEGORIES, DESIGNS, PREVIEW_CHOICE_KEY, PREVIEW_DRAFT_KEY, paletteFor, type DesignId } from "@/lib/previews";
 import { PreviewSite } from "./PreviewSite";
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "").slice(0, 28) || "yourbusiness";
@@ -17,6 +17,7 @@ export function PreviewStudio() {
   const [about, setAbout] = useState("");
   const [design, setDesign] = useState<DesignId>("bold");
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
+  const [tone, setTone] = useState<"all" | "light" | "dark">("all");
   const [errors, setErrors] = useState<{ name?: string; cat?: string }>({});
   const resultRef = useRef<HTMLDivElement>(null);
 
@@ -79,7 +80,7 @@ export function PreviewStudio() {
         </div>
 
         <button className="btn btn--grad" disabled={step === "loading"}>
-          {step === "loading" ? `Picking 3 designs for ${cat?.label ?? "you"}…` : "Show my website"}
+          {step === "loading" ? `Picking ${DESIGNS.length} designs for ${cat?.label ?? "you"}…` : "Show my website"}
         </button>
         <p className="muted small">Free, instant, no sign-up. Nothing is saved until you book.</p>
       </form>
@@ -90,24 +91,36 @@ export function PreviewStudio() {
     <div className="studio" ref={resultRef}>
       <div className="studio__head">
         <div>
-          <h2 className="display h2">Here&apos;s {name.trim()}, three ways.</h2>
+          <h2 className="display h2">Here&apos;s {name.trim()}, {DESIGNS.length} ways.</h2>
           <p className="lede">Pick the one that feels like you. These are starting points from our library. Your final site is designed and built around your business.</p>
         </div>
         <button className="btn btn--sm" onClick={() => setStep("form")}>Change details</button>
       </div>
 
       <div className="studio__bar">
-        <div className="studio__designs" role="group" aria-label="Design">
-          {DESIGNS.map((d) => (
-            <button key={d.id} aria-pressed={design === d.id} onClick={() => setDesign(d.id)}>
-              <strong>{d.name}</strong><span>{d.desc}</span>
-            </button>
+        <div className="studio__tones" role="group" aria-label="Show designs">
+          {(["all", "light", "dark"] as const).map((t) => (
+            <button key={t} aria-pressed={tone === t} onClick={() => setTone(t)}>{t === "all" ? `All ${DESIGNS.length}` : t === "light" ? "Light" : "Dark"}</button>
           ))}
         </div>
         <div className="studio__device" role="group" aria-label="Screen size">
           <button aria-pressed={device === "desktop"} onClick={() => setDevice("desktop")}>Desktop</button>
           <button aria-pressed={device === "mobile"} onClick={() => setDevice("mobile")}>Mobile</button>
         </div>
+      </div>
+
+      <div className="studio__designs" role="group" aria-label="Design">
+        {DESIGNS.filter((d) => tone === "all" || d.tone === tone).map((d) => {
+          const p = paletteFor(cat, d.id);
+          return (
+            <button key={d.id} aria-pressed={design === d.id} onClick={() => setDesign(d.id)}>
+              <span className="studio__swatch" aria-hidden="true" style={{ background: p.bg }}>
+                <i style={{ background: p.accent }} /><i style={{ background: p.text }} />
+              </span>
+              <strong>{d.name}</strong><span>{d.desc}</span>
+            </button>
+          );
+        })}
       </div>
 
       <div className={`frame frame--${device}`} role="img" aria-label={`${DESIGNS.find((d) => d.id === design)!.name} website design for ${name}, a ${cat.label} business`}>

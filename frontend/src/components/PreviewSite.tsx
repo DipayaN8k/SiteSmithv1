@@ -1,10 +1,10 @@
-import type { Category, DesignId } from "@/lib/previews";
+import { paletteFor, type Category, type DesignId } from "@/lib/previews";
 
 // One ready-made website design, filled in with the visitor's business name.
 // The layout reacts to the preview frame's width (CSS container queries), so the
 // desktop/mobile toggle shows a real responsive layout.
 export function PreviewSite({ cat, design, name, about }: { cat: Category; design: DesignId; name: string; about?: string }) {
-  const p = cat.palettes[design];
+  const p = paletteFor(cat, design);
   const vars = {
     "--ps-bg": p.bg, "--ps-surface": p.surface, "--ps-text": p.text,
     "--ps-muted": p.muted, "--ps-accent": p.accent, "--ps-accent-text": p.accentText,

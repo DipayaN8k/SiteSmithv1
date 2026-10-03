@@ -207,14 +207,11 @@ export function ScratchServices() {
     let raf = 0;
     let timer: ReturnType<typeof setTimeout> | undefined;
     let coinTimer: ReturnType<typeof setTimeout> | undefined;
-    console.log("[teaser] effect mount", { teased: teased.current, done });
     const io = new IntersectionObserver(([entry]) => {
-      console.log("[teaser] io", { hit: entry.isIntersecting, ratio: entry.intersectionRatio, teased: teased.current });
       if (!entry.isIntersecting || teased.current || done) return;
       teased.current = true;
       io.disconnect();
       timer = setTimeout(() => {
-        console.log("[teaser] timer fired");
         const w = c.clientWidth, h = c.clientHeight;
         const pts = [[0.93, 0.72], [0.82, 0.8], [0.92, 0.86], [0.8, 0.93], [0.9, 0.98]].map(([px, py]) => ({ x: px * w, y: py * h }));
         const coin = coinRef.current;
@@ -240,9 +237,8 @@ export function ScratchServices() {
       }, 600);
     }, { threshold: 0.6 });
     io.observe(c);
-    setTimeout(() => console.log("[teaser] watched canvas still on page?", c.isConnected, "same as current?", c === canvasRef.current), 1500);
     // Stop everything if the visitor leaves the page mid-animation.
-    return () => { console.log("[teaser] cleanup"); io.disconnect(); cancelAnimationFrame(raf); clearTimeout(timer); clearTimeout(coinTimer); };
+    return () => { io.disconnect(); cancelAnimationFrame(raf); clearTimeout(timer); clearTimeout(coinTimer); };
   }, [done]);
 
   // 3D tilt + glare that follows the cursor (mouse only; flattens while scratching).
