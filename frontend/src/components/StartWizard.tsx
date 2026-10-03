@@ -11,7 +11,7 @@ const projectTypes = [
   { v: "Landing page", d: "One page for a campaign or launch" },
   { v: "Redesign", d: "Your current site needs a glow-up" },
 ];
-const budgets = ["Under ₹5k", "₹5k – ₹10k", "₹10k – ₹15k", "₹15k – ₹20k"];
+const budgets = ["Under ₹5k", "₹5k – ₹10k", "₹10k – ₹15k"];
 
 const STEPS = ["project", "business", "scope", "contact"] as const;
 const PHONE_RE = /^[0-9+\-() .]{5,30}$/; // same rule as the backend
