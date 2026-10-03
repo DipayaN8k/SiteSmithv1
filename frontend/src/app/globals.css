@@ -437,8 +437,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .tok-s { color: #9fe0a8; }
 .tok-b { color: #b99cff; }
 
-.coder__preview { aspect-ratio: auto; min-height: 220px; padding-bottom: 34px; position: relative; transition: background 0.5s ease; }
-.coder .editor { margin: -24px 0 0 8%; z-index: 1; box-shadow: 0 -10px 40px -18px rgba(0, 0, 0, 0.55), 0 20px 40px -20px rgba(0, 0, 0, 0.5); }
+.coder__preview { aspect-ratio: auto; min-height: 220px; padding-bottom: 20px; position: relative; transition: background 0.5s ease; }
+.coder .editor { margin: 14px 0 0; z-index: 1; box-shadow: 0 -10px 40px -18px rgba(0, 0, 0, 0.55), 0 20px 40px -20px rgba(0, 0, 0, 0.5); }
 .coder__preview [data-on] { transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.2), filter 0.45s ease; }
 .coder__preview [data-on="false"] { opacity: 0; transform: translateY(10px); filter: blur(4px); }
 @media (max-width: 520px) {
