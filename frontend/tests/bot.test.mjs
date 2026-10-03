@@ -67,7 +67,7 @@ test("changing topic mid-question works", () => {
 test("contact, social, budgets and services include the details", () => {
   assert.match(ask("contact number please").message.text, /\+91 62918 45804/);
   assert.match(ask("do you have instagram").message.text, /@sitesmith\.studio/);
-  assert.match(ask("what budget do you work with").message.text, /₹5k – ₹10k/);
+  assert.match(ask("what budget do you work with").message.text, /Under ₹5k/);
   const services = ask("what services do you offer").message.text;
   assert.match(services, /Domain and hosting/);
   assert.match(ask("do you handle deployment and hosting").message.text, /domain and hosting/i);
@@ -100,7 +100,7 @@ test("common questions land on the right topic", () => {
     "will you maintain it after launch": /after launch/i,
     "i dont like the design": /approve the design/i,
     "can you make an online shop for my clothes": /mobile-first/i,
-    "what budget do you work with": /₹5k – ₹10k/,
+    "what budget do you work with": /Under ₹5k/,
   };
   for (const [q, re] of Object.entries(cases)) assert.match(ask(q).message.text, re, q);
 });
