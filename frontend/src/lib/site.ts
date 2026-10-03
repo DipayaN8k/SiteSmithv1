@@ -4,6 +4,7 @@ export const brand = {
   tagline: "More customers. Not more templates.",
   email: "hello@sitesmith.studio",
   whatsapp: "+91 62918 45804",
+  whatsapp2: "+91 80178 12091", // second WhatsApp line, shown alongside the main one
   instagram: "@sitesmith.studio",
   city: "Kolkata, India",
 };

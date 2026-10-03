@@ -7,9 +7,10 @@
     "max_input_length": 300
   },
   "contact": {
-    "_help": "Used in answers as {brand} {whatsapp} {phone} {email} {instagram} {city} {hours}, and for the WhatsApp / Email / Instagram / Call buttons. Keep in sync with brand in src/lib/site.ts.",
+    "_help": "Used in answers as {brand} {whatsapp} {whatsapp_2} {phone} {email} {instagram} {city} {hours}, and for the WhatsApp / Email / Instagram / Call buttons. Keep in sync with brand in src/lib/site.ts.",
     "brand": "Sitesmith",
     "whatsapp": "+91 62918 45804",
+    "whatsapp_2": "+91 80178 12091",
     "whatsapp_prefill": "Hi! I found you through your website and have a question.",
     "phone": "+91 62918 45804",
     "email": "hello@sitesmith.studio",
@@ -485,7 +486,7 @@
         "mobile number",
         "cell number"
       ],
-      "answer": "You can reach us on WhatsApp or phone at {whatsapp}, or email {email}. We're available {hours}.",
+      "answer": "You can reach us on WhatsApp or phone at {whatsapp} or {whatsapp_2}, or email {email}. We're available {hours}.",
       "buttons": [
         "whatsapp",
         "email",
@@ -526,7 +527,7 @@
         "text you",
         "dm"
       ],
-      "answer": "You can message us on WhatsApp at {whatsapp}. A real person replies.",
+      "answer": "You can message us on WhatsApp at {whatsapp} or {whatsapp_2}. A real person replies.",
       "buttons": [
         "whatsapp",
         "book"

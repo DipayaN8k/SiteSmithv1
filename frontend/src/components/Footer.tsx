@@ -17,7 +17,15 @@ export function Footer() {
           </div>
           <div className="footer__contact">
             <a href={`mailto:${brand.email}`}>{brand.email}</a>
-            <span>WhatsApp {brand.whatsapp}</span>
+            <span className="footer__wa">
+              WhatsApp{" "}
+              {[brand.whatsapp, brand.whatsapp2].map((n, i) => (
+                <span key={n}>
+                  {i > 0 && " / "}
+                  <a href={`https://wa.me/${n.replace(/\D/g, "")}`} target="_blank" rel="noopener noreferrer">{n}</a>
+                </span>
+              ))}
+            </span>
             <span>Instagram {brand.instagram}</span>
             <span>{brand.city}</span>
           </div>

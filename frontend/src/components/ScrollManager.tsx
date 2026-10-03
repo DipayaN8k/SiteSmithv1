@@ -1,12 +1,22 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 // A refresh should always land at the top of the page.
 // 1. Turn off the browser's scroll restoration (Safari restores aggressively).
-// 2. After a "#section" link has scrolled into place, drop the hash from the URL,
+// 2. Every page change starts at the top, instantly (no slide up from below).
+// 3. After a "#section" link has scrolled into place, drop the hash from the URL,
 //    so refreshing doesn't jump back to that section.
 export function ScrollManager() {
+  const pathname = usePathname();
+
+  // New page: jump to the top. Runs after Next.js's own scroll, which can land
+  // part-way down the page, and uses "instant" to skip the smooth-scroll animation.
+  useEffect(() => {
+    if (!location.hash) window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [pathname]);
+
   useEffect(() => {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
