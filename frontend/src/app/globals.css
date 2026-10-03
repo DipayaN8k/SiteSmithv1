@@ -268,9 +268,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .card-work__foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 18px; }
 .card-work__name { font-family: var(--display); font-weight: 800; letter-spacing: -0.02em; font-size: 1.1rem; }
 .card-work__meta { font-size: var(--step--1); color: var(--muted); }
+.card-work__visit { display: inline-block; opacity: 0.6; transition: transform 0.2s ease, opacity 0.2s ease; }
+.card-work:hover .card-work__visit { opacity: 1; transform: translate(2px, -2px); }
 .card-work__result { flex: none; font-size: 0.78rem; font-weight: 700; color: #fff; background: var(--grad-x); border-radius: 999px; padding: 5px 11px; }
 
 .mock { aspect-ratio: 16 / 10; position: relative; overflow: hidden; }
+.mock--photo img { object-fit: cover; object-position: left top; }
 .mock__bar { display: flex; gap: 6px; align-items: center; padding: 9px 12px; background: rgba(255,255,255,0.08); }
 .mock__bar i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.45); }
 .mock__nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 6%; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.04em; }

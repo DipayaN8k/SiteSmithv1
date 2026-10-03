@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { AskBotButton } from "@/components/AskBotButton";
 import { brand, compare, faqs, projects, steps, type Project } from "@/lib/site";
@@ -5,10 +6,18 @@ import { brand, compare, faqs, projects, steps, type Project } from "@/lib/site"
 // Illustrated browser mock — stand-in until real project screenshots are added.
 export function SiteMock({ p }: { p: Project }) {
   const [dark, light, accent] = p.palette;
+  // A real screenshot beats the drawing: use it whenever the project has one.
+  if (p.image) {
+    return (
+      <div className="mock mock--photo" style={{ background: dark }}>
+        <Image src={p.image} alt={`${p.name} website homepage`} fill sizes="(max-width: 860px) 100vw, 600px" />
+      </div>
+    );
+  }
   return (
     <div className="mock" style={{ background: dark, color: light }}>
       <div className="mock__bar"><i /><i /><i /></div>
-      <div className="mock__nav"><span>{p.name.toUpperCase()}</span><span><span>Shop</span><span>About</span><span>Contact</span></span></div>
+      <div className="mock__nav"><span>{p.name.toUpperCase()}</span><span>{(p.nav ?? ["Shop", "About", "Contact"]).map((w) => <span key={w}>{w}</span>)}</span></div>
       <div className="mock__hero">
         <p className="mock__h">{p.headline}</p>
         <span className="mock__btn" style={{ background: accent, color: dark }}>Explore</span>
@@ -20,18 +29,27 @@ export function SiteMock({ p }: { p: Project }) {
 }
 
 export function WorkCard({ p }: { p: Project }) {
-  return (
-    <Link href="/work" className="card-work">
+  const inner = (
+    <>
       <SiteMock p={p} />
       <div className="card-work__foot">
         <div>
-          <div className="card-work__name">{p.name}</div>
-          <div className="card-work__meta">{p.kind}</div>
+          <div className="card-work__name">{p.name}{p.url && <span className="card-work__visit"> ↗</span>}</div>
+          <div className="card-work__meta">{p.url ? `${p.kind} · view the live site` : p.kind}</div>
         </div>
         <span className="card-work__result">{p.result}</span>
       </div>
-    </Link>
+    </>
   );
+  // Projects with a live site open it in a new tab; the rest stay on /work.
+  if (p.url) {
+    return (
+      <a href={p.url} className="card-work" target="_blank" rel="noopener noreferrer" aria-label={`${p.name}: ${p.kind} (opens the live site in a new tab)`}>
+        {inner}
+      </a>
+    );
+  }
+  return <Link href="/work" className="card-work">{inner}</Link>;
 }
 
 // The projects plus a closing "your business could be next" banner. Used on the home page and /work.

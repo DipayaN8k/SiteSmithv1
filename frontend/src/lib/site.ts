@@ -103,12 +103,15 @@ export type Project = {
   result: string;
   palette: [string, string, string];
   headline: string;
+  url?: string; // live site. When set, the card opens it in a new tab
+  image?: string; // real screenshot in /public (e.g. "/work/spotturf-cover.webp"). Replaces the drawn mock
+  nav?: [string, string, string]; // words in the mock's nav bar (defaults to Shop / About / Contact)
 };
 
 // Placeholder projects until real client work (with testimonials) is ready. Keep this list short.
 export const projects: Project[] = [
+  { slug: "spotturf", name: "SpotTurf Kolkata", kind: "Turf booking website", result: "Live slot booking", palette: ["#0f3d27", "#f2efe4", "#f6c21c"], headline: "Play till midnight in Kasba.", url: "https://spot-turfs.netlify.app/", image: "/work/spotturf-cover.webp", nav: ["Book", "Rates", "Photos"] },
   { slug: "trailpeak", name: "Trailpeak Treks", kind: "Travel website", result: "3× more enquiries", palette: ["#1d3b5c", "#e9f0f6", "#ffb703"], headline: "Walk where the map ends." },
-  { slug: "clayhouse", name: "Clayhouse", kind: "E-commerce", result: "₹4.2L in month one", palette: ["#5a2e1f", "#f4e6d8", "#d77a3d"], headline: "Handmade, slowly." },
 ];
 
 export const steps = [
