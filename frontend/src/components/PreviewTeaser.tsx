@@ -21,7 +21,7 @@ export function PreviewTeaser() {
           <div className="teaser__copy">
             <p className="kicker">Free preview</p>
             <h2 id="teaser-title" className="display h2">Curious how <span className="grad-text teaser__name">{shown}</span> would look online?</h2>
-            <p className="teaser__text">Type your business name. We&apos;ll show you seven designs made for your kind of business, in seconds.</p>
+            <p className="teaser__text">Type your business name. We&apos;ll show you four designs made for your kind of business, in seconds.</p>
           </div>
           <div className="teaser__row">
             <label htmlFor="teaser-name" className="sr-only">Business name</label>

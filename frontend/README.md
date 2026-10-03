@@ -34,7 +34,7 @@ npm run build   # production build
 ## How visitors are pulled in
 
 1. **Hook** — the hero code editor builds a site line by line; the scratch ticket hides the services.
-2. **See it** — "See your website first" (/preview) shows seven designs with the visitor's own business name.
+2. **See it** — "See your website first" (/preview) shows four designs (Bold, Clean, Luxe, Complete) with real photos and motion, with the visitor's own business name.
 3. **Convert** — "I like this one — book it" opens the booking form with business type and chosen design pre-filled.
 
 ## Backend integration (done)

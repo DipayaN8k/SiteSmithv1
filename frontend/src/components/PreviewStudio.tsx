@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { CATEGORIES, DESIGNS, PREVIEW_CHOICE_KEY, PREVIEW_DRAFT_KEY, paletteFor, type DesignId } from "@/lib/previews";
+import { CATEGORIES, DEFAULT_FONT, DESIGNS, FONTS, PREVIEW_CHOICE_KEY, PREVIEW_DRAFT_KEY, THEMES, paletteFor, type DesignId, type FontId } from "@/lib/previews";
+import { elegant, statement } from "@/lib/previewFonts";
 import { PreviewSite } from "./PreviewSite";
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "").slice(0, 28) || "yourbusiness";
 
-// "See your website": business name + type (+ what they do) -> three ready-made designs with their name on them.
+// "See your website": business name + type (+ what they do) -> four ready-made designs with their name on them
+// (see DESIGNS in lib/previews), with real photos and motion. Visitors can also try colour themes and heading fonts.
 export function PreviewStudio() {
   const router = useRouter();
   const [step, setStep] = useState<"form" | "loading" | "result">("form");
@@ -17,7 +19,8 @@ export function PreviewStudio() {
   const [about, setAbout] = useState("");
   const [design, setDesign] = useState<DesignId>("bold");
   const [device, setDevice] = useState<"desktop" | "mobile">("desktop");
-  const [tone, setTone] = useState<"all" | "light" | "dark">("all");
+  const [theme, setTheme] = useState("original");
+  const [font, setFont] = useState<FontId | null>(null); // null = the design's own font
   const [errors, setErrors] = useState<{ name?: string; cat?: string }>({});
   const resultRef = useRef<HTMLDivElement>(null);
 
@@ -49,7 +52,8 @@ export function PreviewStudio() {
   const book = () => {
     const d = DESIGNS.find((x) => x.id === design)!;
     try {
-      sessionStorage.setItem(PREVIEW_CHOICE_KEY, JSON.stringify({ name: name.trim(), catId, category: cat?.label, design: d.name }));
+      const style = [theme !== "original" && `${THEMES.find((t) => t.id === theme)?.name} colours`, font && `${FONTS.find((f) => f.id === font)?.name} font`].filter(Boolean).join(", ");
+      sessionStorage.setItem(PREVIEW_CHOICE_KEY, JSON.stringify({ name: name.trim(), catId, category: cat?.label, design: d.name, style }));
     } catch {}
     router.push("/start");
   };
@@ -88,7 +92,7 @@ export function PreviewStudio() {
   }
 
   return (
-    <div className="studio" ref={resultRef}>
+    <div className={`studio ${elegant.variable} ${statement.variable}`} ref={resultRef}>
       <div className="studio__head">
         <div>
           <h2 className="display h2">Here&apos;s {name.trim()}, {DESIGNS.length} ways.</h2>
@@ -98,11 +102,7 @@ export function PreviewStudio() {
       </div>
 
       <div className="studio__bar">
-        <div className="studio__tones" role="group" aria-label="Show designs">
-          {(["all", "light", "dark"] as const).map((t) => (
-            <button key={t} aria-pressed={tone === t} onClick={() => setTone(t)}>{t === "all" ? `All ${DESIGNS.length}` : t === "light" ? "Light" : "Dark"}</button>
-          ))}
-        </div>
+        <p className="studio__hint">Scroll and tap inside the preview. It works like the real thing.</p>
         <div className="studio__device" role="group" aria-label="Screen size">
           <button aria-pressed={device === "desktop"} onClick={() => setDevice("desktop")}>Desktop</button>
           <button aria-pressed={device === "mobile"} onClick={() => setDevice("mobile")}>Mobile</button>
@@ -110,8 +110,8 @@ export function PreviewStudio() {
       </div>
 
       <div className="studio__designs" role="group" aria-label="Design">
-        {DESIGNS.filter((d) => tone === "all" || d.tone === tone).map((d) => {
-          const p = paletteFor(cat, d.id);
+        {DESIGNS.map((d) => {
+          const p = paletteFor(cat, d.id, theme);
           return (
             <button key={d.id} aria-pressed={design === d.id} onClick={() => setDesign(d.id)}>
               <span className="studio__swatch" aria-hidden="true" style={{ background: p.bg }}>
@@ -123,12 +123,32 @@ export function PreviewStudio() {
         })}
       </div>
 
-      <div className={`frame frame--${device}`} role="img" aria-label={`${DESIGNS.find((d) => d.id === design)!.name} website design for ${name}, a ${cat.label} business`}>
-        <div className="frame__bar"><i /><i /><i /><span>www.{slug(name)}.com</span></div>
-        <div className="frame__viewport" aria-hidden="true">
-          <PreviewSite key={design} cat={cat} design={design} name={name.trim()} about={about} />
+      <div className="studio__style">
+        <div className="studio__themes" role="group" aria-label="Colours">
+          <span>Colours</span>
+          {THEMES.map((t) => {
+            const p = paletteFor(cat, design, t.id);
+            return (
+              <button key={t.id} aria-pressed={theme === t.id} onClick={() => setTheme(t.id)} title={t.name}>
+                <i style={{ background: `linear-gradient(135deg, ${p.bg} 50%, ${p.accent} 50%)` }} aria-hidden="true" />{t.name}
+              </button>
+            );
+          })}
+        </div>
+        <div className="studio__fonts" role="group" aria-label="Heading font">
+          <span>Font</span>
+          {FONTS.map((f) => (
+            <button key={f.id} data-font={f.id} aria-pressed={(font ?? DEFAULT_FONT[design]) === f.id} onClick={() => setFont(f.id)}>{f.name}</button>
+          ))}
         </div>
       </div>
+
+      <section className={`frame frame--${device}`} aria-label={`${DESIGNS.find((d) => d.id === design)!.name} website design for ${name}, a ${cat.label} business`}>
+        <div className="frame__bar" aria-hidden="true"><i /><i /><i /><span>www.{slug(name)}.com</span></div>
+        <div className="frame__viewport">
+          <PreviewSite key={`${design}-${catId}`} cat={cat} design={design} name={name.trim()} about={about} theme={theme} font={font ?? undefined} />
+        </div>
+      </section>
 
       <div className="studio__cta">
         <button className="btn btn--grad" onClick={book}>I like this one — book it</button>
