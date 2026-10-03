@@ -19,12 +19,39 @@ export type Category = {
   palettes: { bold: Palette; clean: Palette; editorial: Palette };
 };
 
+// Seven layout styles. The first three have hand-picked colours per category (palettes below);
+// the others derive their colours from those, so every category automatically gets all seven.
 export const DESIGNS = [
-  { id: "bold", name: "Bold", desc: "Dark, confident, big type" },
-  { id: "clean", name: "Clean", desc: "Light, simple, lots of space" },
-  { id: "editorial", name: "Editorial", desc: "Magazine-style, strong grid" },
+  { id: "bold", name: "Bold", desc: "Dark, confident, big type", tone: "dark" },
+  { id: "clean", name: "Clean", desc: "Light, simple, lots of space", tone: "light" },
+  { id: "editorial", name: "Editorial", desc: "Magazine-style, strong grid", tone: "light" },
+  { id: "showcase", name: "Showcase", desc: "Big picture banner, text on top", tone: "dark" },
+  { id: "split", name: "Split", desc: "Picture left, story right", tone: "light" },
+  { id: "soft", name: "Soft", desc: "Rounded, friendly, pastel", tone: "light" },
+  { id: "luxe", name: "Luxe", desc: "Premium, dark, refined", tone: "dark" },
 ] as const;
 export type DesignId = (typeof DESIGNS)[number]["id"];
+
+// Blend two hex colours (t = share of `a`).
+function mix(a: string, b: string, t: number) {
+  const p = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const [x, y] = [p(a), p(b)];
+  return "#" + x.map((v, i) => Math.round(v * t + y[i] * (1 - t)).toString(16).padStart(2, "0")).join("");
+}
+
+// Colours for any design of any category.
+export function paletteFor(cat: Category, design: DesignId): Palette {
+  const { bold, clean, editorial } = cat.palettes;
+  switch (design) {
+    case "bold": return bold;
+    case "clean": return clean;
+    case "editorial": return editorial;
+    case "showcase": return bold;
+    case "split": return { ...clean, bg: mix(clean.accent, "#ffffff", 0.06), surface: "#ffffff" };
+    case "soft": return { ...editorial, bg: mix(editorial.accent, "#ffffff", 0.1), surface: "#ffffff" };
+    case "luxe": return { bg: "#0f0e0d", surface: "#1b1916", text: "#f4efe6", muted: "#b8b0a2", accent: mix(bold.accent, "#f4efe6", 0.75), accentText: "#0f0e0d" };
+  }
+}
 
 export const CATEGORIES: Category[] = [
   {
@@ -79,7 +106,7 @@ export const CATEGORIES: Category[] = [
     aboutTitle: "Your hour off",
     aboutText: "Relax, switch off and leave looking like your best self.",
     palettes: {
-      bold: { bg: "#1d0f2b", surface: "#2c1a40", text: "#f6ecff", muted: "#c9b6dc", accent: "#b55ce0", accentText: "#ffffff" },
+      bold: { bg: "#1d0f2b", surface: "#2c1a40", text: "#f6ecff", muted: "#c9b6dc", accent: "#9b45c9", accentText: "#ffffff" },
       clean: { bg: "#fbf7f4", surface: "#f1e7df", text: "#2b211c", muted: "#76665c", accent: "#9c6646", accentText: "#ffffff" },
       editorial: { bg: "#f4efff", surface: "#ffffff", text: "#241638", muted: "#5f4d78", accent: "#962fbf", accentText: "#ffffff" },
     },
@@ -117,7 +144,7 @@ export const CATEGORIES: Category[] = [
     aboutTitle: "Engineers, not salespeople",
     aboutText: "You talk directly to the people building your product.",
     palettes: {
-      bold: { bg: "#0b0f1a", surface: "#141a2b", text: "#eef2ff", muted: "#9aa6c7", accent: "#6d78f0", accentText: "#ffffff" },
+      bold: { bg: "#0b0f1a", surface: "#141a2b", text: "#eef2ff", muted: "#9aa6c7", accent: "#5560e0", accentText: "#ffffff" },
       clean: { bg: "#ffffff", surface: "#f3f5f9", text: "#0f172a", muted: "#5b6476", accent: "#0f172a", accentText: "#ffffff" },
       editorial: { bg: "#f5f7f2", surface: "#ffffff", text: "#16201a", muted: "#57635a", accent: "#15803d", accentText: "#ffffff" },
     },
@@ -157,7 +184,7 @@ export const CATEGORIES: Category[] = [
     palettes: {
       bold: { bg: "#1a1033", surface: "#271a47", text: "#f5f1ff", muted: "#c2b6e3", accent: "#feda75", accentText: "#1a1033" },
       clean: { bg: "#ffffff", surface: "#f4f2fb", text: "#1d1834", muted: "#615b7a", accent: "#5b3fd1", accentText: "#ffffff" },
-      editorial: { bg: "#fff8e4", surface: "#ffffff", text: "#3b2400", muted: "#7a6438", accent: "#b97d00", accentText: "#ffffff" },
+      editorial: { bg: "#fff8e4", surface: "#ffffff", text: "#3b2400", muted: "#7a6438", accent: "#966300", accentText: "#ffffff" },
     },
   },
   {
