@@ -3,7 +3,7 @@ export const brand = {
   name: "Sitesmith", // placeholder until the team finalises the name
   tagline: "More customers. Not more templates.",
   email: "hello@sitesmith.studio",
-  whatsapp: "+91 90000 00000",
+  whatsapp: "+91 62918 45804",
   instagram: "@sitesmith.studio",
   city: "Kolkata, India",
 };

@@ -61,13 +61,13 @@ test("pricing asks, then gives a range", () => {
 test("changing topic mid-question works", () => {
   const first = ask("how long does it take");
   const second = ask("what is your phone number", first.state);
-  assert.match(second.message.text, /\+91 90000 00000/);
+  assert.match(second.message.text, /\+91 62918 45804/);
 });
 
 test("contact, social, budgets and services include the details", () => {
-  assert.match(ask("contact number please").message.text, /\+91 90000 00000/);
+  assert.match(ask("contact number please").message.text, /\+91 62918 45804/);
   assert.match(ask("do you have instagram").message.text, /@sitesmith\.studio/);
-  assert.match(ask("what budget do you work with").message.text, /Under ₹5k/);
+  assert.match(ask("what budget do you work with").message.text, /₹5k – ₹10k/);
   const services = ask("what services do you offer").message.text;
   assert.match(services, /Domain and hosting/);
   assert.match(ask("do you handle deployment and hosting").message.text, /domain and hosting/i);
@@ -75,9 +75,9 @@ test("contact, social, budgets and services include the details", () => {
 
 test("contact answer offers WhatsApp, email, call, instagram buttons with real links", () => {
   const hrefs = ask("how do i contact you").message.buttons.map((b) => b.href);
-  assert.ok(hrefs.some((h) => h.startsWith("https://wa.me/919000000000?text=")));
+  assert.ok(hrefs.some((h) => h.startsWith("https://wa.me/916291845804?text=")));
   assert.ok(hrefs.includes("mailto:hello@sitesmith.studio"));
-  assert.ok(hrefs.includes("tel:+919000000000"));
+  assert.ok(hrefs.includes("tel:+916291845804"));
   assert.ok(hrefs.includes("https://instagram.com/sitesmith.studio"));
 });
 
@@ -100,7 +100,7 @@ test("common questions land on the right topic", () => {
     "will you maintain it after launch": /after launch/i,
     "i dont like the design": /approve the design/i,
     "can you make an online shop for my clothes": /mobile-first/i,
-    "what budget do you work with": /Under ₹5k/,
+    "what budget do you work with": /₹5k – ₹10k/,
   };
   for (const [q, re] of Object.entries(cases)) assert.match(ask(q).message.text, re, q);
 });
@@ -115,7 +115,7 @@ test("a generic answer like 'a website' picks Business website, but specific wor
 test("never asks the same question twice: it remembers the project type", () => {
   let r = ask("how much does it cost");
   r = ask("Online store", r.state);
-  assert.match(r.message.text, /₹15k – ₹20k/);
+  assert.match(r.message.text, /₹10k – ₹15k/);
   assert.equal(r.state.project, "Online store");
   // later, a different question reuses the answer instead of asking again
   r = bot.topic("delivery", r.state);
@@ -146,7 +146,7 @@ test("pricing answers tell unhappy visitors to contact WhatsApp", () => {
   const first = ask("how much does it cost");
   for (const label of ["Landing page", "Business website", "Online store", "Redesign"]) {
     const r = ask(label, first.state);
-    assert.match(r.message.text, /Not happy with the pricing\? Contact us on WhatsApp \(\+91 90000 00000\)/, label);
+    assert.match(r.message.text, /Not happy with the pricing\? Contact us on WhatsApp \(\+91 62918 45804\)/, label);
     assert.ok(r.message.buttons.some((b) => b.href?.startsWith("https://wa.me/")), `${label} has a WhatsApp button`);
   }
   const budgets = ask("what budget do you work with");

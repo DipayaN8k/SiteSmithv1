@@ -9,9 +9,9 @@
   "contact": {
     "_help": "Used in answers as {brand} {whatsapp} {phone} {email} {instagram} {city} {hours}, and for the WhatsApp / Email / Instagram / Call buttons. Keep in sync with brand in src/lib/site.ts.",
     "brand": "Sitesmith",
-    "whatsapp": "+91 90000 00000",
+    "whatsapp": "+91 62918 45804",
     "whatsapp_prefill": "Hi! I found you through your website and have a question.",
-    "phone": "+91 90000 00000",
+    "phone": "+91 62918 45804",
     "email": "hello@sitesmith.studio",
     "instagram": "@sitesmith.studio",
     "instagram_url": "https://instagram.com/sitesmith.studio",
@@ -20,10 +20,8 @@
   },
   "pricing_note": "Not happy with the pricing? Contact us on WhatsApp ({whatsapp}) and we'll find something that fits your budget.",
   "budgets": [
-    "Under ₹5k",
     "₹5k – ₹10k",
-    "₹10k – ₹15k",
-    "₹15k – ₹20k"
+    "₹10k – ₹15k"
   ],
   "services": [
     "Business websites (5 to 15 pages)",
@@ -348,7 +346,7 @@
               "online shop",
               "web store"
             ],
-            "answer": "Online stores usually fall in the ₹15k – ₹20k range, depending on how many products you have. {pricing_note}"
+            "answer": "Online stores usually fall in the ₹10k – ₹15k range, depending on how many products you have. {pricing_note}"
           },
           {
             "label": "Redesign",
