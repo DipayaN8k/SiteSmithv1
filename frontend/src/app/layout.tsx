@@ -4,6 +4,7 @@ import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { ScrollManager } from "@/components/ScrollManager";
+import { ChatBot } from "@/components/ChatBot";
 import { brand, DEFAULT_THEME, THEME_KEY, THEMES } from "@/lib/site";
 
 const display = Bricolage_Grotesque({ subsets: ["latin"], axes: ["opsz"], variable: "--font-display", display: "swap" });
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Nav />
           <main>{children}</main>
           <Footer />
+          <ChatBot />
       </body>
     </html>
   );

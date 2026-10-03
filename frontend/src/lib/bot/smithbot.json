@@ -1,0 +1,1268 @@
+{
+  "_help": "SmithBot's whole brain. Edit text freely; no code changes needed. See README.md in this folder for the full guide. Anything starting with _ is a note and is ignored. ALL numbers, prices and timelines below are PLACEHOLDERS: replace them with real ones.",
+  "settings": {
+    "bot_name": "SmithBot",
+    "typing_delay_ms": 450,
+    "min_score": 2,
+    "max_input_length": 300
+  },
+  "contact": {
+    "_help": "Used in answers as {brand} {whatsapp} {phone} {email} {instagram} {city} {hours}, and for the WhatsApp / Email / Instagram / Call buttons. Keep in sync with brand in src/lib/site.ts.",
+    "brand": "Sitesmith",
+    "whatsapp": "+91 90000 00000",
+    "whatsapp_prefill": "Hi! I found you through your website and have a question.",
+    "phone": "+91 90000 00000",
+    "email": "hello@sitesmith.studio",
+    "instagram": "@sitesmith.studio",
+    "instagram_url": "https://instagram.com/sitesmith.studio",
+    "city": "Kolkata, India",
+    "hours": "Mon to Sat, 10am to 7pm IST"
+  },
+  "pricing_note": "Not happy with the pricing? Contact us on WhatsApp ({whatsapp}) and we'll find something that fits your budget.",
+  "budgets": [
+    "Under ₹5k",
+    "₹5k – ₹10k",
+    "₹10k – ₹15k",
+    "₹15k – ₹20k"
+  ],
+  "services": [
+    "Business websites (5 to 15 pages)",
+    "Online stores with a product catalogue",
+    "Landing pages for campaigns and launches",
+    "Domain and hosting setup (we deploy it for you)",
+    "SEO basics so Google can find you",
+    "Enquiry forms that reach our team's dashboard",
+    "WhatsApp order alerts for stores",
+    "A free preview of your site before you commit",
+    "An editor so you can change text and images yourself"
+  ],
+  "welcome": {
+    "_help": "First message when the chat opens, plus the buttons under it. quick_replies are topic ids from the topics list below. The message should say who we are and what we do, because a new visitor has no context. The buttons use each topic's 'title', so write titles that make sense on their own.",
+    "message": "Hi, I'm SmithBot, the assistant for {brand}. We build websites, online stores and landing pages for businesses. Tap a question below or type your own.",
+    "quick_replies": [
+      "services",
+      "pricing",
+      "delivery",
+      "process",
+      "contact"
+    ]
+  },
+  "greetings": {
+    "_help": "If someone just says hi. One line each; the bot picks one at random.",
+    "triggers": [
+      "hi",
+      "hii",
+      "hello",
+      "hey",
+      "hola",
+      "namaste",
+      "good morning",
+      "good afternoon",
+      "good evening",
+      "yo",
+      "sup"
+    ],
+    "replies": [
+      "Hello! What would you like to know?",
+      "Hey there! Ask me anything about our websites.",
+      "Hi! How can I help with your website today?"
+    ]
+  },
+  "exits": {
+    "_help": "If someone says thanks or bye.",
+    "triggers": [
+      "bye",
+      "goodbye",
+      "see you",
+      "thanks",
+      "thank you",
+      "thx",
+      "ty",
+      "ok thanks",
+      "that's all",
+      "thats all",
+      "cya",
+      "no thanks"
+    ],
+    "replies": [
+      "Happy to help! Message us on WhatsApp whenever you're ready.",
+      "Anytime! Come back if you have more questions.",
+      "Thanks for stopping by. Book a project when you're ready."
+    ],
+    "buttons": [
+      "whatsapp",
+      "book"
+    ]
+  },
+  "fallback": {
+    "_help": "Used for gibberish and anything outside what the bot knows. It hands the visitor to a human.",
+    "replies": [
+      "I'm not sure about that one. A real person can help: please contact us on WhatsApp or book a project.",
+      "That's outside what I can answer. Please reach us on WhatsApp or book a project and we'll sort it out."
+    ],
+    "buttons": [
+      "whatsapp",
+      "book"
+    ]
+  },
+  "topics": [
+    {
+      "_help": "A topic with 'ask' first asks a question, then answers based on the option chosen. This one gives a delivery estimate.",
+      "id": "delivery",
+      "title": "How long does a website take?",
+      "keywords": [
+        "how long",
+        "delivery",
+        "deliver",
+        "timeline",
+        "turnaround",
+        "deadline",
+        "how many days",
+        "how many weeks",
+        "how soon",
+        "ready by",
+        "go live",
+        "time taken",
+        "duration",
+        "when will it be ready",
+        "how fast",
+        "quickly",
+        "how long does",
+        "how long will",
+        "how long to",
+        "how long for",
+        "how long is",
+        "how much time",
+        "how many days will"
+      ],
+      "ask": {
+        "question": "It depends on what you need. What are you looking to build?",
+        "options": [
+          {
+            "label": "Landing page",
+            "keywords": [
+              "landing",
+              "one page",
+              "single page",
+              "campaign",
+              "launch page"
+            ],
+            "answer": "A landing page usually goes live in about 2 days after you approve the design."
+          },
+          {
+            "label": "Business website",
+            "keywords": [
+              "portfolio",
+              "multi page",
+              "corporate",
+              "brochure",
+              "informational",
+              "business site",
+              "company website",
+              "company site",
+              "small business"
+            ],
+            "answer": "A business website usually goes live in about 1 week after you approve the design.",
+            "weak_keywords": [
+              "website",
+              "websites",
+              "web site",
+              "site",
+              "sites"
+            ]
+          },
+          {
+            "label": "Online store",
+            "keywords": [
+              "store",
+              "shop",
+              "ecommerce",
+              "e commerce",
+              "sell",
+              "products",
+              "catalogue",
+              "catalog",
+              "online shop",
+              "web store"
+            ],
+            "answer": "An online store usually takes about 1 to 2 weeks, depending on how many products you have."
+          },
+          {
+            "label": "Redesign",
+            "keywords": [
+              "redesign",
+              "revamp",
+              "refresh",
+              "existing",
+              "old site",
+              "rebuild",
+              "update my site"
+            ],
+            "answer": "A redesign usually takes about 1 week, depending on the size of your current site."
+          }
+        ]
+      },
+      "buttons": [
+        "topic:pricing",
+        "book"
+      ]
+    },
+    {
+      "id": "pricing_concern",
+      "title": "Can the price be negotiated?",
+      "keywords": [
+        "too expensive",
+        "too costly",
+        "too much",
+        "expensive",
+        "costly",
+        "cheap",
+        "cheaper",
+        "discount",
+        "discounts",
+        "negotiate",
+        "negotiation",
+        "bargain",
+        "lower price",
+        "reduce the price",
+        "reduce price",
+        "best price",
+        "over budget",
+        "out of my budget",
+        "cant afford",
+        "cannot afford",
+        "afford",
+        "not satisfied with the price",
+        "not happy with the price",
+        "not satisfied with pricing",
+        "not happy with pricing",
+        "can you reduce",
+        "less price",
+        "offer any discount",
+        "not satisfied with the pricing",
+        "not happy with the pricing",
+        "unhappy with the price",
+        "unhappy with the pricing",
+        "dont like the price",
+        "dont like the pricing",
+        "dont like the cost",
+        "negotiate the price",
+        "negotiate price",
+        "reduce the cost",
+        "too high",
+        "price is high",
+        "price is too high",
+        "pricing is high",
+        "pricing too high",
+        "costs too much",
+        "over my budget",
+        "beyond my budget",
+        "above my budget",
+        "exceeds my budget",
+        "more than my budget",
+        "cheaper option",
+        "any offers",
+        "any offer"
+      ],
+      "answer": "We understand. Pricing depends on the project, and we can often adjust the scope to fit your budget. Please contact us on WhatsApp ({whatsapp}), tell us what you have in mind, and we'll find something that works.",
+      "buttons": [
+        "whatsapp",
+        "topic:budgets",
+        "book"
+      ]
+    },
+    {
+      "_help": "Same pattern for pricing. PLACEHOLDER prices: replace with yours.",
+      "id": "pricing",
+      "title": "How much does a website cost?",
+      "keywords": [
+        "price",
+        "prices",
+        "pricing",
+        "cost",
+        "costs",
+        "how much",
+        "charge",
+        "charges",
+        "fees",
+        "fee",
+        "quote",
+        "quotation",
+        "rate",
+        "rates",
+        "package",
+        "packages",
+        "inr",
+        "how much does",
+        "how much is",
+        "how much for",
+        "how much will",
+        "how much to",
+        "cost of",
+        "price of",
+        "what does it cost",
+        "what is the price"
+      ],
+      "ask": {
+        "question": "Pricing depends on the project. What do you need?",
+        "options": [
+          {
+            "label": "Landing page",
+            "keywords": [
+              "landing",
+              "one page",
+              "single page",
+              "campaign"
+            ],
+            "answer": "Landing pages usually fall in the ₹5k – ₹10k range. {pricing_note}"
+          },
+          {
+            "label": "Business website",
+            "keywords": [
+              "portfolio",
+              "multi page",
+              "corporate",
+              "business site",
+              "company website",
+              "company site",
+              "small business"
+            ],
+            "answer": "Business websites usually fall in the ₹10k – ₹15k range. {pricing_note}",
+            "weak_keywords": [
+              "website",
+              "websites",
+              "web site",
+              "site",
+              "sites"
+            ]
+          },
+          {
+            "label": "Online store",
+            "keywords": [
+              "store",
+              "shop",
+              "ecommerce",
+              "e commerce",
+              "sell",
+              "products",
+              "online shop",
+              "web store"
+            ],
+            "answer": "Online stores usually fall in the ₹15k – ₹20k range, depending on how many products you have. {pricing_note}"
+          },
+          {
+            "label": "Redesign",
+            "keywords": [
+              "redesign",
+              "revamp",
+              "refresh",
+              "existing",
+              "rebuild"
+            ],
+            "answer": "Redesigns usually fall in the ₹5k – ₹15k range, depending on the size of your current site. {pricing_note}"
+          }
+        ]
+      },
+      "buttons": [
+        "topic:budgets",
+        "topic:delivery",
+        "whatsapp"
+      ]
+    },
+    {
+      "id": "budgets",
+      "title": "What budgets do you work with?",
+      "keywords": [
+        "budget",
+        "budgets",
+        "low budget",
+        "small budget",
+        "tight budget",
+        "range",
+        "starting price",
+        "minimum",
+        "only have",
+        "rupees",
+        "can spend",
+        "3000",
+        "5000",
+        "10000",
+        "what budget",
+        "what budgets",
+        "which budget",
+        "budget do you"
+      ],
+      "answer": "We work with these budgets: {budgets}. Every project includes a free trial, so you can see the work before you commit. {pricing_note}",
+      "buttons": [
+        "topic:pricing",
+        "whatsapp",
+        "book"
+      ]
+    },
+    {
+      "id": "services",
+      "title": "What services do you offer?",
+      "keywords": [
+        "services",
+        "service",
+        "what do you do",
+        "what do you offer",
+        "offer",
+        "features",
+        "feature",
+        "provide",
+        "what you do",
+        "capabilities",
+        "what is included",
+        "whats included",
+        "what do i get",
+        "what you provide"
+      ],
+      "answer": "Here's what we provide:\n{services}",
+      "buttons": [
+        "topic:pricing",
+        "topic:delivery",
+        "book"
+      ]
+    },
+    {
+      "id": "deployment",
+      "title": "Do you set up the domain and hosting?",
+      "keywords": [
+        "deployment",
+        "deploy",
+        "deployed",
+        "hosting",
+        "host",
+        "domain",
+        "server",
+        "publish",
+        "dns"
+      ],
+      "answer": "We set up your domain and hosting for you and deploy the site, so you never have to touch a server. Once it's live we also set up SEO and analytics.",
+      "buttons": [
+        "topic:process",
+        "book"
+      ]
+    },
+    {
+      "id": "process",
+      "title": "How does your process work?",
+      "keywords": [
+        "process",
+        "steps",
+        "how does it work",
+        "how it works",
+        "how do you work",
+        "how to start",
+        "get started",
+        "begin",
+        "procedure",
+        "workflow",
+        "what happens"
+      ],
+      "answer": "It's four steps:\n1. Say hi: message us or fill the short form. We call you within a day.\n2. See it first: you get a design to approve before any code is written.\n3. Watch it build: a live preview link updates as we go, and you can comment on anything.\n4. Go live: we set up the domain and hosting and launch.",
+      "buttons": [
+        "book",
+        "whatsapp"
+      ]
+    },
+    {
+      "id": "contact",
+      "title": "How do I contact you?",
+      "keywords": [
+        "contact",
+        "contact number",
+        "phone",
+        "phone number",
+        "number",
+        "call",
+        "email",
+        "mail",
+        "reach",
+        "get in touch",
+        "address",
+        "whatsapp number",
+        "mobile number",
+        "cell number"
+      ],
+      "answer": "You can reach us on WhatsApp or phone at {whatsapp}, or email {email}. We're available {hours}.",
+      "buttons": [
+        "whatsapp",
+        "email",
+        "call",
+        "instagram"
+      ]
+    },
+    {
+      "id": "social",
+      "title": "Are you on Instagram?",
+      "keywords": [
+        "instagram",
+        "insta",
+        "social",
+        "facebook",
+        "twitter",
+        "linkedin",
+        "youtube",
+        "social media",
+        "follow",
+        "handle",
+        "ig"
+      ],
+      "answer": "Follow our work on Instagram: {instagram}.",
+      "buttons": [
+        "instagram",
+        "whatsapp"
+      ]
+    },
+    {
+      "id": "whatsapp",
+      "title": "Can I talk to you on WhatsApp?",
+      "keywords": [
+        "whatsapp",
+        "wa",
+        "chat with you",
+        "message you",
+        "text you",
+        "dm"
+      ],
+      "answer": "You can message us on WhatsApp at {whatsapp}. A real person replies.",
+      "buttons": [
+        "whatsapp",
+        "book"
+      ]
+    },
+    {
+      "id": "location",
+      "title": "Where are you based?",
+      "keywords": [
+        "location",
+        "where are you",
+        "based",
+        "office",
+        "city",
+        "visit",
+        "meet",
+        "in person",
+        "kolkata",
+        "india",
+        "address"
+      ],
+      "answer": "We're based in {city}, and we work with clients anywhere online. We're available {hours}.",
+      "buttons": [
+        "topic:contact",
+        "book"
+      ]
+    },
+    {
+      "_help": "PLACEHOLDER payment terms: replace with your real policy.",
+      "id": "payment",
+      "title": "How do I pay?",
+      "keywords": [
+        "pay",
+        "payment",
+        "payments",
+        "advance",
+        "upfront",
+        "installment",
+        "installments",
+        "deposit",
+        "pay later",
+        "invoice",
+        "gst",
+        "receipt",
+        "refund policy"
+      ],
+      "answer": "We agree the price and payment schedule with you before we start, so there are no surprises. Message us and we'll share the details.",
+      "buttons": [
+        "whatsapp",
+        "topic:pricing"
+      ]
+    },
+    {
+      "id": "about_bot",
+      "title": "Who are you?",
+      "keywords": [
+        "who are you",
+        "your name",
+        "what are you",
+        "are you a bot",
+        "are you ai",
+        "are you real",
+        "are you human",
+        "bot",
+        "smithbot",
+        "about you",
+        "tell me about yourself",
+        "yourself"
+      ],
+      "answer": "I'm SmithBot, a simple assistant that answers common questions about our websites. For anything I can't answer, a real person is on WhatsApp.",
+      "buttons": [
+        "whatsapp",
+        "topic:services"
+      ]
+    },
+    {
+      "id": "human",
+      "title": "Can I talk to a person?",
+      "keywords": [
+        "human",
+        "person",
+        "agent",
+        "real person",
+        "someone",
+        "representative",
+        "talk to someone",
+        "speak to someone",
+        "support",
+        "help me",
+        "customer care"
+      ],
+      "answer": "Of course. Please contact our team on WhatsApp or book a project and we'll call you within a day.",
+      "buttons": [
+        "whatsapp",
+        "book",
+        "call"
+      ]
+    },
+    {
+      "id": "content",
+      "title": "Do I need to write my own website content?",
+      "keywords": [
+        "content",
+        "text",
+        "copy",
+        "write",
+        "writing",
+        "photos",
+        "images",
+        "pictures",
+        "material",
+        "what do i need",
+        "what do you need",
+        "requirements",
+        "prepare"
+      ],
+      "answer": "No. Send us what you have, even voice notes or your Instagram captions, and we'll shape it into copy that sells.",
+      "buttons": [
+        "book",
+        "topic:process"
+      ]
+    },
+    {
+      "id": "editing",
+      "title": "Can I edit my website later?",
+      "keywords": [
+        "edit",
+        "editing",
+        "change",
+        "changes",
+        "update",
+        "updates",
+        "modify",
+        "manage",
+        "cms",
+        "myself",
+        "later",
+        "add products",
+        "maintenance",
+        "maintain",
+        "support after",
+        "after launch",
+        "after delivery"
+      ],
+      "answer": "Yes. We can set up an editor so you can change text, images and products without us. We're also here for changes after launch.",
+      "buttons": [
+        "whatsapp",
+        "book"
+      ]
+    },
+    {
+      "id": "revisions",
+      "title": "What if I don't like the design?",
+      "keywords": [
+        "revision",
+        "revisions",
+        "dont like",
+        "do not like",
+        "redo",
+        "not happy",
+        "satisfied",
+        "satisfaction",
+        "approve",
+        "approval",
+        "change the design",
+        "guarantee"
+      ],
+      "answer": "You approve the design before we build anything, and revisions are part of the process.",
+      "buttons": [
+        "topic:process",
+        "book"
+      ]
+    },
+    {
+      "id": "preview",
+      "title": "Can I see my website before I commit?",
+      "keywords": [
+        "preview",
+        "demo",
+        "sample",
+        "samples",
+        "example",
+        "examples",
+        "free trial",
+        "trial",
+        "see before",
+        "see first",
+        "mockup",
+        "try before"
+      ],
+      "answer": "Yes! You can see a free preview of your site before you commit. Use the 'See your website first' page, or book a project and we'll show you a design to approve.",
+      "link_label": "See your website first",
+      "buttons": [
+        {
+          "label": "See your website first",
+          "href": "/preview"
+        },
+        "book"
+      ]
+    },
+    {
+      "id": "work",
+      "title": "Can I see your past work?",
+      "keywords": [
+        "portfolio",
+        "projects",
+        "past work",
+        "clients",
+        "case study",
+        "case studies",
+        "previous",
+        "references",
+        "results",
+        "your work",
+        "see your work",
+        "previous work",
+        "sample work",
+        "show me your work",
+        "examples of your work"
+      ],
+      "answer": "You can browse some of our projects on the Work page.",
+      "buttons": [
+        {
+          "label": "See our work",
+          "href": "/work"
+        },
+        "book"
+      ]
+    },
+    {
+      "id": "ecommerce",
+      "title": "Can you build an online store?",
+      "keywords": [
+        "online store",
+        "ecommerce",
+        "e commerce",
+        "shop",
+        "sell online",
+        "payment gateway",
+        "razorpay",
+        "orders",
+        "cart",
+        "checkout",
+        "inventory",
+        "online shop",
+        "sell clothes",
+        "sell products",
+        "web store"
+      ],
+      "answer": "Yes. Our online stores are mobile-first with a product catalogue, and we can set up WhatsApp order alerts so you stop taking orders in DMs.",
+      "buttons": [
+        "topic:pricing",
+        "topic:delivery",
+        "book"
+      ]
+    },
+    {
+      "id": "seo",
+      "title": "Will my website show up on Google?",
+      "keywords": [
+        "seo",
+        "google",
+        "ranking",
+        "search engine",
+        "traffic",
+        "visibility",
+        "analytics",
+        "found online"
+      ],
+      "answer": "Every site is built Google-ready, and we set up SEO and analytics as part of going live.",
+      "buttons": [
+        "topic:services",
+        "book"
+      ]
+    },
+    {
+      "id": "why",
+      "title": "Why choose you over a template builder?",
+      "keywords": [
+        "why you",
+        "why choose",
+        "why should i",
+        "different",
+        "templates",
+        "template",
+        "wordpress",
+        "wix",
+        "ai",
+        "hand coded",
+        "engineers",
+        "better than"
+      ],
+      "answer": "Every site is designed around your business and hand-coded by engineers, using AI to move faster but never to cut corners. No templates, and a real team on WhatsApp when you need us.",
+      "buttons": [
+        "topic:preview",
+        "book"
+      ]
+    },
+    {
+      "id": "book",
+      "title": "How do I start a project?",
+      "keywords": [
+        "start",
+        "book",
+        "booking",
+        "hire",
+        "get a website",
+        "need a website",
+        "want a website",
+        "begin project",
+        "sign up",
+        "lets go",
+        "let's start",
+        "ready",
+        "interested"
+      ],
+      "answer": "Great! Fill the short form and we'll call you within a day, or message us on WhatsApp.",
+      "buttons": [
+        "book",
+        "whatsapp"
+      ]
+    },
+    {
+      "id": "mobile",
+      "title": "Will my website work on mobile?",
+      "keywords": [
+        "mobile",
+        "responsive",
+        "mobile friendly",
+        "phone friendly",
+        "on my phone",
+        "tablet",
+        "smartphone",
+        "android",
+        "iphone"
+      ],
+      "answer": "Yes. Every site is built mobile-first and checked on phones, tablets and desktops.",
+      "buttons": [
+        "topic:preview",
+        "book"
+      ]
+    },
+    {
+      "id": "security",
+      "title": "Is my website secure?",
+      "keywords": [
+        "secure",
+        "security",
+        "ssl",
+        "https",
+        "hack",
+        "hacked",
+        "hacking",
+        "safe",
+        "certificate",
+        "malware",
+        "backup",
+        "backups"
+      ],
+      "answer": "Yes. Every site is served over HTTPS (SSL is included) and we follow standard security practice for forms and logins.",
+      "buttons": [
+        "topic:deployment",
+        "whatsapp"
+      ]
+    },
+    {
+      "id": "ownership",
+      "title": "Who owns the website?",
+      "keywords": [
+        "who owns",
+        "ownership",
+        "do i own",
+        "source code",
+        "own the website",
+        "own the site",
+        "full access",
+        "admin access",
+        "transfer",
+        "hand over",
+        "handover access",
+        "my website or yours"
+      ],
+      "answer": "You do. The domain and the finished website belong to you, and we hand over access when the project is complete.",
+      "buttons": [
+        "whatsapp",
+        "book"
+      ]
+    },
+    {
+      "id": "pages",
+      "title": "How many pages can my website have?",
+      "keywords": [
+        "how many pages",
+        "number of pages",
+        "extra pages",
+        "more pages",
+        "add pages",
+        "additional pages",
+        "page limit",
+        "pages included"
+      ],
+      "answer": "Business websites are typically 5 to 15 pages. Need more? Tell us and we'll quote it.",
+      "buttons": [
+        "topic:pricing",
+        "whatsapp"
+      ]
+    },
+    {
+      "id": "languages",
+      "title": "Can my website be in another language?",
+      "keywords": [
+        "hindi",
+        "bengali",
+        "bangla",
+        "multilingual",
+        "multiple languages",
+        "other languages",
+        "language",
+        "languages",
+        "translate",
+        "translation",
+        "regional language",
+        "tamil",
+        "marathi",
+        "gujarati"
+      ],
+      "answer": "Yes, we can build multilingual sites. Tell us which languages you need and we'll include it in the plan.",
+      "buttons": [
+        "whatsapp",
+        "book"
+      ]
+    },
+    {
+      "id": "integrations",
+      "title": "Can you connect my website to other tools?",
+      "keywords": [
+        "integrate",
+        "integration",
+        "integrations",
+        "google maps",
+        "connect with",
+        "integrate with",
+        "google analytics",
+        "instagram feed",
+        "whatsapp button",
+        "whatsapp chat button",
+        "payment gateway",
+        "third party",
+        "api",
+        "crm",
+        "mailchimp",
+        "newsletter"
+      ],
+      "answer": "Yes. We can add a WhatsApp chat or order button, an Instagram feed, Google Maps, analytics and payment links. Tell us what you use and we'll connect it.",
+      "buttons": [
+        "whatsapp",
+        "topic:services"
+      ]
+    },
+    {
+      "id": "renewal",
+      "title": "Do I pay for domain and hosting every year?",
+      "keywords": [
+        "renewal",
+        "renewals",
+        "renew",
+        "yearly",
+        "annual",
+        "annually",
+        "recurring",
+        "monthly cost",
+        "monthly charges",
+        "hosting cost",
+        "hosting charges",
+        "domain cost",
+        "domain charges",
+        "hosting fee",
+        "domain fee",
+        "ongoing cost",
+        "ongoing costs",
+        "pay yearly",
+        "pay every year",
+        "every year",
+        "each year",
+        "per year",
+        "pay for hosting",
+        "pay for domain",
+        "pay for the domain",
+        "pay monthly",
+        "yearly fee",
+        "yearly charges"
+      ],
+      "answer": "Domain and hosting have yearly charges paid to the provider. We tell you the exact numbers upfront, so there are no surprises later.",
+      "buttons": [
+        "topic:deployment",
+        "whatsapp"
+      ]
+    },
+    {
+      "id": "response_time",
+      "title": "How quickly do you reply?",
+      "keywords": [
+        "how quickly do you reply",
+        "how fast do you reply",
+        "response time",
+        "reply time",
+        "how soon will you reply",
+        "get back to me",
+        "call me back",
+        "when will you call",
+        "how soon will you call",
+        "will you call me",
+        "reply to me",
+        "how fast will you reply",
+        "how quickly will you reply",
+        "how fast do you respond",
+        "how soon will you respond",
+        "how quickly do you respond",
+        "how long to reply",
+        "how long do you take to reply",
+        "reply",
+        "respond",
+        "response"
+      ],
+      "answer": "We call you within a day of your request. WhatsApp messages are usually answered the same day, {hours}.",
+      "buttons": [
+        "whatsapp",
+        "book"
+      ]
+    },
+    {
+      "id": "custom",
+      "title": "Can you build custom features or apps?",
+      "keywords": [
+        "custom",
+        "custom feature",
+        "custom features",
+        "web app",
+        "web application",
+        "booking system",
+        "appointment",
+        "appointments",
+        "login system",
+        "dashboard",
+        "portal",
+        "membership",
+        "software",
+        "mobile app",
+        "android app",
+        "ios app",
+        "application",
+        "app"
+      ],
+      "answer": "Yes. Beyond standard sites we build custom features like booking, logins and dashboards. We focus on websites and web apps; for a mobile app, message us and we'll tell you what's possible.",
+      "buttons": [
+        "whatsapp",
+        "topic:pricing"
+      ]
+    },
+    {
+      "id": "team",
+      "title": "Who will build my website?",
+      "keywords": [
+        "who will build",
+        "who builds",
+        "who is building",
+        "your team",
+        "how many people",
+        "team size",
+        "freelancer",
+        "freelancers",
+        "outsourced",
+        "outsource",
+        "in house",
+        "who are the developers",
+        "which developers"
+      ],
+      "answer": "A small team of engineers designs and codes every site in-house, and you talk to the same people throughout.",
+      "buttons": [
+        "topic:why",
+        "book"
+      ]
+    },
+    {
+      "id": "outside_india",
+      "title": "Do you work with clients outside India?",
+      "keywords": [
+        "outside india",
+        "abroad",
+        "international",
+        "overseas",
+        "other countries",
+        "foreign",
+        "usa",
+        "america",
+        "uk",
+        "dubai",
+        "gulf",
+        "remote",
+        "remotely",
+        "from another country",
+        "clients in",
+        "work with clients in",
+        "clients abroad",
+        "clients outside",
+        "from dubai",
+        "in dubai",
+        "in usa",
+        "in the usa",
+        "in the uk",
+        "in uk"
+      ],
+      "answer": "Yes. We work with clients anywhere, and everything runs online over WhatsApp, calls and email.",
+      "buttons": [
+        "whatsapp",
+        "book"
+      ]
+    },
+    {
+      "id": "privacy",
+      "title": "Is my information private?",
+      "keywords": [
+        "confidential",
+        "confidentiality",
+        "nda",
+        "non disclosure",
+        "privacy",
+        "private",
+        "my data",
+        "data safe",
+        "keep it secret",
+        "share my idea",
+        "steal my idea"
+      ],
+      "answer": "Yes. What you share with us stays private, and we're happy to sign an NDA if you need one.",
+      "buttons": [
+        "whatsapp",
+        "book"
+      ]
+    },
+    {
+      "id": "cancel",
+      "title": "What if I want to cancel the project?",
+      "keywords": [
+        "cancel",
+        "cancellation",
+        "stop the project",
+        "change my mind",
+        "back out",
+        "refund",
+        "refunds",
+        "money back",
+        "pause the project",
+        "no longer need"
+      ],
+      "answer": "You can stop at any point and you only pay for the work already done. Message us and we'll talk it through.",
+      "buttons": [
+        "whatsapp",
+        "topic:revisions"
+      ]
+    },
+    {
+      "id": "business_email",
+      "title": "Can I get email addresses on my own domain?",
+      "keywords": [
+        "business email",
+        "professional email",
+        "email id",
+        "email ids",
+        "email address with",
+        "domain email",
+        "custom email",
+        "info@",
+        "company email",
+        "email on my domain",
+        "email accounts"
+      ],
+      "answer": "Yes. We can set up professional email addresses on your domain, like hello@yourbusiness.com.",
+      "buttons": [
+        "topic:deployment",
+        "whatsapp"
+      ]
+    },
+    {
+      "id": "training",
+      "title": "Will you show me how to use my website?",
+      "keywords": [
+        "training",
+        "tutorial",
+        "tutorials",
+        "how to use",
+        "how do i use",
+        "teach me",
+        "guide me",
+        "walk me through",
+        "handover session",
+        "user guide",
+        "learn to use",
+        "manage it myself"
+      ],
+      "answer": "Yes. We walk you through the site and share a short guide, so you can manage it with confidence.",
+      "buttons": [
+        "topic:editing",
+        "book"
+      ]
+    },
+    {
+      "id": "reviews",
+      "title": "Do you have client reviews?",
+      "keywords": [
+        "reviews",
+        "review",
+        "testimonial",
+        "testimonials",
+        "feedback",
+        "ratings",
+        "customer reviews",
+        "client reviews",
+        "happy clients",
+        "trust you",
+        "can i trust",
+        "genuine",
+        "legit",
+        "legitimate",
+        "proof"
+      ],
+      "answer": "Real project results are on our Work page, and we add client testimonials as projects go live. You can also see a free preview of your own site before you commit.",
+      "buttons": [
+        {
+          "label": "See our work",
+          "href": "/work"
+        },
+        "topic:preview",
+        "whatsapp"
+      ]
+    }
+  ]
+}

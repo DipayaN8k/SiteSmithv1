@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AskBotButton } from "@/components/AskBotButton";
 import { brand, compare, faqs, projects, steps, type Project } from "@/lib/site";
 
 // Illustrated browser mock — stand-in until real project screenshots are added.
@@ -114,7 +115,8 @@ export function Faq() {
         <div>
           <p className="kicker">Questions</p>
           <h2 className="display h2">Asked before<br />you asked.</h2>
-          <p className="lede">Something else on your mind? Message us on WhatsApp — a real person replies.</p>
+          <p className="lede">Don&apos;t feel like scrolling? Try our SmithBot to get answers to your queries instantly. Still stuck? Message us on WhatsApp — a real person replies.</p>
+          <div className="faq__bot"><AskBotButton /></div>
         </div>
         <div className="faq__list">
           {faqs.map((f) => (
