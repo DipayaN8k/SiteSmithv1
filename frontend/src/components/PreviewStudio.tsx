@@ -96,9 +96,20 @@ export function PreviewStudio() {
       <div className="studio__head">
         <div>
           <h2 className="display h2">Here&apos;s {name.trim()}, {DESIGNS.length} ways.</h2>
-          <p className="lede">Pick the one that feels like you. These are starting points from our library. Your final site is designed and built around your business.</p>
+          <p className="lede">Pick the one that feels like you.</p>
         </div>
         <button className="btn btn--sm" onClick={() => setStep("form")}>Change details</button>
+      </div>
+
+      <div className="studio__note">
+        <p>
+          <span className="studio__note-tag">Preview</span>
+          This is just a preview. Your real site is designed from scratch around {name.trim()} and hand-coded by our engineers, so it will look and work far better.
+        </p>
+        <div className="studio__meters">
+          <span>This preview<i aria-hidden="true"><b style={{ width: "30%" }} /></i></span>
+          <span className="studio__meters-final">Your website<i aria-hidden="true"><b style={{ width: "100%" }} /></i></span>
+        </div>
       </div>
 
       <div className="studio__bar">
@@ -144,7 +155,7 @@ export function PreviewStudio() {
       </div>
 
       <section className={`frame frame--${device}`} aria-label={`${DESIGNS.find((d) => d.id === design)!.name} website design for ${name}, a ${cat.label} business`}>
-        <div className="frame__bar" aria-hidden="true"><i /><i /><i /><span>www.{slug(name)}.com</span></div>
+        <div className="frame__bar" aria-hidden="true"><i /><i /><i /><span>www.{slug(name)}.com</span><b className="frame__tag">Preview</b></div>
         <div className="frame__viewport">
           <PreviewSite key={`${design}-${catId}`} cat={cat} design={design} name={name.trim()} about={about} theme={theme} font={font ?? undefined} />
         </div>
@@ -153,6 +164,7 @@ export function PreviewStudio() {
       <div className="studio__cta">
         <button className="btn btn--grad" onClick={book}>I like this one — book it</button>
         <span className="studio__trial">Free trial included</span>
+        <p className="studio__fine">This preview is only a starting point. We customise every page to your needs.</p>
         <Link href="/work" className="studio__link">Or see sites we&apos;ve built</Link>
       </div>
     </div>
