@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "next start -p 3000"
+    "start": "next start -p 3000",
+    "test:bot": "node --test tests/bot.test.mjs"
   },
   "dependencies": {
     "next": "^16.3.8",
