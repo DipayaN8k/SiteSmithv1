@@ -112,7 +112,7 @@ export type Project = {
 // Placeholder projects until real client work (with testimonials) is ready. Keep this list short.
 export const projects: Project[] = [
   { slug: "spotturf", name: "SpotTurf Kolkata", kind: "Turf booking website", result: "Live slot booking", palette: ["#0f3d27", "#f2efe4", "#f6c21c"], headline: "Play till midnight in Kasba.", url: "https://spot-turfs.netlify.app/", image: "/work/spotturf-cover.webp", nav: ["Book", "Rates", "Photos"] },
-  { slug: "trailpeak", name: "Trailpeak Treks", kind: "Travel website", result: "3× more enquiries", palette: ["#1d3b5c", "#e9f0f6", "#ffb703"], headline: "Walk where the map ends." },
+  { slug: "bhor", name: "Bhor Coffee & Bakehouse", kind: "Cafe website", result: "Order ahead for pickup", palette: ["#1d3b36", "#f7f0e6", "#e9a23b"], headline: "Coffee from the hills. Baked at dawn, gone by noon.", url: "https://bhor-coffee.netlify.app/", image: "/work/bhor-coffee-cover.jpg", nav: ["Order", "Coffee", "Visit"] },
 ];
 
 export const steps = [
