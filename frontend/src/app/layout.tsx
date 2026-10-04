@@ -13,7 +13,7 @@ const body = Instrument_Sans({ subsets: ["latin"], variable: "--font-body", disp
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
 export const metadata: Metadata = {
-  title: `${brand.name} — ${brand.tagline}`,
+  title: `${brand.name} — ${brand.tabTitle}`,
   description: "Websites and online stores, hand-coded by real engineers, for businesses that have outgrown \u201cDM to order\u201d.",
 };
 

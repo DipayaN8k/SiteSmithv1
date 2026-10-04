@@ -236,12 +236,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .scratch__skip { margin: 26px 0 0; font-size: var(--step--1); color: var(--muted); }
 .scratch__skip button { border: 0; background: none; padding: 0; color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 600px) { .ticket::before, .ticket::after { width: 22px; height: 22px; margin-top: -11px; } .ticket::before { left: -11px; } .ticket::after { right: -11px; } }
-.scratch__grid { display: grid; grid-template-columns: repeat(2, 1fr); }
-.svc { padding: clamp(20px, 2.4vw, 30px); min-height: 190px; display: flex; flex-direction: column; color: #fff; }
+.scratch__grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+.svc { padding: clamp(20px, 2.4vw, 30px); min-height: 230px; display: flex; flex-direction: column; color: #fff; }
 .svc--sun { background: linear-gradient(160deg, #feda75, #fa7e1e); color: #1a1023; }
 .svc--bloom { background: linear-gradient(160deg, #fa7e1e -20%, #d62976 60%); }
 .svc--dusk { background: linear-gradient(160deg, #962fbf, #4f5bd5); }
-.svc--mint { background: linear-gradient(160deg, #3b46c0 -10%, #0f5f57 70%); }
 .svc__title { font-size: var(--step-2); }
 .svc__line { margin: 8px 0 18px; opacity: 0.85; }
 .svc ul { list-style: none; padding: 0; margin: auto 0 0; display: grid; gap: 8px; font-weight: 600; }

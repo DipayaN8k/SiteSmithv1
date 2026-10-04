@@ -2,6 +2,7 @@
 export const brand = {
   name: "Sitesmith", // placeholder until the team finalises the name
   tagline: "More customers. Not more templates.",
+  tabTitle: "Websites & Automation, Engineered", // shown in the browser tab on the home page
   email: "hello@sitesmith.studio",
   whatsapp: "+91 62918 45804",
   whatsapp2: "+91 80178 12091", // second WhatsApp line, shown alongside the main one
@@ -80,25 +81,19 @@ export const services = [
     tone: "sun",
     title: "Business websites",
     line: "Look established from day one.",
-    points: ["5–15 page sites", "Built-in enquiry forms", "Google-ready SEO"],
+    points: ["5–15 page sites", "Built-in enquiry forms", "Google-ready SEO", "Built-in automation"],
   },
   {
     tone: "bloom",
     title: "Online stores",
     line: "Stop taking orders in DMs.",
-    points: ["Mobile-first storefront", "Product catalogue", "WhatsApp order alerts"],
+    points: ["Mobile-first storefront", "Product catalogue", "WhatsApp order alerts", "Website chatbot"],
   },
   {
     tone: "dusk",
     title: "Landing pages",
     line: "One page. One job. Converts.",
-    points: ["Ad campaign pages", "Launch & event pages", "Live in 2 days"],
-  },
-  {
-    tone: "mint",
-    title: "AI & automation",
-    line: "Let bots handle the busywork.",
-    points: ["Website chatbots", "Your own enquiry dashboard", "One-tap WhatsApp orders"],
+    points: ["Ad campaign pages", "Launch & event pages", "Lead capture forms", "Live in 2 days"],
   },
 ];
 
