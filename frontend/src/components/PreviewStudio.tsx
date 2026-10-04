@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { CATEGORIES, DEFAULT_FONT, DESIGNS, FONTS, PREVIEW_CHOICE_KEY, PREVIEW_DRAFT_KEY, THEMES, paletteFor, type DesignId, type FontId } from "@/lib/previews";
+import { CATEGORIES, DEFAULT_FONT, resolveCategory, DESIGNS, FONTS, PREVIEW_CHOICE_KEY, PREVIEW_DRAFT_KEY, THEMES, paletteFor, type DesignId, type FontId } from "@/lib/previews";
 import { elegant, statement } from "@/lib/previewFonts";
 import { PreviewSite } from "./PreviewSite";
+import { SAME_PAGE_EVENT } from "./ScrollManager";
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "").slice(0, 28) || "yourbusiness";
 
@@ -33,7 +34,15 @@ export function PreviewStudio() {
     if (window.innerWidth < 700) setDevice("mobile");
   }, []);
 
-  const cat = CATEGORIES.find((c) => c.id === catId);
+  // "See your website first" clicked again while here: back to the form to try another business.
+  useEffect(() => {
+    const reset = () => { setStep("form"); setErrors({}); };
+    window.addEventListener(SAME_PAGE_EVENT, reset);
+    return () => window.removeEventListener(SAME_PAGE_EVENT, reset);
+  }, []);
+
+  // A restaurant whose name or description sounds like a café gets the café look.
+  const cat = resolveCategory(catId, name, about);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -101,10 +110,10 @@ export function PreviewStudio() {
         <button className="btn btn--sm" onClick={() => setStep("form")}>Change details</button>
       </div>
 
-      <div className="studio__note">
+      <div className="studio__note" role="note">
         <p>
-          <span className="studio__note-tag">Preview</span>
-          This is just a preview. Your real site is designed from scratch around {name.trim()} and hand-coded by our engineers, so it will look and work far better.
+          <span className="studio__note-tag">Read first</span>
+          <strong>This is just a preview.</strong> Your real site is designed from scratch around {name.trim()} and hand-coded by our engineers, so it will look and work far better.
         </p>
         <div className="studio__meters">
           <span>This preview<i aria-hidden="true"><b style={{ width: "30%" }} /></i></span>
@@ -157,7 +166,7 @@ export function PreviewStudio() {
       <section className={`frame frame--${device}`} aria-label={`${DESIGNS.find((d) => d.id === design)!.name} website design for ${name}, a ${cat.label} business`}>
         <div className="frame__bar" aria-hidden="true"><i /><i /><i /><span>www.{slug(name)}.com</span><b className="frame__tag">Preview</b></div>
         <div className="frame__viewport">
-          <PreviewSite key={`${design}-${catId}`} cat={cat} design={design} name={name.trim()} about={about} theme={theme} font={font ?? undefined} />
+          <PreviewSite key={`${design}-${cat.id}`} cat={cat} design={design} name={name.trim()} about={about} theme={theme} font={font ?? undefined} />
         </div>
       </section>
 

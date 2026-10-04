@@ -27,6 +27,10 @@ export type Category = {
   hours: string;
   photos: { hero: [string, string, string]; items: [string, string, string]; gallery: string[]; about: string };
   palettes: { bold: Palette; clean: Palette; vivid: Palette };
+  // "ui": fewer photos, designed product visuals instead (code, dashboards, servers). Used for IT.
+  visual?: "ui";
+  cases?: [title: string, text: string, tags: string[]][]; // "Selected work" cards, replaces the photo gallery in ui mode
+  stack?: string[]; // tools strip, replaces the photo strip in ui mode
 };
 type Pair = [title: string, text: string];
 type Member = [role: string, photo: string];
@@ -252,6 +256,13 @@ export const CATEGORIES: Category[] = [
     team: [["Founder & CTO", "photo-1640531005390-38bd92755d6a"], ["Lead engineer", "photo-1573497620166-aef748c8c792"], ["Cloud architect", "photo-1752738372136-2602aaafdcb7"]],
     platforms: ["AWS", "Google Cloud", "Azure", "GitHub", "Clutch"],
     hours: "Mon to Fri, 9am to 7pm · Support 24/7",
+    visual: "ui",
+    cases: [
+      ["Fleet tracking dashboard", "Live tracking for 2,000+ trucks, built in ten weeks.", ["React", "Node.js", "AWS"]],
+      ["Clinic booking platform", "Appointments, reports and reminders for 40 clinics.", ["Next.js", "PostgreSQL", "WhatsApp API"]],
+      ["Retail inventory sync", "Stock kept in sync across 25 stores in real time.", ["Python", "Kafka", "Google Cloud"]],
+    ],
+    stack: ["React", "Next.js", "Node.js", "Python", "AWS", "Kubernetes", "PostgreSQL", "Docker"],
     photos: {
       hero: ["photo-1719400471588-575b23e27bd7", "photo-1706074740295-d7a79c079562", "photo-1781914476939-91a41b914899"],
       items: ["photo-1559028012-481c04fa702d", "photo-1561233835-f937539b95b9", "photo-1623479322729-28b25c16b011"],
@@ -363,6 +374,50 @@ export const CATEGORIES: Category[] = [
   },
 ];
 
+// Cafés pick "Restaurant & Café" too, but deserve their own look: coffee, bakes and a slower pace.
+// resolveCategory() swaps this in when the business name or description sounds like a café.
+export const CAFE: Category = {
+  id: "cafe", label: "Café",
+  nav: ["Menu", "Our coffee", "Visit"], cta: "Order ahead",
+  heroTitle: "Slow coffee, good company.",
+  heroText: "Specialty coffee, fresh bakes and a corner to call your own.",
+  sectionTitle: "From the bar",
+  items: [
+    { title: "Signature coffee", text: "Vietnamese iced coffee, iced lattes and a proper americano.", points: ["Vietnamese phin coffee", "Iced latte with oat or almond milk", "Single-origin americano"] },
+    { title: "Fresh bakes", text: "Croissants and cakes, out of the oven every morning.", points: ["Butter croissants", "Banana bread and brownies", "Cakes to order"] },
+    { title: "All-day brunch", text: "Eggs, toast and pancakes, made to order.", points: ["Avocado toast and eggs", "Pancakes and waffles", "Vegan options"] },
+  ],
+  aboutTitle: "A café at its own pace",
+  aboutText: "We roast in small batches and pour every cup by hand.",
+  stats: [{ n: 12, suffix: "", label: "single-origin coffees" }, { n: 30, suffix: "+", label: "bakes every morning" }, { n: 7, suffix: "am", label: "doors open daily" }],
+  story: "We started with one espresso machine and a love for good beans. Today we roast in small batches, bake every morning and still pour every cup by hand.",
+  features: [["Specialty beans", "Sourced from Indian estates, roasted in-house."], ["Baked fresh", "Out of the oven every morning."], ["Work-friendly", "Fast Wi-Fi, plugs and quiet corners."], ["Order ahead", "Skip the queue, pick up on your way."]],
+  steps: [["Order", "At the counter or ahead on WhatsApp."], ["We brew", "Every cup made by hand, to order."], ["Settle in", "Find a corner, stay as long as you like."], ["Come back", "Your usual, remembered."]],
+  team: [["Head barista", "photo-1736813133636-0fa60f1e9dbd"], ["Owner", "photo-1753351052363-53ce102830eb"], ["Pastry chef", "photo-1731576089290-e6230a18dcb4"]],
+  platforms: ["Google Maps", "Instagram", "Zomato", "Swiggy", "WhatsApp"],
+  hours: "Every day, 7am to 10pm",
+  photos: {
+    hero: ["photo-1511081692775-05d0f180a065", "photo-1607539068168-21a93fbedad8", "photo-1728761390316-935ffeb3fbcc"],
+    items: ["photo-1642647391072-6a2416f048e5", "photo-1620146344904-097a0002d797", "photo-1622532630744-d977c065c094"],
+    gallery: ["photo-1671014594641-262cc4b9a16d", "photo-1461023058943-07fcbe16d735", "photo-1629610207316-1f58e0ea19e4", "photo-1607681034540-2c46cc71896d", "photo-1579992357154-faf4bde95b3d", "photo-1718791985055-e1b06ef5961d"],
+    about: "photo-1583354608715-177553a4035e",
+  },
+  palettes: {
+    bold: { bg: "#1a1410", surface: "#2a201a", text: "#f5ece2", muted: "#cdbba8", accent: "#d79a5a", accentText: "#1a1410" },
+    clean: { bg: "#faf6f0", surface: "#efe5d8", text: "#2b2119", muted: "#6b5b4b", accent: "#8a5a2b", accentText: "#ffffff" },
+    vivid: { bg: "#f3ede3", surface: "#ffffff", text: "#231b14", muted: "#5f5346", accent: "#6f4a2a", accentText: "#ffffff" },
+  },
+};
+
+const CAFE_WORDS = /\b(caf[eé]s?|coffee(house|shop|bar)?|espresso|brew(s|ing|ery|house)?|roast(ers?|ery)|latte|chai|tea ?(house|room|bar)|bakery|bakehouse|patisserie|kopi)(?![a-z])/i;
+
+// The category to show: the one picked, or the café variant when a restaurant sounds like a café.
+export function resolveCategory(catId: string, name = "", about = ""): Category | undefined {
+  const base = CATEGORIES.find((c) => c.id === catId);
+  if (base?.id === "restaurant" && CAFE_WORDS.test(`${name} ${about}`)) return CAFE;
+  return base;
+}
+
 // Handover to the booking form when a visitor picks a design.
 export const PREVIEW_CHOICE_KEY = "preview-choice-v1";
 // Business name typed into the home-page teaser, picked up by /preview.
@@ -370,6 +425,6 @@ export const PREVIEW_DRAFT_KEY = "preview-draft-v1";
 
 // What the booking form preselects for each category (must match backend BUSINESS_TYPES).
 export const CATEGORY_TO_BUSINESS: Record<string, string> = {
-  restaurant: "Hospitality", fashion: "Retail", health: "Healthcare",
+  restaurant: "Hospitality", cafe: "Hospitality", fashion: "Retail", health: "Healthcare",
   tech: "IT/Software", realestate: "Real Estate", education: "Education",
 };

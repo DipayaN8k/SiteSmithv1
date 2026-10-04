@@ -8,6 +8,11 @@ import { useEffect } from "react";
 // 2. Every page change starts at the top, instantly (no slide up from below).
 // 3. After a "#section" link has scrolled into place, drop the hash from the URL,
 //    so refreshing doesn't jump back to that section.
+// 4. Clicking a link to the page you are already on (menu, footer) takes you back to its top
+//    and tells the page to reset, e.g. /preview goes back to its form for a new business.
+// Fired when a link to the current page is clicked. Pages with their own steps (like /preview) listen for it.
+export const SAME_PAGE_EVENT = "site:same-page";
+
 export function ScrollManager() {
   const pathname = usePathname();
 
@@ -33,10 +38,17 @@ export function ScrollManager() {
       window.scrollTo(0, 0);
     }
 
-    // Same-page "#section" clicks: let the browser scroll, then clean the URL.
     const onClick = (e: MouseEvent) => {
-      const a = (e.target as Element | null)?.closest?.("a[href*='#']");
-      if (a) setTimeout(clearHash, 600);
+      const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>("a[href]");
+      if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target === "_blank") return;
+      const url = new URL(a.href, location.href);
+      if (url.origin !== location.origin) return;
+      // Same-page "#section" clicks: let the browser scroll, then clean the URL.
+      if (url.hash) { setTimeout(clearHash, 600); return; }
+      if (url.pathname === location.pathname) {
+        window.scrollTo({ top: 0, left: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+        window.dispatchEvent(new Event(SAME_PAGE_EVENT));
+      }
     };
     const onHash = () => setTimeout(clearHash, 600);
     window.addEventListener("hashchange", onHash);

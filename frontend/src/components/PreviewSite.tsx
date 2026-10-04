@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { accentInk, DEFAULT_FONT, paletteFor, photo, type Category, type DesignId, type FontId } from "@/lib/previews";
 import { elegant, statement } from "@/lib/previewFonts";
 import "./preview-site.css";
@@ -27,14 +27,17 @@ export function PreviewSite({ cat, design, name, about, theme = "original", font
   };
   const root = useRef<HTMLDivElement>(null);
   useMotion(root);
+  const look = { ui: cat.visual === "ui", name };
 
   return (
     <div ref={root} className={`ps ps--${design} ${elegant.variable} ${statement.variable}`} data-font={font ?? DEFAULT_FONT[design]} style={vars}>
       <div className="ps-progress" aria-hidden="true"><i /></div>
-      {design === "bold" && <Bold {...ctx} />}
-      {design === "clean" && <Clean {...ctx} />}
-      {design === "luxe" && <Luxe {...ctx} />}
-      {design === "complete" && <Complete {...ctx} />}
+      <Look.Provider value={look}>
+        {design === "bold" && <Bold {...ctx} />}
+        {design === "clean" && <Clean {...ctx} />}
+        {design === "luxe" && <Luxe {...ctx} />}
+        {design === "complete" && <Complete {...ctx} />}
+      </Look.Provider>
     </div>
   );
 }
@@ -149,7 +152,14 @@ const jump = (id: string) => (e: React.MouseEvent<HTMLElement>) => {
 const fmt = (n: number) => (String(n).includes(".") ? n.toFixed(1) : String(n));
 const d = (n: number) => ({ "--d": n }) as React.CSSProperties;
 
-function Img({ src, w, alt = "", eager, className }: { src: string; w: number; alt?: string; eager?: boolean; className?: string }) {
+// "ui" businesses (IT) swap photos for designed product visuals; see TechArt below.
+const Look = createContext({ ui: false, name: "" });
+type ArtKind = "mesh" | "code" | "terminal" | "dash" | "graph" | "nodes";
+const ITEM_ART: ArtKind[] = ["code", "nodes", "terminal"];
+
+function Img({ src, w, alt = "", eager, className, art }: { src: string; w: number; alt?: string; eager?: boolean; className?: string; art?: ArtKind }) {
+  const { ui, name } = useContext(Look);
+  if (ui && art) return <TechArt kind={art} name={name} className={className} />;
   // eslint-disable-next-line @next/next/no-img-element
   return <img className={`ps-img ${className ?? ""}`} src={photo(src, w)} alt={alt} loading={eager ? "eager" : "lazy"} decoding="async" draggable={false} />;
 }
@@ -211,7 +221,7 @@ function Features({ cat, title = "Why people choose us" }: { cat: Category; titl
       <div className="ps-bento">
         {cat.features.map(([t, txt], i) => (
           <article key={t} className="ps-bento__card" data-reveal data-glow style={d(i)}>
-            {i === 0 && <Img src={cat.photos.gallery[1]} w={700} className="ps-bento__bg" />}
+            {i === 0 && <Img src={cat.photos.gallery[1]} w={700} className="ps-bento__bg" art="graph" />}
             <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d={ICONS[i]} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" strokeLinecap="round" /></svg>
             <h3>{t}</h3>
             <p>{txt}</p>
@@ -285,6 +295,93 @@ function Footer({ name, initial, cat }: Ctx) {
   );
 }
 
+// "Selected work": short case-study cards, used instead of a photo gallery for ui businesses.
+function Cases({ cat, anchor }: { cat: Category; anchor?: string }) {
+  return (
+    <section className="ps__section" data-anchor={anchor}>
+      <Split text="Selected work" />
+      <div className="ps-cases">
+        {(cat.cases ?? []).map(([t, txt, tags], i) => (
+          <article key={t} className="ps-cases__card" data-reveal data-glow style={d(i)}>
+            <span className="ps-cases__n">Case study 0{i + 1}</span>
+            <h3>{t}</h3>
+            <p>{txt}</p>
+            <div className="ps-cases__tags">{tags.map((g) => <span key={g}>{g}</span>)}</div>
+            <span className="c-card__link">Read the case study <Arrow /></span>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Stack({ items }: { items: string[] }) {
+  return (
+    <div className="ps-stack" aria-label={`Built with ${items.join(", ")}`}>
+      <div className="ps-stack__track" aria-hidden="true">{[...items, ...items].map((t, i) => <span key={i}>{t}</span>)}</div>
+    </div>
+  );
+}
+
+// Designed product visuals (no stock photos): code, terminal, dashboard, uptime graph, architecture.
+function TechArt({ kind, name, className = "" }: { kind: ArtKind; name: string; className?: string }) {
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "").slice(0, 20) || "yourcompany";
+  if (kind === "mesh") return <div className={`ta-mesh ${className}`} aria-hidden="true"><i /><i /><i /></div>;
+  const win = (title: string, body: React.ReactNode, dark = true) => (
+    <div className={`ta ${className}`} aria-hidden="true">
+      <div className={`ta-win ${dark ? "ta-win--dark" : ""}`}>
+        <div className="ta-win__bar"><i /><i /><i /><span>{title}</span></div>
+        <div className="ta-win__body">{body}</div>
+      </div>
+    </div>
+  );
+  const lines = (rows: React.ReactNode[]) => rows.map((r, i) => <div className="ta-line" key={i} style={{ "--i": i } as React.CSSProperties}>{r}</div>);
+  switch (kind) {
+    case "code":
+      return win(`${slug}/app.ts`, lines([
+        <><b className="k">const</b> app = <b className="f">createApp</b>({"{"}</>,
+        <>&nbsp;&nbsp;name: <b className="s">&quot;{name}&quot;</b>,</>,
+        <>&nbsp;&nbsp;region: <b className="s">&quot;ap-south-1&quot;</b>,</>,
+        <>&nbsp;&nbsp;replicas: <b className="n">3</b>,</>,
+        <>{"}"});</>,
+        <><b className="c">{"// p95 latency 120ms · 0 errors"}</b></>,
+        <>app.<b className="f">deploy</b>();<i className="ta-caret" /></>,
+      ]));
+    case "terminal":
+      return win("terminal", lines([
+        <><b className="c">$</b> git push origin main</>,
+        <><b className="ok">✓</b> Build passed <b className="c">(42s)</b></>,
+        <><b className="ok">✓</b> 318 tests passed</>,
+        <><b className="ok">✓</b> Deployed to production</>,
+        <><b className="c">→</b> https://{slug}.com<i className="ta-caret" /></>,
+      ]));
+    case "dash":
+      return win(`${slug} · dashboard`, (
+        <div className="ta-dash">
+          <div className="ta-dash__kpis">
+            <div><span>Active users</span><strong>12,480</strong><em>+18%</em></div>
+            <div><span>Orders today</span><strong>1,204</strong><em>+6%</em></div>
+          </div>
+          <div className="ta-bars">{[38, 52, 46, 64, 58, 76, 90].map((h, i) => <i key={i} style={{ "--h": `${h}%`, "--i": i } as React.CSSProperties} />)}</div>
+        </div>
+      ), false);
+    case "graph":
+      return win("uptime · 30 days", (
+        <div className="ta-graph">
+          <strong>99.98%</strong><span>uptime this month</span>
+          <svg viewBox="0 0 200 60" preserveAspectRatio="none"><path pathLength={1} d="M0 44 C20 40 30 30 50 34 S80 18 100 22 S140 10 160 14 S190 6 200 8" /></svg>
+        </div>
+      ));
+    case "nodes":
+      return win("architecture", (
+        <div className="ta-nodes">
+          <svg viewBox="0 0 200 110" preserveAspectRatio="none" aria-hidden="true"><path d="M50 27 H150 M50 27 V83 M150 27 V83 M50 83 H150" /></svg>
+          {["Web app", "API", "Database", "Queue"].map((t, i) => <span key={t} style={{ "--i": i } as React.CSSProperties}>{t}</span>)}
+        </div>
+      ));
+  }
+}
+
 const Arrow = () => <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M5 12h13m-5-6 6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 const Check = () => <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 
@@ -292,11 +389,12 @@ const Check = () => <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden=
 
 function Bold(c: Ctx) {
   const { cat, title, text } = c;
-  const ticker = [...cat.items.map((i) => i.title), cat.cta, "Open every day"];
+  const { ui } = useContext(Look);
   return (
     <>
       <section className="b-hero">
-        <div className="b-hero__bg ps-parallax"><Img src={cat.photos.hero[0]} w={1600} eager /></div>
+        <div className="b-hero__bg ps-parallax"><Img src={cat.photos.hero[0]} w={1600} eager art="mesh" /></div>
+        {ui && <div className="ps-hero-art" aria-hidden="true"><TechArt kind="code" name={c.name} /></div>}
         <Nav {...c} className="ps__nav--over" />
         <div className="b-hero__text">
           <p className="ps__eyebrow rise">{cat.id === "other" ? c.name : cat.label}</p>
@@ -309,14 +407,7 @@ function Bold(c: Ctx) {
             <span className="ps__btn ps__btn--ghost">Contact us</span>
           </div>
         </div>
-        <span className="b-hero__scroll" aria-hidden="true"><i /></span>
       </section>
-
-      <div className="b-marquee" aria-hidden="true">
-        <div className="b-marquee__track">
-          {[...ticker, ...ticker].map((t, i) => <span key={i}>{t}<em>✦</em></span>)}
-        </div>
-      </div>
 
       <section className="ps__section">
         <Split text={cat.sectionTitle} />
@@ -324,7 +415,7 @@ function Bold(c: Ctx) {
           {cat.items.map((it, i) => (
             <article className="b-card" key={it.title} data-reveal style={d(i)}>
               <div className="ps-tilt" data-tilt>
-                <div className="b-card__img"><Img src={cat.photos.items[i]} w={700} alt={it.title} /></div>
+                <div className="b-card__img"><Img src={cat.photos.items[i]} w={700} alt={it.title} art={ITEM_ART[i]} /></div>
                 <div className="b-card__body">
                   <span className="b-card__n">0{i + 1}</span>
                   <h3>{it.title}</h3>
@@ -339,15 +430,17 @@ function Bold(c: Ctx) {
       <Stats cat={cat} className="b-stats" />
       <Features cat={cat} />
 
-      <div className="b-strip" aria-hidden="true">
-        <div className="b-strip__track">
-          {[...cat.photos.gallery, ...cat.photos.gallery].map((g, i) => <Img key={i} src={g} w={500} />)}
+      {ui && cat.stack ? <Stack items={cat.stack} /> : (
+        <div className="b-strip" aria-hidden="true">
+          <div className="b-strip__track">
+            {[...cat.photos.gallery, ...cat.photos.gallery].map((g, i) => <Img key={i} src={g} w={500} />)}
+          </div>
         </div>
-      </div>
+      )}
 
       <section className="b-about">
         <div className="b-about__img" data-reveal="wipe">
-          <Img src={cat.photos.about} w={900} />
+          <Img src={cat.photos.about} w={900} art="dash" />
           <span className="b-about__badge">{cat.label}</span>
         </div>
         <div data-reveal style={d(1)}>
@@ -373,6 +466,7 @@ function Bold(c: Ctx) {
 
 function Clean(c: Ctx) {
   const { cat, title, text } = c;
+  const { ui } = useContext(Look);
   return (
     <>
       <Nav {...c} />
@@ -387,9 +481,9 @@ function Clean(c: Ctx) {
           </div>
         </div>
         <div className="c-collage" aria-hidden="true">
-          <div className="c-collage__a"><Img src={cat.photos.hero[0]} w={900} eager /></div>
-          <div className="c-collage__b"><Img src={cat.photos.items[0]} w={500} eager /></div>
-          <div className="c-collage__c"><Img src={cat.photos.items[1]} w={500} eager /></div>
+          <div className="c-collage__a"><Img src={cat.photos.hero[0]} w={900} eager art="dash" /></div>
+          <div className="c-collage__b"><Img src={cat.photos.items[0]} w={500} eager art="terminal" /></div>
+          <div className="c-collage__c"><Img src={cat.photos.items[1]} w={500} eager art="graph" /></div>
           <span className="c-collage__chip">{cat.items[0].title} <Arrow /></span>
         </div>
       </section>
@@ -402,7 +496,7 @@ function Clean(c: Ctx) {
         <div className="c-cards">
           {cat.items.map((it, i) => (
             <article className="c-card" key={it.title} data-reveal style={d(i)}>
-              <div className="c-card__img"><Img src={cat.photos.items[i]} w={700} alt={it.title} /></div>
+              <div className="c-card__img"><Img src={cat.photos.items[i]} w={700} alt={it.title} art={ITEM_ART[i]} /></div>
               <h3>{it.title}</h3>
               <p>{it.text}</p>
               <span className="c-card__link">Learn more <Arrow /></span>
@@ -413,14 +507,16 @@ function Clean(c: Ctx) {
 
       <Steps cat={cat} />
 
-      <section className="ps__section c-gallery">
-        {cat.photos.gallery.map((g, i) => (
-          <div key={g} data-reveal="wipe" style={d(i % 3)}><Img src={g} w={600} /></div>
-        ))}
-      </section>
+      {ui && cat.cases ? <Cases cat={cat} /> : (
+        <section className="ps__section c-gallery">
+          {cat.photos.gallery.map((g, i) => (
+            <div key={g} data-reveal="wipe" style={d(i % 3)}><Img src={g} w={600} /></div>
+          ))}
+        </section>
+      )}
 
       <section className="c-about">
-        <div className="c-about__img" data-reveal="wipe"><Img src={cat.photos.about} w={900} /></div>
+        <div className="c-about__img" data-reveal="wipe"><Img src={cat.photos.about} w={900} art="dash" /></div>
         <div data-reveal style={d(1)}>
           <h2 className="ps__h2">{cat.aboutTitle}</h2>
           <p className="ps__lead">{cat.story}</p>
@@ -444,11 +540,12 @@ function Clean(c: Ctx) {
 
 function Luxe(c: Ctx) {
   const { cat, title, text } = c;
+  const { ui } = useContext(Look);
   const roman = ["I", "II", "III"];
   return (
     <>
       <section className="l-hero">
-        <div className="l-hero__bg ps-parallax"><Img src={cat.photos.hero[0]} w={1600} eager /></div>
+        <div className="l-hero__bg ps-parallax"><Img src={cat.photos.hero[0]} w={1600} eager art="mesh" /></div>
         <Nav {...c} className="ps__nav--over" />
         <div className="l-hero__text">
           <span className="l-line" />
@@ -470,7 +567,7 @@ function Luxe(c: Ctx) {
       <section className="l-rows">
         {cat.items.map((it, i) => (
           <article className={`l-row ${i % 2 ? "l-row--flip" : ""}`} key={it.title}>
-            <div className="l-row__img" data-reveal="wipe"><Img src={cat.photos.items[i]} w={900} alt={it.title} /></div>
+            <div className="l-row__img" data-reveal="wipe"><Img src={cat.photos.items[i]} w={900} alt={it.title} art={ITEM_ART[i]} /></div>
             <div className="l-row__text" data-reveal style={d(1)}>
               <span className="l-row__n">{roman[i]}</span>
               <h3>{it.title}</h3>
@@ -485,11 +582,13 @@ function Luxe(c: Ctx) {
       <Stats cat={cat} className="l-stats" />
       <Team cat={cat} title="The people behind it" />
 
-      <section className="l-gallery">
-        {cat.photos.gallery.slice(0, 6).map((g, i) => (
-          <div key={g} data-reveal style={d(i % 3)}><Img src={g} w={600} /></div>
-        ))}
-      </section>
+      {ui && cat.cases ? <Cases cat={cat} /> : (
+        <section className="l-gallery">
+          {cat.photos.gallery.slice(0, 6).map((g, i) => (
+            <div key={g} data-reveal style={d(i % 3)}><Img src={g} w={600} /></div>
+          ))}
+        </section>
+      )}
 
       <section className="l-cta" data-reveal>
         <span className="l-line" />
@@ -506,6 +605,7 @@ function Luxe(c: Ctx) {
 
 function Complete(c: Ctx) {
   const { cat, title, text, name } = c;
+  const { ui } = useContext(Look);
   const [slide, setSlide] = useState(0);
   const [tab, setTab] = useState(0);
   const [zoom, setZoom] = useState<number | null>(null);
@@ -548,7 +648,12 @@ function Complete(c: Ctx) {
       <Nav {...c} className="x-nav" links={["About", "Services", "Team", "Contact"]} />
 
       <section className="x-hero">
-        {cat.photos.hero.map((h, i) => (
+        {ui ? (
+          <>
+            <div className="x-hero__slide is-on"><Img src={cat.photos.hero[0]} w={1600} art="mesh" /></div>
+            <div className="ps-hero-art" aria-hidden="true"><TechArt kind="dash" name={name} /></div>
+          </>
+        ) : cat.photos.hero.map((h, i) => (
           <div key={h} className={`x-hero__slide ${i === slide ? "is-on" : ""}`}><Img src={h} w={1600} eager={i === 0} /></div>
         ))}
         <div className="x-hero__text">
@@ -557,15 +662,15 @@ function Complete(c: Ctx) {
           <p className="ps__lead rise" style={d(2)}>{text}</p>
           <div className="ps__ctas rise" style={d(3)}>
             <button type="button" className="ps__btn" onClick={jump("x-book")}>{cat.cta} <Arrow /></button>
-            <button type="button" className="ps__btn ps__btn--ghost" onClick={jump("x-gallery")}>See photos</button>
+            <button type="button" className="ps__btn ps__btn--ghost" onClick={jump("x-gallery")}>{ui ? "See our work" : "See photos"}</button>
           </div>
         </div>
         <div className="x-open rise" style={d(4)}><i /> Open now<span>{cat.hours}</span></div>
-        <div className="x-hero__dots">
+        {!ui && <div className="x-hero__dots">
           {cat.photos.hero.map((h, i) => (
             <button key={h} type="button" aria-label={`Show photo ${i + 1}`} aria-pressed={i === slide} onClick={() => setSlide(i)}><i key={i === slide ? `on-${slide}` : "off"} /></button>
           ))}
-        </div>
+        </div>}
       </section>
 
       <Stats cat={cat} className="x-stats" />
@@ -573,8 +678,8 @@ function Complete(c: Ctx) {
 
       <section className="ps__section x-about">
         <div className="x-about__pics">
-          <div className="x-about__a" data-reveal="wipe"><Img src={cat.photos.about} w={800} /></div>
-          <div className="x-about__b" data-reveal="wipe" style={d(2)}><Img src={cat.photos.gallery[0]} w={500} /></div>
+          <div className="x-about__a" data-reveal="wipe"><Img src={cat.photos.about} w={800} art="dash" /></div>
+          <div className="x-about__b" data-reveal="wipe" style={d(2)}><Img src={cat.photos.gallery[0]} w={500} art="terminal" /></div>
           <span className="x-about__badge" data-reveal style={d(3)}><strong>{fmt(cat.stats[0].n)}{cat.stats[0].suffix}</strong>{cat.stats[0].label}</span>
         </div>
         <div>
@@ -594,7 +699,7 @@ function Complete(c: Ctx) {
           ))}
         </div>
         <div className="x-panel" role="tabpanel" key={tab}>
-          <div className="x-panel__img"><Img src={cat.photos.items[tab]} w={900} alt={cat.items[tab].title} /></div>
+          <div className="x-panel__img"><Img src={cat.photos.items[tab]} w={900} alt={cat.items[tab].title} art={ITEM_ART[tab]} /></div>
           <div>
             <h3>{cat.items[tab].title}</h3>
             <p>{cat.items[tab].text}</p>
@@ -608,7 +713,7 @@ function Complete(c: Ctx) {
       <Steps cat={cat} />
       <Team cat={cat} />
 
-      <section className="ps__section" data-anchor="x-gallery">
+      {ui && cat.cases ? <Cases cat={cat} anchor="x-gallery" /> : <section className="ps__section" data-anchor="x-gallery">
         <Split text="Take a look inside" />
         <div className="x-gallery">
           {cat.photos.gallery.map((g, i) => (
@@ -618,7 +723,7 @@ function Complete(c: Ctx) {
             </button>
           ))}
         </div>
-      </section>
+      </section>}
 
       <section className="ps__section x-book" data-anchor="x-book">
         <div className="x-book__card" data-reveal>
