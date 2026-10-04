@@ -98,7 +98,7 @@ export const services = [
     tone: "mint",
     title: "AI & automation",
     line: "Let bots handle the busywork.",
-    points: ["Website chatbots", "Leads sent to your inbox", "Auto-updated lead sheets"],
+    points: ["Website chatbots", "Your own enquiry dashboard", "One-tap WhatsApp orders"],
   },
 ];
 
