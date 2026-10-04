@@ -199,7 +199,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 /* ---------- scratch services ---------- */
 .head-row { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px; }
-.scratch { position: relative; border-radius: var(--r-l); overflow: hidden; background: var(--surface); }
+.scratch { position: relative; border-radius: var(--r-l); overflow: hidden; background: var(--surface); -webkit-user-select: none; user-select: none; }
 
 /* the ticket: a stacked, tilting, notched scratch card */
 .ticket-stage { position: relative; max-width: 980px; margin-top: 40px; perspective: 1200px; }
@@ -255,7 +255,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .svc { min-height: 0; padding: 18px 20px; }
   .svc__title { font-size: var(--step-1); }
   .svc__line { margin: 4px 0 10px; font-size: var(--step--1); }
-  .svc ul { margin-top: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: var(--step--1); }
+  .svc ul { margin-top: 0; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px 14px; font-size: var(--step--1); }
 }
 
 /* ---------- work ---------- */
@@ -477,7 +477,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 /* budget chips: price + "Free trial included" note */
 .option--budget { display: inline-flex; flex-direction: column; align-items: flex-start; gap: 2px; border-radius: 16px; padding: 10px 18px 11px; }
-.option--budget small { font-family: var(--mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #3ddc84; }
+.option--budget small { font-family: var(--mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #15803d; }
+:root[data-theme="night"] .option--budget small { color: #3ddc84; }
 
 /* ---------- theme button (nav) ---------- */
 .theme { position: relative; }
@@ -564,7 +565,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .studio__device button { border: 0; background: transparent; padding: 6px 13px; border-radius: 999px; font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
 .studio__device button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 .studio__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 24px; }
-.studio__trial { font-family: var(--mono); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #1f9d55; }
+.studio__trial { font-family: var(--mono); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #15803d; }
 :root[data-theme="night"] .studio__trial { color: #3ddc84; }
 .studio__link { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
 
@@ -576,6 +577,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .frame__bar i { width: 10px; height: 10px; border-radius: 50%; background: #c9c5d1; }
 .frame__bar span { margin-left: 10px; padding: 3px 12px; border-radius: 999px; background: #fff; font-family: var(--mono); font-size: 0.72rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .frame__viewport { height: min(640px, 78vh); overflow-y: auto; container-type: inline-size; overscroll-behavior: contain; }
+@media (max-width: 700px) { .frame__viewport { height: min(560px, 68svh); overscroll-behavior-y: auto; } } /* phones: leave room to swipe past, and let the page carry on scrolling at the end */
 
 /* nav: never wrap a label; tighten on medium screens so the longer "See your website first" link fits */
 .nav__links a { white-space: nowrap; }
@@ -619,6 +621,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .bot__form input { flex: 1; min-width: 0; padding: 0 14px; min-height: 42px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); color: var(--ink); font: inherit; }
 .bot__form input:focus-visible, .bot__chip:focus-visible, .bot__close:focus-visible, .bot__launch:focus-visible { outline: 2px solid var(--pink); outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .bot__typing i { animation: none; opacity: 0.6; } .bot__launch { transition: none; } }
+@media (max-width: 600px) { .bot__launch { width: 54px; height: 54px; padding: 0; justify-content: center; } .bot__launch span { display: none; } } /* phones: icon-only so it doesn't cover buttons */
 @media (max-width: 480px) { .bot { right: 12px; bottom: 12px; } .bot__launch { right: 12px; bottom: 12px; } }
 
 /* design picker: tone filter + scrollable design cards with a colour swatch */
@@ -761,3 +764,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .pv-shots .pv-card:nth-child(1) { left: 0; right: auto; top: 0; rotate: -3deg; z-index: 1; }
 .pv-shots .pv-card:nth-child(2) { left: auto; right: 0; top: 30%; rotate: 4deg; z-index: 2; }
 @media (max-width: 900px) { .pv-feature { grid-template-columns: 1fr; gap: 28px; } .pv-shots { max-width: 560px; } }
+
+/* Touch screens: a tap leaves :hover stuck on, so skip the hover lift there. */
+@media (hover: none) { .btn:hover, .option:hover, .card-work:hover, .studio__designs button:hover, .pv-type:hover, .bot__launch:hover, .pv-get li:hover { transform: none; } .option:not([aria-pressed="true"]):hover { box-shadow: none; } }
