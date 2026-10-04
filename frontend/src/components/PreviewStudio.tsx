@@ -41,8 +41,7 @@ export function PreviewStudio() {
     return () => window.removeEventListener(SAME_PAGE_EVENT, reset);
   }, []);
 
-  // A restaurant whose name or description sounds like a café gets the café look.
-  const cat = resolveCategory(catId, name, about);
+  const cat = resolveCategory(catId);
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
