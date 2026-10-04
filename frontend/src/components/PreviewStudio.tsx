@@ -159,10 +159,10 @@ export function PreviewStudio() {
       </div>
 
       <div className="studio__designs" role="group" aria-label="Design">
-        {DESIGNS.map((d) => {
+        {DESIGNS.map((d, i) => {
           const p = paletteFor(cat, d.id, theme);
           return (
-            <button key={d.id} aria-pressed={design === d.id} onClick={() => setDesign(d.id)}>
+            <button key={d.id} aria-pressed={design === d.id} onClick={() => setDesign(d.id)} style={{ "--c": GET_COLORS[i] } as React.CSSProperties}>
               <span className="studio__swatch" aria-hidden="true" style={{ background: p.bg }}>
                 <i style={{ background: p.accent }} /><i style={{ background: p.text }} />
               </span>

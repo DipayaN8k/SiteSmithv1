@@ -551,14 +551,17 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* result */
 .studio__head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
 .studio__head .lede { max-width: 58ch; }
-.studio__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 16px; }
+.studio__bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
 .studio__designs { display: flex; flex-wrap: wrap; gap: 10px; }
-.studio__designs button { text-align: left; padding: 10px 16px; border-radius: 14px; border: 2px solid var(--line); background: var(--surface); }
-.studio__designs button strong { display: block; }
-.studio__designs button span { font-size: 0.8rem; color: var(--muted); }
-.studio__designs button[aria-pressed="true"] { border-color: transparent; background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--grad) border-box; box-shadow: var(--glow); }
+.studio__designs button { position: relative; text-align: left; padding: 12px 16px 14px; border-radius: 16px; border: 2px solid color-mix(in srgb, var(--c, var(--ink)) 28%, var(--line)); background: linear-gradient(160deg, color-mix(in srgb, var(--c, var(--ink)) 10%, var(--surface)), var(--surface) 70%); line-height: 1.4; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.studio__designs button:hover { transform: translateY(-2px); border-color: var(--c, var(--ink)); box-shadow: 0 12px 26px -18px var(--c, var(--ink)); }
+.studio__designs button strong { display: block; font-family: var(--display); font-size: 1.2rem; font-weight: 800; letter-spacing: -0.02em; color: var(--c, var(--ink)); }
+.studio__designs button > span:last-child { display: block; margin-top: 2px; font-size: 0.82rem; font-weight: 500; color: var(--ink); opacity: 0.78; }
+.studio__designs button[aria-pressed="true"] { border-color: transparent; background: linear-gradient(160deg, color-mix(in srgb, var(--c) 16%, var(--surface)), var(--surface) 75%) padding-box, var(--grad) border-box; box-shadow: 0 16px 34px -18px var(--c); }
+.studio__designs button[aria-pressed="true"]::after { content: "✓"; position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--c); color: #fff; font-size: 0.75rem; font-weight: 800; }
+:root[data-theme="night"] .studio__designs button strong { color: color-mix(in srgb, var(--c) 55%, #fff); }
 .studio__device { display: inline-flex; padding: 4px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
-.studio__device button { border: 0; background: transparent; padding: 8px 16px; border-radius: 999px; font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+.studio__device button { border: 0; background: transparent; padding: 6px 13px; border-radius: 999px; font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
 .studio__device button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 .studio__cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; margin-top: 24px; }
 .studio__trial { font-family: var(--mono); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #1f9d55; }
@@ -619,14 +622,14 @@ button { font: inherit; color: inherit; cursor: pointer; }
 @media (max-width: 480px) { .bot { right: 12px; bottom: 12px; } .bot__launch { right: 12px; bottom: 12px; } }
 
 /* design picker: tone filter + scrollable design cards with a colour swatch */
-.studio__hint { margin: 0; color: var(--muted); font-size: 0.9rem; }
-.studio__note { position: relative; margin: 0 0 20px; padding: 16px 18px 16px 20px; border-radius: 16px; border: 1.5px solid transparent; background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--grad-x) border-box; color: var(--muted); font-size: 0.98rem; line-height: 1.55; box-shadow: 0 14px 36px -24px rgba(214, 41, 118, 0.6); animation: noteIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both, noteGlow 2.4s ease-in-out 0.8s 2; }
+.studio__hint { margin: 0; color: var(--muted); font-size: 0.84rem; }
+.studio__note { position: relative; margin: 0 0 14px; padding: 10px 14px; border-radius: 12px; border: 1.5px solid transparent; background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--grad-x) border-box; color: var(--muted); font-size: 0.86rem; line-height: 1.5; box-shadow: 0 14px 36px -24px rgba(214, 41, 118, 0.6); animation: noteIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both, noteGlow 2.4s ease-in-out 0.8s 2; }
 .studio__note p { margin: 0; }
 .studio__note strong { color: var(--ink); }
-.studio__note-tag { display: inline-block; margin-right: 10px; padding: 3px 10px; border-radius: 999px; background: var(--ink); color: var(--bg); font-family: var(--mono); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; vertical-align: 2px; }
-.studio__meters { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 12px; font-size: 0.82rem; }
+.studio__note-tag { display: inline-block; margin-right: 8px; padding: 2px 8px; border-radius: 999px; background: var(--ink); color: var(--bg); font-family: var(--mono); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; vertical-align: 1px; }
+.studio__meters { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 7px; font-size: 0.74rem; }
 .studio__meters span { display: inline-flex; align-items: center; gap: 10px; }
-.studio__meters i { display: block; width: 140px; height: 6px; overflow: hidden; border-radius: 6px; background: color-mix(in srgb, var(--ink) 10%, transparent); }
+.studio__meters i { display: block; width: 100px; height: 5px; overflow: hidden; border-radius: 6px; background: color-mix(in srgb, var(--ink) 10%, transparent); }
 .studio__meters b { display: block; height: 100%; border-radius: inherit; background: color-mix(in srgb, var(--ink) 30%, transparent); transform-origin: left; animation: meterFill 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) 0.5s both; }
 .studio__meters-final { color: var(--ink); font-weight: 600; }
 .studio__meters-final b { background: var(--grad-x); animation-delay: 0.9s; }
@@ -636,12 +639,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { .studio__note, .studio__meters b { animation: none; } }
 .studio__fine { order: 3; flex-basis: 100%; margin: 0; color: var(--muted); font-size: 0.85rem; }
 .frame__tag { margin-left: auto; padding: 2px 8px; border-radius: 999px; border: 1px solid #c9c5d1; color: #6b6474; font-family: var(--mono); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
-.studio__style { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: center; margin: 0 0 16px; }
+.studio__style { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; margin: 0 0 12px; }
 .studio__themes, .studio__fonts { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .studio__themes > span, .studio__fonts > span { margin-right: 4px; font-family: var(--mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
-.studio__themes button, .studio__fonts button { display: inline-flex; align-items: center; gap: 7px; padding: 6px 12px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); font-size: 0.82rem; font-weight: 600; }
+.studio__themes button, .studio__fonts button { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border: 1.5px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--ink); font-size: 0.76rem; font-weight: 600; }
 .studio__themes button[aria-pressed="true"], .studio__fonts button[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--bg); }
-.studio__themes i { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15); }
+.studio__themes i { width: 13px; height: 13px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15); }
 .studio__fonts button[data-font="modern"] { font-family: var(--display); font-weight: 800; }
 .studio__fonts button[data-font="elegant"] { font-family: var(--font-elegant), Georgia, serif; font-weight: 500; font-style: italic; }
 .studio__fonts button[data-font="minimal"] { font-family: var(--body); }
