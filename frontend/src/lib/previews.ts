@@ -40,7 +40,7 @@ type Stat = { n: number; suffix: string; label: string };
 export const DESIGNS = [
   { id: "bold", name: "Bold", desc: "Dark, full-screen photos, big moving type", tone: "dark" },
   { id: "clean", name: "Clean", desc: "Bright, airy, photo collage", tone: "light" },
-  { id: "luxe", name: "Luxe", desc: "Premium and cinematic, gold details", tone: "dark" },
+  { id: "luxe", name: "Luxe", desc: "Maison-style: quiet, editorial, luxurious", tone: "light" },
   { id: "complete", name: "Complete", desc: "Packed: booking, gallery, tabs, chat", tone: "light" },
 ] as const;
 export type DesignId = (typeof DESIGNS)[number]["id"];
@@ -91,6 +91,18 @@ export function accentInk(p: Palette) {
   return p.text;
 }
 
+// Dark-mode version of any palette (used by the Complete design's light/dark switch).
+export function darkPalette(p: Palette): Palette {
+  const bg = "#101114";
+  let accent = p.accent;
+  for (let t = 1; t >= 0; t -= 0.05) {
+    accent = mix(p.accent, "#ffffff", t);
+    if (contrast(accent, bg) >= 4.5) break;
+  }
+  const accentText = contrast(bg, accent) >= contrast("#ffffff", accent) ? bg : "#ffffff";
+  return { bg, surface: "#1b1d22", text: "#f1f1f3", muted: "#a9acb5", accent, accentText };
+}
+
 // Colours for any design of any category.
 export function paletteFor(cat: Category, design: DesignId, theme = "original"): Palette {
   const picked = THEMES.find((t) => t.id === theme)?.p;
@@ -100,7 +112,8 @@ export function paletteFor(cat: Category, design: DesignId, theme = "original"):
     case "bold": return bold;
     case "clean": return clean;
     case "complete": return vivid;
-    case "luxe": return { bg: "#0f0e0d", surface: "#1b1916", text: "#f4efe6", muted: "#b8b0a2", accent: mix(bold.accent, "#f4efe6", 0.75), accentText: "#0f0e0d" };
+    // Luxury houses keep it monochrome: ivory, black, lots of air.
+    case "luxe": return { bg: "#f7f4ef", surface: "#ece7df", text: "#141414", muted: "#5c574f", accent: "#141414", accentText: "#ffffff" };
   }
 }
 

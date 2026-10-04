@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { accentInk, DEFAULT_FONT, paletteFor, photo, type Category, type DesignId, type FontId } from "@/lib/previews";
+import { accentInk, darkPalette, DEFAULT_FONT, paletteFor, photo, type Category, type DesignId, type FontId, type Palette } from "@/lib/previews";
 import { elegant, statement } from "@/lib/previewFonts";
 import "./preview-site.css";
 
@@ -15,10 +15,7 @@ type Props = { cat: Category; design: DesignId; name: string; about?: string; th
 
 export function PreviewSite({ cat, design, name, about, theme = "original", font }: Props) {
   const p = paletteFor(cat, design, theme);
-  const vars = {
-    "--ps-bg": p.bg, "--ps-surface": p.surface, "--ps-text": p.text,
-    "--ps-muted": p.muted, "--ps-accent": p.accent, "--ps-accent-text": p.accentText, "--ps-accent-ink": accentInk(p),
-  } as React.CSSProperties;
+  const vars = paletteVars(p);
   const ctx: Ctx = {
     cat, name,
     title: cat.heroTitle.replace("{name}", name),
@@ -27,7 +24,7 @@ export function PreviewSite({ cat, design, name, about, theme = "original", font
   };
   const root = useRef<HTMLDivElement>(null);
   useMotion(root);
-  const look = { ui: cat.visual === "ui", name };
+  const look = { ui: cat.visual === "ui", name, p };
 
   return (
     <div ref={root} className={`ps ps--${design} ${elegant.variable} ${statement.variable}`} data-font={font ?? DEFAULT_FONT[design]} style={vars}>
@@ -41,6 +38,11 @@ export function PreviewSite({ cat, design, name, about, theme = "original", font
     </div>
   );
 }
+
+const paletteVars = (p: Palette) => ({
+  "--ps-bg": p.bg, "--ps-surface": p.surface, "--ps-text": p.text,
+  "--ps-muted": p.muted, "--ps-accent": p.accent, "--ps-accent-text": p.accentText, "--ps-accent-ink": accentInk(p),
+}) as React.CSSProperties;
 
 /* ---------- motion ---------- */
 
@@ -153,7 +155,7 @@ const fmt = (n: number) => (String(n).includes(".") ? n.toFixed(1) : String(n));
 const d = (n: number) => ({ "--d": n }) as React.CSSProperties;
 
 // "ui" businesses (IT) swap photos for designed product visuals; see TechArt below.
-const Look = createContext({ ui: false, name: "" });
+const Look = createContext<{ ui: boolean; name: string; p?: Palette }>({ ui: false, name: "" });
 type ArtKind = "mesh" | "code" | "terminal" | "dash" | "graph" | "nodes";
 const ITEM_ART: ArtKind[] = ["code", "nodes", "terminal"];
 
@@ -184,11 +186,12 @@ function Logo({ initial, name }: { initial: string; name: string }) {
   return <span className="ps__logo"><b>{initial}</b>{name}</span>;
 }
 
-function Nav({ cat, name, initial, className = "", links }: Ctx & { className?: string; links?: string[] }) {
+function Nav({ cat, name, initial, className = "", links, extra }: Ctx & { className?: string; links?: string[]; extra?: React.ReactNode }) {
   return (
     <header className={`ps__nav ${className}`}>
       <Logo initial={initial} name={name} />
       <span className="ps__links">{(links ?? cat.nav).map((n) => <span key={n}>{n}</span>)}</span>
+      {extra}
       <span className="ps__btn ps__btn--sm">{cat.cta}</span>
     </header>
   );
@@ -536,65 +539,95 @@ function Clean(c: Ctx) {
   );
 }
 
-/* ---------- Luxe: cinematic photo, tracking-in type, gold lines that draw ---------- */
+/* ---------- Luxe: maison-style — ivory and black, full-screen photography, quiet type ---------- */
 
 function Luxe(c: Ctx) {
-  const { cat, title, text } = c;
+  const { cat, title, text, name } = c;
   const { ui } = useContext(Look);
-  const roman = ["I", "II", "III"];
+  const [mail, setMail] = useState(false);
+  const tiles: { t: string; src: string; art: ArtKind }[] = [
+    ...cat.items.map((it, i) => ({ t: it.title, src: cat.photos.items[i], art: ITEM_ART[i] })),
+    { t: cat.aboutTitle, src: cat.photos.gallery[2] ?? cat.photos.about, art: "dash" },
+  ];
   return (
     <>
+      <div className="l-bar">{cat.cta} · {cat.hours}</div>
       <section className="l-hero">
         <div className="l-hero__bg ps-parallax"><Img src={cat.photos.hero[0]} w={1600} eager art="mesh" /></div>
-        <Nav {...c} className="ps__nav--over" />
+        <header className="l-nav">
+          <span className="l-nav__side"><i className="l-burger" aria-hidden="true" /><span>Menu</span></span>
+          <span className="l-nav__mark">{name}</span>
+          <span className="l-nav__side l-nav__side--end">{cat.cta}</span>
+        </header>
         <div className="l-hero__text">
-          <span className="l-line" />
-          <p className="ps__eyebrow rise">{cat.id === "other" ? c.name : cat.label}</p>
-          <h1 className="l-hero__title">{title}</h1>
-          <p className="ps__lead rise" style={d(3)}>{text}</p>
-          <div className="ps__ctas rise" style={d(4)}>
-            <span className="ps__btn">{cat.cta}</span>
+          <p className="l-label rise">{cat.label}</p>
+          <h1 className="l-hero__title rise" style={d(1)}>{title}</h1>
+          <div className="l-hero__ctas rise" style={d(2)}>
+            <span className="l-btn">Discover</span>
+            <span className="l-link">{cat.cta}</span>
           </div>
         </div>
+      </section>
+
+      <section className="l-intro" data-reveal>
+        <h2>Explore the world of {name}</h2>
+        <p>{text}</p>
+      </section>
+
+      <section className="l-grid">
+        {tiles.map((t, i) => (
+          <figure key={t.t} data-reveal style={d(i % 2)}>
+            <div className="l-grid__img"><Img src={t.src} w={800} alt={t.t} art={t.art} /></div>
+            <figcaption>{t.t}</figcaption>
+          </figure>
+        ))}
+      </section>
+
+      <section className="l-diptych">
+        {[cat.photos.hero[1], cat.photos.hero[2]].map((src, i) => (
+          <div key={src} className="l-diptych__panel" data-reveal="wipe" style={d(i)}>
+            <Img src={src} w={1000} art={i ? "graph" : "nodes"} />
+            <div className="l-diptych__cap">
+              <span>{i ? "Visit us" : "The house"}</span>
+              <strong>{i ? cat.hours : cat.aboutTitle}</strong>
+              <em>Discover</em>
+            </div>
+          </div>
+        ))}
       </section>
 
       <section className="l-quote" data-reveal>
         <span className="l-ornament" aria-hidden="true">◆</span>
         <p>{cat.story}</p>
-        <span className="l-sign">— {c.name}</span>
+        <span className="l-sign">— {name}</span>
       </section>
 
-      <section className="l-rows">
-        {cat.items.map((it, i) => (
-          <article className={`l-row ${i % 2 ? "l-row--flip" : ""}`} key={it.title}>
-            <div className="l-row__img" data-reveal="wipe"><Img src={cat.photos.items[i]} w={900} alt={it.title} art={ITEM_ART[i]} /></div>
-            <div className="l-row__text" data-reveal style={d(1)}>
-              <span className="l-row__n">{roman[i]}</span>
-              <h3>{it.title}</h3>
-              <p>{it.text}</p>
-              <ul>{it.points.map((pt) => <li key={pt}>{pt}</li>)}</ul>
-              <span className="l-link">Discover <Arrow /></span>
-            </div>
-          </article>
-        ))}
+      <section className="l-services">
+        <h2 className="l-h2" data-reveal>Services</h2>
+        <div>
+          {cat.features.slice(0, 3).map(([t, txt], i) => (
+            <article key={t} data-reveal style={d(i)}>
+              <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d={ICONS[i]} fill="none" stroke="currentColor" strokeWidth="1.1" strokeLinejoin="round" strokeLinecap="round" /></svg>
+              <h3>{t}</h3>
+              <p>{txt}</p>
+              <span className="l-link">Discover</span>
+            </article>
+          ))}
+        </div>
       </section>
 
-      <Stats cat={cat} className="l-stats" />
+      {ui && cat.cases && <Cases cat={cat} />}
       <Team cat={cat} title="The people behind it" />
 
-      {ui && cat.cases ? <Cases cat={cat} /> : (
-        <section className="l-gallery">
-          {cat.photos.gallery.slice(0, 6).map((g, i) => (
-            <div key={g} data-reveal style={d(i % 3)}><Img src={g} w={600} /></div>
-          ))}
-        </section>
-      )}
-
-      <section className="l-cta" data-reveal>
-        <span className="l-line" />
-        <h2>{cat.aboutTitle}</h2>
-        <p>{cat.hours}</p>
-        <span className="ps__btn">{cat.cta}</span>
+      <section className="l-news" data-reveal>
+        <h2>Receive news from {name}</h2>
+        <p>New arrivals, events and private invitations, a few times a year.</p>
+        {mail ? <p className="l-news__ok">Thank you. You are on the list.</p> : (
+          <form onSubmit={(e) => { e.preventDefault(); setMail(true); }}>
+            <input type="email" placeholder="Email address" aria-label="Email address" autoComplete="off" />
+            <button type="submit">Subscribe</button>
+          </form>
+        )}
       </section>
       <Footer {...c} />
     </>
@@ -605,7 +638,17 @@ function Luxe(c: Ctx) {
 
 function Complete(c: Ctx) {
   const { cat, title, text, name } = c;
-  const { ui } = useContext(Look);
+  const { ui, p } = useContext(Look);
+  const [dark, setDark] = useState(false);
+  const [joined, setJoined] = useState(false);
+  const left = useCountdown();
+  const handle = name.toLowerCase().replace(/[^a-z0-9]+/g, "").slice(0, 24) || "yourbusiness";
+  const ago = (days: number) => new Date(Date.now() - days * 864e5).toLocaleDateString("en-IN", { day: "numeric", month: "short" });
+  const posts: { t: string; date: string; mins: number; src: string; art: ArtKind }[] = [
+    { t: `Behind the scenes: ${cat.items[0].title.toLowerCase()}`, date: ago(3), mins: 4, src: cat.photos.gallery[2], art: "code" },
+    { t: `${cat.items[1].title}: what's new this month`, date: ago(11), mins: 3, src: cat.photos.gallery[3], art: "dash" },
+    { t: `${cat.features[0][0]}, and why it matters`, date: ago(24), mins: 5, src: cat.photos.gallery[4], art: "terminal" },
+  ];
   const [slide, setSlide] = useState(0);
   const [tab, setTab] = useState(0);
   const [zoom, setZoom] = useState<number | null>(null);
@@ -641,11 +684,20 @@ function Complete(c: Ctx) {
   }, [zoom, n]);
 
   return (
-    <>
+    <div className="x-root" data-dark={dark} style={dark && p ? paletteVars(darkPalette(p)) : undefined}>
       <div className="x-ticker" aria-hidden="true">
         <div className="x-ticker__track">{[...ticker, ...ticker].map((t, i) => <span key={i}>{t}</span>)}</div>
       </div>
-      <Nav {...c} className="x-nav" links={["About", "Services", "Team", "Contact"]} />
+      <Nav {...c} className="x-nav" links={["About", "Services", "Team", "Contact"]} extra={
+        <>
+          <span className="x-live"><i />Open now</span>
+          <button type="button" className="x-mode" aria-label={dark ? "Switch to light mode" : "Switch to dark mode"} aria-pressed={dark} onClick={() => setDark((v) => !v)}>
+            {dark
+              ? <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" strokeWidth="2" /><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" /></svg>
+              : <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" /></svg>}
+          </button>
+        </>
+      } />
 
       <section className="x-hero">
         {ui ? (
@@ -675,6 +727,13 @@ function Complete(c: Ctx) {
 
       <Stats cat={cat} className="x-stats" />
       <Platforms cat={cat} />
+
+      <section className="x-offer" data-reveal>
+        <span className="x-offer__tag">This week only</span>
+        <p><strong>A welcome offer for first-time customers.</strong> {cat.cta} today and we&apos;ll add a little extra.</p>
+        <span className="x-offer__time" aria-label={`Offer ends in ${left}`}>{left}</span>
+        <button type="button" className="ps__btn" onClick={jump("x-book")}>Claim offer <Arrow /></button>
+      </section>
 
       <section className="ps__section x-about">
         <div className="x-about__pics">
@@ -724,6 +783,37 @@ function Complete(c: Ctx) {
           ))}
         </div>
       </section>}
+
+      {!ui && (
+        <section className="ps__section x-insta">
+          <div className="x-insta__head">
+            <Split text="Follow along" />
+            <span className="c-card__link">@{handle} on Instagram <Arrow /></span>
+          </div>
+          <div className="x-insta__grid">
+            {cat.photos.gallery.slice(0, 6).map((g, i) => (
+              <div key={g} data-reveal style={d(i % 3)}>
+                <Img src={g} w={400} />
+                <span aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" fill="currentColor" /></svg></span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section className="ps__section">
+        <Split text={`Latest from ${name}`} />
+        <div className="x-blog">
+          {posts.map((post, i) => (
+            <article key={post.t} data-reveal style={d(i)}>
+              <div className="x-blog__img"><Img src={post.src} w={600} art={post.art} /></div>
+              <span className="x-blog__meta">{post.date} · {post.mins} min read</span>
+              <h3>{post.t}</h3>
+              <span className="c-card__link">Read more <Arrow /></span>
+            </article>
+          ))}
+        </div>
+      </section>
 
       <section className="ps__section x-book" data-anchor="x-book">
         <div className="x-book__card" data-reveal>
@@ -779,9 +869,25 @@ function Complete(c: Ctx) {
           )}
         </form>
       </section>
+
+      <section className="x-news" data-reveal>
+        <div>
+          <h2 className="ps__h2">Get updates on WhatsApp</h2>
+          <p>New offers and news from {name}. No spam, leave any time.</p>
+        </div>
+        {joined ? <p className="x-news__ok"><Check /> You&apos;re in. Watch your WhatsApp.</p> : (
+          <form onSubmit={(e) => { e.preventDefault(); setJoined(true); }}>
+            <input type="tel" placeholder="Your WhatsApp number" aria-label="WhatsApp number" autoComplete="off" />
+            <button type="submit" className="ps__btn">Join</button>
+          </form>
+        )}
+      </section>
       <Footer {...c} />
 
       <div className="x-wa">
+        <button type="button" className="x-top" aria-label="Back to top" onClick={(e) => e.currentTarget.closest(".frame__viewport")?.scrollTo({ top: 0, behavior: "smooth" })}>
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 19V5m-6 6 6-6 6 6" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </button>
         {chat && (
           <div className="x-wa__chat">
             <strong>{name}</strong>
@@ -804,8 +910,23 @@ function Complete(c: Ctx) {
             onClick={(e) => { e.stopPropagation(); setZoom((zoom + 1) % n); }}>›</button>
         </div>
       )}
-    </>
+    </div>
   );
+}
+
+// Time left until the end of this week (Sunday midnight), ticking every second.
+function useCountdown() {
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const end = new Date(now);
+  end.setDate(end.getDate() + ((7 - end.getDay()) % 7));
+  end.setHours(23, 59, 59, 999);
+  const s = Math.max(0, Math.floor((end.getTime() - now) / 1000));
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${Math.floor(s / 86400)}d ${pad(Math.floor(s / 3600) % 24)}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`;
 }
 
 function Choice({ label, options, value, onChange }: { label: string; options: string[]; value: number; onChange: (i: number) => void }) {

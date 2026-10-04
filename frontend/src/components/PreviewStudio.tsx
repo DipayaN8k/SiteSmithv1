@@ -8,6 +8,15 @@ import { elegant, statement } from "@/lib/previewFonts";
 import { PreviewSite } from "./PreviewSite";
 import { SAME_PAGE_EVENT } from "./ScrollManager";
 
+// One-line hint under each business type in the picker.
+const TYPE_HINT: Record<string, string> = {
+  restaurant: "Menus and table bookings", cafe: "Coffee, bakes and brunch", fashion: "Collections and lookbooks",
+  salon: "Services and slot booking", health: "Doctors and appointments", tech: "Services and case studies",
+  realestate: "Listings and site visits", education: "Courses and demo classes", other: "Any other business",
+};
+
+const GET_COLORS = ["#c4480c", "#b3145c", "#7d1fa6", "#3b46c0"];
+
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "").slice(0, 28) || "yourbusiness";
 
 // "See your website": business name + type (+ what they do) -> four ready-made designs with their name on them
@@ -68,34 +77,55 @@ export function PreviewStudio() {
 
   if (step !== "result" || !cat) {
     return (
+      <div className="pv-formwrap">
       <form className="studio-form" onSubmit={submit} noValidate>
         <div className="field">
-          <label htmlFor="pv-name">Business name</label>
+          <label htmlFor="pv-name"><span className="pv-step">01</span>Business name</label>
           <input id="pv-name" maxLength={40} autoComplete="organization" placeholder="e.g. Chai Point" value={name}
             aria-invalid={!!errors.name} onChange={(e) => setName(e.target.value)} />
           {errors.name && <div className="field__err">{errors.name}</div>}
         </div>
 
         <div className="field">
-          <span className="field-label" id="pv-type">Type of business</span>
+          <span className="field-label" id="pv-type"><span className="pv-step">02</span>Type of business</span>
           <div className="studio-cats" role="group" aria-labelledby="pv-type">
             {CATEGORIES.map((c) => (
-              <button type="button" key={c.id} className="option option--chip" aria-pressed={catId === c.id} onClick={() => setCatId(c.id)}>{c.label}</button>
+              <button type="button" key={c.id} className="pv-type" aria-pressed={catId === c.id} onClick={() => setCatId(c.id)}>
+                <span className="pv-type__text">
+                  <span className="pv-type__name">{c.label}</span>
+                  <span className="pv-type__hint">{TYPE_HINT[c.id]}</span>
+                </span>
+              </button>
             ))}
           </div>
           {errors.cat && <div className="field__err">{errors.cat}</div>}
         </div>
 
         <div className="field">
-          <label htmlFor="pv-about">What does your business do? <span className="muted">(optional)</span></label>
+          <label htmlFor="pv-about"><span className="pv-step">03</span>What does your business do? <span className="muted">(optional)</span></label>
           <input id="pv-about" maxLength={110} placeholder="e.g. Fresh coffee and homemade cakes in Salt Lake" value={about} onChange={(e) => setAbout(e.target.value)} />
         </div>
 
-        <button className="btn btn--grad" disabled={step === "loading"}>
-          {step === "loading" ? `Picking ${DESIGNS.length} designs for ${cat?.label ?? "you"}…` : "Show my website"}
+        <button className="btn btn--grad pv-go" disabled={step === "loading"}>
+          {step === "loading" ? `Picking ${DESIGNS.length} designs for ${cat?.label ?? "you"}…` : <>Show my website <span aria-hidden="true">→</span></>}
         </button>
+        {step === "loading" && <div className="pv-loading" aria-hidden="true"><i /></div>}
         <p className="muted small">Free, instant, no sign-up. Nothing is saved until you book.</p>
       </form>
+      <aside className="pv-get" aria-label="What you'll get">
+        <p className="pv-get__kicker">What you&apos;ll get</p>
+        <h2>4 designs, with your name on them</h2>
+        <ul>
+          {DESIGNS.map((d, i) => (
+            <li key={d.id} style={{ "--c": GET_COLORS[i] } as React.CSSProperties}>
+              <span aria-hidden="true">{d.name[0]}</span>
+              <div><strong>{d.name}</strong><small>{d.desc}</small></div>
+            </li>
+          ))}
+        </ul>
+        <p className="pv-get__more">Plus 6 colour themes and 4 font styles to try, on desktop and mobile.</p>
+      </aside>
+      </div>
     );
   }
 
