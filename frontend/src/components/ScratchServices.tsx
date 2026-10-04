@@ -264,7 +264,7 @@ export function ScratchServices() {
       <div className="wrap">
         <p className="kicker">What we build</p>
         <h2 className="display h2">What&apos;s under<br />the card?</h2>
-        <p className="lede">Three things are hidden under this ticket. One of them is exactly what your business needs.</p>
+        <p className="lede">Four things are hidden under this ticket. One of them is exactly what your business needs.</p>
 
         <div className="ticket-stage" data-done={done} onPointerMove={onTilt} onPointerLeave={resetTilt}>
           <div className="ticket" ref={ticketRef} data-scratching={scratching} data-done={done}>

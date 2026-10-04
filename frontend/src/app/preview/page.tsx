@@ -17,6 +17,12 @@ const FAN = [
   { cat: byId("realestate"), name: "Urban Nest", title: "Find the place you'll call home." },
 ];
 
+// Two sample sites for the showcase card further down.
+const SHOTS = [
+  { cat: byId("restaurant"), name: "Barkas", title: "Good food, worth the trip." },
+  { cat: byId("fashion"), name: "Velvet Lane", title: "New season. Limited pieces." },
+];
+
 const PILLS = [
   { t: "100% free", c: "#fa7e1e" },
   { t: "Ready in 10 seconds", c: "#d62976" },
@@ -25,7 +31,6 @@ const PILLS = [
 ];
 
 export default function PreviewPage() {
-  const strip = CATEGORIES.filter((c) => c.id !== "other");
   return (
     <>
       <section className="page-head pv-head">
@@ -61,22 +66,27 @@ export default function PreviewPage() {
 
       <section className="pv-showcase" aria-label="Business types we design for">
         <div className="wrap">
-          <p className="kicker">Made for every kind of business</p>
-          <h2 className="display h2">Restaurants to real estate, <span className="grad-text">we&apos;ve got a look for you.</span></h2>
-        </div>
-        {[0, 1].map((row) => (
-          <div className={`pv-strip ${row ? "pv-strip--rev" : ""}`} key={row} aria-hidden="true">
-            <div className="pv-strip__track">
-              {[...strip, ...strip].map((c, i) => (
-                <figure key={`${c.id}-${i}`} style={{ "--a": c.palettes.bold.accent } as React.CSSProperties}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={photo(row ? c.photos.gallery[1] : c.photos.hero[0], 480)} alt="" loading="lazy" />
-                  <figcaption>{c.label}</figcaption>
-                </figure>
+          <div className="pv-feature">
+            <div className="pv-feature__text">
+              <p className="kicker">Made for every kind of business</p>
+              <h2 className="display h2">One preview, <span className="grad-text">any business.</span></h2>
+              <p className="lede">Restaurants, cafés, salons, clinics, software firms. Pick your type above and see a site built around it, with your name on it.</p>
+              <a href="/preview" className="pv-feature__link">Try it with your name <span aria-hidden="true">↑</span></a>
+            </div>
+            <div className="pv-shots" aria-hidden="true">
+              {SHOTS.map((f, i) => (
+                <div className="pv-card" key={f.name} style={{ "--i": i, "--a": f.cat.palettes.bold.accent } as React.CSSProperties}>
+                  <div className="pv-card__bar"><i /><i /><i /><span>www.{f.name.toLowerCase().replace(/\s+/g, "")}.com</span></div>
+                  <div className="pv-card__body">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={photo(f.cat.photos.hero[0], 720)} alt="" loading="lazy" />
+                    <div className="pv-card__text"><b>{f.name}</b><strong>{f.title}</strong><em>{f.cat.cta}</em></div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
-        ))}
+        </div>
       </section>
     </>
   );

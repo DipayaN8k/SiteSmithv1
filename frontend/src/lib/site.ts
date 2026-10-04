@@ -94,6 +94,12 @@ export const services = [
     line: "One page. One job. Converts.",
     points: ["Ad campaign pages", "Launch & event pages", "Live in 2 days"],
   },
+  {
+    tone: "mint",
+    title: "AI & automation",
+    line: "Let bots handle the busywork.",
+    points: ["Website chatbots", "Leads sent to your inbox", "Auto-updated lead sheets"],
+  },
 ];
 
 export type Project = {
