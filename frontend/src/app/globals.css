@@ -823,3 +823,6 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .legal__body a.btn { text-decoration: none; }
 .card-work__concept { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); font-family: var(--mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); vertical-align: 3px; }
+/* Legal links sit on the left, and the right edge stays clear of the floating chat button. */
+.footer__bottom { justify-content: flex-start; column-gap: 32px; padding-right: 210px; }
+@media (max-width: 600px) { .footer__bottom { padding-right: 70px; } }

@@ -30,12 +30,12 @@ export function Footer() {
           </div>
         </div>
         <div className="footer__bottom">
-          <span>© {new Date().getFullYear()} {brand.name}</span>
           <nav className="footer__legal" aria-label="Legal">
             <Link href="/privacy">Privacy Policy</Link>
             <Link href="/terms">Terms &amp; Conditions</Link>
             <Link href="/cookies">Cookie Policy</Link>
           </nav>
+          <span>© {new Date().getFullYear()} {brand.name}</span>
         </div>
       </div>
     </footer>
