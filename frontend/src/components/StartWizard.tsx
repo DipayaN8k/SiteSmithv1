@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { BUSINESS_TYPES, submitContact, type BusinessType } from "@/lib/api";
 import { CATEGORY_TO_BUSINESS, PREVIEW_CHOICE_KEY } from "@/lib/previews";
+import { legal } from "@/lib/legal";
+import { brand } from "@/lib/site";
 
 const projectTypes = [
   { v: "Business website", d: "Show who you are, get enquiries" },
@@ -210,16 +212,26 @@ export function StartWizard() {
                 onChange={(e) => setForm({ ...form, website: e.target.value })} />
             </div>
 
+            {/* DPDP Act notice (s.5 / Rule 3): what we collect, why, and how to withdraw, complain or use your rights. */}
+            <div className="form-notice" id="data-notice">
+              <strong>How we use these details.</strong> We collect your name, email, phone number, business type, project
+              type, budget and message, only to reply to this request, discuss your project and send you a quote (the
+              message is optional; the rest we need to reply). We don&apos;t sell them or use them for ads. You can withdraw consent, ask to see, correct or delete your data,
+              or raise a complaint (including with the Data Protection Board of India) any time by emailing{" "}
+              <a href={`mailto:${legal.grievanceOfficer.email}`}>{legal.grievanceOfficer.email}</a>. Details in
+              our <Link href="/privacy" target="_blank">Privacy Policy</Link>.
+            </div>
             <label className="consent" data-invalid={!!errors.consent}>
-              <input type="checkbox" checked={form.consent} onChange={(e) => setForm({ ...form, consent: e.target.checked })} />
+              <input type="checkbox" checked={form.consent} aria-describedby="data-notice" onChange={(e) => setForm({ ...form, consent: e.target.checked })} />
               <span>
-                I agree that this studio can store these details and contact me about my project, as described in
-                the <Link href="/privacy" target="_blank">privacy policy</Link>.
+                I consent to {brand.name} using these details as described above and in
+                the <Link href="/privacy" target="_blank">Privacy Policy</Link>.
               </span>
             </label>
             {errors.consent && <div className="field__err" style={{ marginTop: -8 }}>{errors.consent}</div>}
           </div>
           {formError && <p className="field__err" role="alert" style={{ marginTop: 16 }}>{formError}</p>}
+          <p className="wizard__legal">By sending this request you agree to our <Link href="/terms" target="_blank">Terms &amp; Conditions</Link>. Sending it doesn&apos;t commit you to anything.</p>
           <div className="wizard__nav">
             <button type="button" className="btn" onClick={back}>Back</button>
             <button type="submit" className="btn btn--grad" disabled={status === "sending"}>

@@ -1,0 +1,14 @@
+# Netlify settings for the public website (frontend/).
+# Netlify reads this file automatically, so nothing needs to be typed in its setup screens.
+# The admin dashboard and backend are hosted separately (see DEPLOYMENT.md).
+
+[build]
+  base = "frontend"          # the website lives in this folder
+  command = "npm run build"
+  publish = ".next"          # Next.js build output (relative to base)
+
+[build.environment]
+  NODE_VERSION = "22"        # Next.js 16 needs Node 20.9 or newer
+
+# Once the backend is live, add NEXT_PUBLIC_API_URL in Netlify:
+# Site configuration -> Environment variables. Keep it out of this file.

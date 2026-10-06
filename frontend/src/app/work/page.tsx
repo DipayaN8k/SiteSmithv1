@@ -11,7 +11,7 @@ export default function WorkPage() {
         <div className="wrap">
           <p className="kicker">Our work</p>
           <h1 className="display page-head__title">Websites that<span className="grad-text">bring in customers.</span></h1>
-          <p className="lede">A look at what we&apos;ve built, and what changed for each business after launch.</p>
+          <p className="lede">Concept websites we designed and built to show what we can do for businesses like yours. Client projects are added here as they go live.</p>
         </div>
       </section>
       <section className="section" style={{ paddingTop: 0 }}>

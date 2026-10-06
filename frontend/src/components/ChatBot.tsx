@@ -146,6 +146,7 @@ export function ChatBot() {
               placeholder="Type your question…" onChange={(e) => setInput(e.target.value)} />
             <button type="submit" className="btn btn--grad btn--sm" disabled={!input.trim() || typing}>Send</button>
           </form>
+          <p className="bot__note">Automated answers for general guidance, not a quote. Chats aren&apos;t saved. <Link href="/terms#smithbot">Terms</Link></p>
         </section>
       )}
     </>

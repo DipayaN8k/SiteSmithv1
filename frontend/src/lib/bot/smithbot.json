@@ -749,7 +749,7 @@
         "show me your work",
         "examples of your work"
       ],
-      "answer": "You can browse some of our projects on the Work page.",
+      "answer": "You can browse our concept websites on the Work page. They show the kind of site we build, and client projects are added as they go live.",
       "buttons": [
         {
           "label": "See our work",
@@ -911,7 +911,7 @@
         "handover access",
         "my website or yours"
       ],
-      "answer": "You do. The domain and the finished website belong to you, and we hand over access when the project is complete.",
+      "answer": "You do. Once the project is paid in full, the domain and the finished website belong to you, and we hand over access. Details are in our Terms.",
       "buttons": [
         "whatsapp",
         "book"
@@ -1255,7 +1255,7 @@
         "legitimate",
         "proof"
       ],
-      "answer": "Real project results are on our Work page, and we add client testimonials as projects go live. You can also see a free preview of your own site before you commit.",
+      "answer": "Our Work page shows concept websites we built to show our style, and we add client projects and testimonials as they go live. You can also see a free preview of your own site before you commit.",
       "buttons": [
         {
           "label": "See our work",

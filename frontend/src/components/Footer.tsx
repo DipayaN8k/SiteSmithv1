@@ -12,7 +12,6 @@ export function Footer() {
             <nav className="footer__links" aria-label="Footer">
               {[...nav, ...navMore].map((n) => <Link key={n.href} href={n.href}>{n.label}</Link>)}
               <Link href="/start">Book a project</Link>
-              <Link href="/privacy">Privacy</Link>
             </nav>
           </div>
           <div className="footer__contact">
@@ -32,6 +31,11 @@ export function Footer() {
         </div>
         <div className="footer__bottom">
           <span>© {new Date().getFullYear()} {brand.name}</span>
+          <nav className="footer__legal" aria-label="Legal">
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/terms">Terms &amp; Conditions</Link>
+            <Link href="/cookies">Cookie Policy</Link>
+          </nav>
         </div>
       </div>
     </footer>

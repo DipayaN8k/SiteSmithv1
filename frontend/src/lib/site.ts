@@ -107,12 +107,14 @@ export type Project = {
   url?: string; // live site. When set, the card opens it in a new tab
   image?: string; // real screenshot in /public (e.g. "/work/spotturf-cover.webp"). Replaces the drawn mock
   nav?: [string, string, string]; // words in the mock's nav bar (defaults to Shop / About / Contact)
+  concept?: boolean; // a sample site we made ourselves, not client work. Shown with a "Concept" label (required: misleading-ads rules)
 };
 
-// Placeholder projects until real client work (with testimonials) is ready. Keep this list short.
+// Concept sites until real client work (with testimonials) is ready. Keep this list short.
+// Real client projects must NOT have concept: true; concept ones must keep it.
 export const projects: Project[] = [
-  { slug: "spotturf", name: "SpotTurf Kolkata", kind: "Turf booking website", result: "Live slot booking", palette: ["#0f3d27", "#f2efe4", "#f6c21c"], headline: "Play till midnight in Kasba.", url: "https://spot-turfs.netlify.app/", image: "/work/spotturf-cover.webp", nav: ["Book", "Rates", "Photos"] },
-  { slug: "bhor", name: "Bhor Coffee & Bakehouse", kind: "Cafe website", result: "Order ahead for pickup", palette: ["#1d3b36", "#f7f0e6", "#e9a23b"], headline: "Coffee from the hills. Baked at dawn, gone by noon.", url: "https://bhor-coffee.netlify.app/", image: "/work/bhor-coffee-cover.jpg", nav: ["Order", "Coffee", "Visit"] },
+  { slug: "spotturf", concept: true, name: "SpotTurf Kolkata", kind: "Turf booking website", result: "Live slot booking", palette: ["#0f3d27", "#f2efe4", "#f6c21c"], headline: "Play till midnight in Kasba.", url: "https://spot-turfs.netlify.app/", image: "/work/spotturf-cover.webp", nav: ["Book", "Rates", "Photos"] },
+  { slug: "bhor", concept: true, name: "Bhor Coffee & Bakehouse", kind: "Cafe website", result: "Order ahead for pickup", palette: ["#1d3b36", "#f7f0e6", "#e9a23b"], headline: "Coffee from the hills. Baked at dawn, gone by noon.", url: "https://bhor-coffee.netlify.app/", image: "/work/bhor-coffee-cover.jpg", nav: ["Order", "Coffee", "Visit"] },
 ];
 
 export const steps = [

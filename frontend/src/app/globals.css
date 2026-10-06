@@ -767,3 +767,59 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 /* Touch screens: a tap leaves :hover stuck on, so skip the hover lift there. */
 @media (hover: none) { .btn:hover, .option:hover, .card-work:hover, .studio__designs button:hover, .pv-type:hover, .bot__launch:hover, .pv-get li:hover { transform: none; } .option:not([aria-pressed="true"]):hover { box-shadow: none; } }
+
+/* ---------- legal pages (privacy, terms, cookies) ---------- */
+.legal__title { font-size: clamp(2.4rem, 6vw, 4.2rem); margin: 0; }
+.legal__dates { margin: 12px 0 0; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.legal__tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; padding-bottom: 26px; border-bottom: 1px solid var(--line); }
+.legal__tabs a { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: 0.86rem; font-weight: 600; }
+.legal__tabs a[aria-current="page"] { border-color: transparent; background: var(--ink); color: var(--bg); }
+.legal__grid { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 56px; align-items: start; margin-top: 36px; }
+.legal__toc { position: sticky; top: 96px; max-height: calc(100vh - 120px); overflow-y: auto; }
+.legal__toc p { margin: 0 0 10px; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.legal__toc ol, .legal__toc-mobile ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.legal__toc a, .legal__toc-mobile a { display: flex; gap: 10px; padding: 6px 8px; border-radius: 8px; color: var(--muted); font-size: 0.86rem; line-height: 1.35; }
+.legal__toc a:hover { background: var(--surface); color: var(--ink); }
+.legal__toc a span, .legal__toc-mobile a span { font-family: var(--mono); font-size: 0.72rem; padding-top: 2px; opacity: 0.7; }
+.legal__toc-mobile { display: none; }
+.legal__body { max-width: 72ch; }
+.legal__intro p { font-size: var(--step-0); color: var(--ink); margin-top: 0; }
+.legal__sec { scroll-margin-top: 96px; }
+.legal__sec h2 span { background: var(--grad-x); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.legal__body strong { color: var(--ink); }
+.legal__body a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.legal__card { margin: 14px 0; padding: 16px 18px; border-radius: var(--r-s); border: 1px solid var(--line); background: var(--surface); color: var(--ink); line-height: 1.7; }
+.legal__table { overflow-x: auto; margin: 16px 0; border: 1px solid var(--line); border-radius: var(--r-s); background: var(--surface); }
+.legal__table table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.legal__table th, .legal__table td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); color: var(--muted); }
+.legal__table th { color: var(--ink); font-size: 0.78rem; font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.05em; }
+.legal__table tr:last-child td { border-bottom: 0; }
+.legal__table td:first-child { color: var(--ink); font-weight: 600; min-width: 130px; }
+.legal__table code { font-size: 0.8rem; }
+.legal__grid > * { min-width: 0; }
+@media (max-width: 900px) {
+  .legal__grid { grid-template-columns: 1fr; gap: 24px; }
+  .legal__toc { display: none; }
+  .legal__toc-mobile { display: block; border: 1px solid var(--line); border-radius: var(--r-s); background: var(--surface); }
+  .legal__toc-mobile summary { padding: 14px 16px; cursor: pointer; font-weight: 600; color: var(--ink); }
+  .legal__toc-mobile ol { padding: 0 8px 12px; }
+}
+.form-notice { margin: 0 0 14px; padding: 14px 16px; border-radius: var(--r-s); border: 1px dashed var(--line); font-size: var(--step--1); color: var(--muted); line-height: 1.55; }
+.form-notice strong { color: var(--ink); }
+.form-notice a, .wizard__legal a { text-decoration: underline; text-underline-offset: 2px; }
+.wizard__legal { margin: 12px 0 0; font-size: 0.8rem; color: var(--muted); }
+.bot__note { margin: 0; padding: 6px 14px 10px; font-size: 0.72rem; color: var(--muted); text-align: center; }
+.bot__note a { text-decoration: underline; text-underline-offset: 2px; }
+.footer__legal { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.footer__legal a:hover { color: #fff; }
+@media (max-width: 640px) {
+  .legal__table { overflow: visible; border: 0; background: none; }
+  .legal__table thead { display: none; }
+  .legal__table table, .legal__table tbody, .legal__table tr, .legal__table td { display: block; }
+  .legal__table tr { margin-bottom: 12px; padding: 6px 0; border: 1px solid var(--line); border-radius: var(--r-s); background: var(--surface); }
+  .legal__table td { border: 0; padding: 8px 14px; }
+  .legal__table td::before { content: attr(data-label); display: block; margin-bottom: 2px; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+  .legal__table td:first-child { min-width: 0; }
+}
+.legal__body a.btn { text-decoration: none; }
+.card-work__concept { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); font-family: var(--mono); font-size: 0.62rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); vertical-align: 3px; }
