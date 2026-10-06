@@ -1,21 +1,21 @@
 {
-  "_help": "SmithBot's whole brain. Edit text freely; no code changes needed. See README.md in this folder for the full guide. Anything starting with _ is a note and is ignored. ALL numbers, prices and timelines below are PLACEHOLDERS: replace them with real ones.",
+  "_help": "LoopBot's whole brain. Edit text freely; no code changes needed. See README.md in this folder for the full guide. Anything starting with _ is a note and is ignored. ALL numbers, prices and timelines below are PLACEHOLDERS: replace them with real ones.",
   "settings": {
-    "bot_name": "SmithBot",
+    "bot_name": "LoopBot",
     "typing_delay_ms": 450,
     "min_score": 2,
     "max_input_length": 300
   },
   "contact": {
     "_help": "Used in answers as {brand} {whatsapp} {whatsapp_2} {phone} {email} {instagram} {city} {hours}, and for the WhatsApp / Email / Instagram / Call buttons. Keep in sync with brand in src/lib/site.ts.",
-    "brand": "Sitesmith",
+    "brand": "Loopgen",
     "whatsapp": "+91 62918 45804",
     "whatsapp_2": "+91 80178 12091",
     "whatsapp_prefill": "Hi! I found you through your website and have a question.",
     "phone": "+91 62918 45804",
-    "email": "hello@sitesmith.studio",
-    "instagram": "@sitesmith.studio",
-    "instagram_url": "https://instagram.com/sitesmith.studio",
+    "email": "hello@loopgen.in",
+    "instagram": "@loopgen.in",
+    "instagram_url": "https://instagram.com/loopgen.in",
     "city": "Kolkata, India",
     "hours": "Mon to Sat, 10am to 7pm IST"
   },
@@ -593,7 +593,7 @@
         "are you real",
         "are you human",
         "bot",
-        "smithbot",
+        "loopbot",
         "about you",
         "tell me about yourself",
         "yourself"

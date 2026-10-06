@@ -62,7 +62,7 @@ Before production: set the backend's `CORS_ORIGINS` to the live site address and
 
 ## Placeholder content to replace before launch
 
-- Brand name "Sitesmith", email, WhatsApp, Instagram, city
+- Brand name "Loopgen", email, WhatsApp, Instagram, city
 - Project names, results and the illustrated mockups (swap for real screenshots)
 - Team names and initials
 - Testimonials and pricing were removed on purpose until real ones exist

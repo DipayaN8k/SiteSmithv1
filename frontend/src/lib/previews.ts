@@ -155,6 +155,40 @@ export const CAFE: Category = {
   },
 };
 
+// Travel agencies: destinations, packages and trip planning, with a premium ocean-and-gold palette.
+export const TRAVEL: Category = {
+  id: "travel", label: "Travel & Tours",
+  nav: ["Destinations", "Journeys", "Contact"], cta: "Plan my journey",
+  heroTitle: "Journeys, beautifully planned.",
+  heroText: "Private, tailor-made holidays across India and the world, designed around you and looked after from departure to return.",
+  sectionTitle: "Curated journeys",
+  items: [
+    { title: "Luxury escapes", text: "Overwater villas, private islands and five-star cities, every detail arranged.", points: ["Maldives, Bali, Dubai and Europe", "Honeymoons and milestone trips", "Handpicked luxury resorts"] },
+    { title: "Signature India journeys", text: "Palace stays, backwater cruises and Himalayan retreats, with private guides.", points: ["Rajasthan heritage palaces", "Kerala houseboats and Kashmir", "Private chauffeurs and expert guides"] },
+    { title: "Concierge travel", text: "Flights, stays, visas and experiences, handled for you from start to finish.", points: ["Premium flights and upgrades", "Visas and paperwork handled", "Private transfers and experiences"] },
+  ],
+  aboutTitle: "Travel, quietly perfected",
+  aboutText: "Every journey is designed by hand, checked in person and looked after until you are home.",
+  stats: [{ n: 120, suffix: "+", label: "destinations curated" }, { n: 5000, suffix: "+", label: "journeys designed" }, { n: 24, suffix: "/7", label: "concierge on every trip" }],
+  story: "We began by planning unforgettable trips for friends and family. Today we design private journeys across India and the world, and we still visit, check and choose every stay ourselves before we recommend it to you.",
+  features: [["Tailor-made, never packaged", "Every itinerary built around your dates, pace and style."], ["Handpicked luxury stays", "Resorts and hotels we have stayed in and trust."], ["A concierge on call 24/7", "A real person on WhatsApp, wherever you are."], ["Visas and paperwork handled", "We take care of every document for you."]],
+  steps: [["Share your dream", "Where, when and who is travelling."], ["Receive your itinerary", "A day-by-day journey, beautifully planned."], ["We arrange everything", "Flights, stays, transfers and experiences, confirmed."], ["Travel, looked after", "Your concierge is on call until you are home."]],
+  team: [["Travel designer", "photo-1655333879254-1fb721db743c"], ["Founder", "photo-1647580427155-0483906cb9de"], ["Travel concierge", "photo-1573497620166-aef748c8c792"]],
+  platforms: ["Google Maps", "Instagram", "WhatsApp", "TripAdvisor", "Facebook"],
+  hours: "Mon to Sat, 10am to 8pm · 24/7 support on trips",
+  photos: {
+    hero: ["photo-1514282401047-d79a71a590e8", "photo-1540541338287-41700207dee6", "photo-1524492412937-b28074a5d7da"],
+    items: ["photo-1573843981267-be1999ff37cd", "photo-1477587458883-47145ed94245", "photo-1436491865332-7a61a109cc05"],
+    gallery: ["photo-1602216056096-3b40cc0c9944", "photo-1537996194471-e657df975ab4", "photo-1528127269322-539801943592", "photo-1502602898657-3e91760cbb34", "photo-1544735716-392fe2489ffa", "photo-1512343879784-a960bf40e7f2"],
+    about: "photo-1488646953014-85cb44e25828",
+  },
+  palettes: {
+    bold: { bg: "#06121a", surface: "#0c2230", text: "#f4f1ea", muted: "#b4c2c8", accent: "#d9b26a", accentText: "#06121a" },
+    clean: { bg: "#f6fbfc", surface: "#e4f1f4", text: "#0c2a33", muted: "#4f6b73", accent: "#0e7c86", accentText: "#ffffff" },
+    vivid: { bg: "#f4efe6", surface: "#ffffff", text: "#13232a", muted: "#55626a", accent: "#0b6e78", accentText: "#ffffff" },
+  },
+};
+
 export const CATEGORIES: Category[] = [
   {
     id: "restaurant", label: "Restaurant",
@@ -388,6 +422,7 @@ export const CATEGORIES: Category[] = [
       vivid: { bg: "#fff8e4", surface: "#ffffff", text: "#3b2400", muted: "#7a6438", accent: "#966300", accentText: "#ffffff" },
     },
   },
+  TRAVEL,
   {
     // Generic fallback for any business that doesn't fit the categories above.
     id: "other", label: "Something else",
@@ -406,7 +441,7 @@ export const CATEGORIES: Category[] = [
     story: "We started small and grew by word of mouth. Today we still answer every call ourselves and treat every customer like a neighbour.",
     features: [["Experienced team", "Years of doing this well."], ["Fair pricing", "Clear quotes, no hidden extras."], ["Quick response", "Replies within the hour."], ["Local and trusted", "Proudly serving the neighbourhood."]],
     steps: [["Get in touch", "Call, WhatsApp or visit."], ["Get a quote", "A clear price before we start."], ["We deliver", "On time, done properly."], ["Stay in touch", "We are here if you need us."]],
-    team: [["Founder", "photo-1764173039192-2bbd508d5211"], ["Customer care", "photo-1753351056544-7446ea89311c"], ["Head of work", "photo-1611523794717-4d1f87dabf3b"]],
+    team: [["Founder", "photo-1556474835-b0f3ac40d4d1"], ["Customer care", "photo-1753351056544-7446ea89311c"], ["Head of work", "photo-1611523794717-4d1f87dabf3b"]],
     platforms: ["Google Maps", "WhatsApp", "Instagram", "Justdial", "Facebook"],
     hours: "Mon to Sat, 10am to 7pm",
     photos: {
@@ -436,5 +471,5 @@ export const PREVIEW_DRAFT_KEY = "preview-draft-v1";
 // What the booking form preselects for each category (must match backend BUSINESS_TYPES).
 export const CATEGORY_TO_BUSINESS: Record<string, string> = {
   restaurant: "Hospitality", cafe: "Hospitality", fashion: "Retail", health: "Healthcare",
-  tech: "IT/Software", realestate: "Real Estate", education: "Education",
+  tech: "IT/Software", realestate: "Real Estate", education: "Education", travel: "Hospitality",
 };

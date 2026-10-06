@@ -134,7 +134,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .nav { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--bg) 82%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
 .nav__in { display: flex; align-items: center; gap: 28px; min-height: 68px; }
 .logo { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 800; font-size: 1.2rem; letter-spacing: -0.03em; }
-.logo__mark { flex: none; color: var(--ink); }
+.logo__mark { flex: 0 0 auto; width: 34px; height: 28px; min-width: 34px; max-width: none; color: var(--ink); overflow: visible; } /* fixed size: Safari can shrink a max-width:100% SVG inside inline-flex to 0 */
+.footer .logo__mark { color: #fff; } /* the footer is always dark, whatever the theme (Cream/Lavender ink is near-black) */
 .nav__links { display: flex; gap: clamp(16px, 2.2vw, 30px); margin-left: auto; font-weight: 500; font-size: 0.95rem; color: var(--muted); }
 .nav__links a:hover { color: var(--ink); }
 .nav__burger { display: none; margin-left: auto; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
@@ -587,7 +588,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .nav__links { gap: 12px; font-size: 0.72rem; letter-spacing: 0.03em; }
 }
 
-/* ---------- SmithBot (src/components/ChatBot.tsx) ---------- */
+/* ---------- LoopBot (src/components/ChatBot.tsx) ---------- */
 /* White text sits on this gradient, so it is deepened (>= 4.5:1) and shared by every theme. */
 .bot, .bot__launch { --bot-grad: linear-gradient(90deg, #c4480c 0%, #b3145c 42%, #7d1fa6 72%, #3b46c0 100%); }
 .bot__launch { position: fixed; right: 18px; bottom: 18px; z-index: 60; display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--bot-grad); color: #fff; font: inherit; font-weight: 600; cursor: pointer; box-shadow: var(--glow); transition: transform 0.15s ease; }

@@ -3,7 +3,7 @@
 import { brand } from "@/lib/site";
 
 // Opens the chat assistant window (ChatBot.tsx listens for this event).
-export const OPEN_BOT_EVENT = "smithbot:open";
+export const OPEN_BOT_EVENT = "loopbot:open";
 
 export function AskBotButton({ label = `Ask ${brand.botName}` }: { label?: string }) {
   return (

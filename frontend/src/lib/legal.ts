@@ -3,7 +3,7 @@
 import { brand } from "./site";
 
 export const legal = {
-  // CONFIRM: the registered name of the business (e.g. "Sitesmith" as a proprietorship, or "Sitesmith LLP").
+  // CONFIRM: the registered name of the business (e.g. "Loopgen" as a proprietorship, or "Loopgen LLP").
   businessName: brand.name,
   // CONFIRM: one line on how the business is set up, or "" to leave it out. Only say "MSME registered" if it is.
   businessStatus: "",

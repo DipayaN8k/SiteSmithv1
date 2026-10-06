@@ -1,4 +1,4 @@
-// SmithBot engine: turns a visitor's text into a reply using only smithbot.json.
+// LoopBot engine: turns a visitor's text into a reply using only loopbot.json.
 // Pure functions, no imports, so it is easy to test (see frontend/tests/bot.test.mjs).
 
 type ButtonSpec = string | { label: string; href: string };

@@ -613,3 +613,9 @@
   .x-blog, .x-news { grid-template-columns: 1fr; }
   .x-news { gap: 16px; }
 }
+
+/* Safari: the moving hero photo (parallax + slow zoom) gets its own compositing layer and can paint over
+   un-layered siblings, hiding the logo/nav and headline. Give everything in front of it an explicit layer. */
+.b-hero__text, .l-nav, .l-hero__text, .x-hero__text { position: relative; z-index: 1; }
+.ps__nav, .l-nav, .x-nav { -webkit-transform: translateZ(0); transform: translateZ(0); }
+.b-hero__bg, .l-hero__bg, .x-hero__slide { pointer-events: none; }

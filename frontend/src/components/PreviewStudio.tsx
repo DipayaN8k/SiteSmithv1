@@ -12,7 +12,7 @@ import { SAME_PAGE_EVENT } from "./ScrollManager";
 const TYPE_HINT: Record<string, string> = {
   restaurant: "Menus and table bookings", cafe: "Coffee, bakes and brunch", fashion: "Collections and lookbooks",
   salon: "Services and slot booking", health: "Doctors and appointments", tech: "Services and case studies",
-  realestate: "Listings and site visits", education: "Courses and demo classes", other: "Any other business",
+  realestate: "Listings and site visits", education: "Courses and demo classes", travel: "Destinations and holiday packages", other: "Any other business",
 };
 
 const GET_COLORS = ["#c4480c", "#b3145c", "#7d1fa6", "#3b46c0"];
