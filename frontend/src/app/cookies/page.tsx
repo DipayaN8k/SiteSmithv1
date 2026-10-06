@@ -58,7 +58,7 @@ const sections: LegalSection[] = [
         <li>No analytics tools (such as Google Analytics).</li>
         <li>No advertising or remarketing pixels (such as the Meta Pixel).</li>
         <li>No cross-site tracking, fingerprinting or selling of browsing data.</li>
-        <li>SmithBot, the chat assistant, does not save your chat. It is gone when you close the page.</li>
+        <li>{brand.botName}, the chat assistant, does not save your chat. It is gone when you close the page.</li>
       </ul>
     ),
   },

@@ -93,6 +93,7 @@ export function createBot(config: BotConfig, rand: () => number = Math.random) {
 
   const fill = (text: string) =>
     text
+      .replace(/\{bot_name\}/g, settings.bot_name)
       .replace(/\{pricing_note\}/g, config.pricing_note ?? "")
       .replace(/\{budgets\}/g, config.budgets.join(" · "))
       .replace(/\{services\}/g, config.services.map((s) => `• ${s}`).join("\n"))

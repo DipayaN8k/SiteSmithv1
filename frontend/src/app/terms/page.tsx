@@ -67,7 +67,7 @@ const sections: LegalSection[] = [
           writing (by email or a WhatsApp message from our official number).
         </p>
         <p>
-          Statements made anywhere else, including on calls or in meetings, in social media posts or ads, by SmithBot, in
+          Statements made anywhere else, including on calls or in meetings, in social media posts or ads, by {brand.botName} (our chat assistant), in
           the free website preview, or in general chats, do not add to or change your Proposal or these Terms unless we
           confirm them in writing. If something matters to you, ask us to put it in the Proposal.
         </p>
@@ -75,11 +75,11 @@ const sections: LegalSection[] = [
     ),
   },
   {
-    id: "smithbot",
-    title: "SmithBot (the chat assistant)",
+    id: "chat-assistant",
+    title: `${brand.botName} (the chat assistant)`,
     body: (
       <p>
-        SmithBot is an automated assistant that gives pre-written answers to common questions. It is not a person and it
+        {brand.botName} is an automated assistant that gives pre-written answers to common questions. It is not a person and it
         can be wrong or out of date. Its answers are general information only: they are not quotes, promises or advice, and
         they do not bind us. For anything specific to your project, contact our team.
       </p>

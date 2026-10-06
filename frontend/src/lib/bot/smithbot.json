@@ -39,7 +39,7 @@
   ],
   "welcome": {
     "_help": "First message when the chat opens, plus the buttons under it. quick_replies are topic ids from the topics list below. The message should say who we are and what we do, because a new visitor has no context. The buttons use each topic's 'title', so write titles that make sense on their own.",
-    "message": "Hi, I'm SmithBot, the assistant for {brand}. We build websites, online stores and landing pages for businesses. Tap a question below or type your own.",
+    "message": "Hi, I'm {bot_name}, the assistant for {brand}. We build websites, online stores and landing pages for businesses. Tap a question below or type your own.",
     "quick_replies": [
       "services",
       "pricing",
@@ -598,7 +598,7 @@
         "tell me about yourself",
         "yourself"
       ],
-      "answer": "I'm SmithBot, a simple assistant that answers common questions about our websites. For anything I can't answer, a real person is on WhatsApp.",
+      "answer": "I'm {bot_name}, a simple assistant that answers common questions about our websites. For anything I can't answer, a real person is on WhatsApp.",
       "buttons": [
         "whatsapp",
         "topic:services"

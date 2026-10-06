@@ -133,7 +133,7 @@ export function Faq() {
         <div>
           <p className="kicker">Questions</p>
           <h2 className="display h2">Asked before<br />you asked.</h2>
-          <p className="lede">Don&apos;t feel like scrolling? Try our SmithBot to get answers to your queries instantly. Still stuck? Message us on WhatsApp — a real person replies.</p>
+          <p className="lede">Don&apos;t feel like scrolling? Try our {brand.botName} to get answers to your queries instantly. Still stuck? Message us on WhatsApp — a real person replies.</p>
           <div className="faq__bot"><AskBotButton /></div>
         </div>
         <div className="faq__list">

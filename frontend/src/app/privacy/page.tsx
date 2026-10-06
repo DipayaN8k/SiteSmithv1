@@ -38,7 +38,7 @@ const sections: LegalSection[] = [
       <>
         <p>This policy covers personal data we handle when you:</p>
         <ul>
-          <li>visit this website, including the free website preview and the SmithBot chat;</li>
+          <li>visit this website, including the free website preview and the {brand.botName} chat;</li>
           <li>send us a project request through the booking form;</li>
           <li>contact us by email, WhatsApp, phone or Instagram; and</li>
           <li>work with us as a client.</li>
@@ -88,7 +88,7 @@ const sections: LegalSection[] = [
         <p><strong>Kept only on your own device, never sent to us:</strong></p>
         <ul>
           <li>Your colour theme choice, and the business name and design you pick in the free preview (see our <Link href="/cookies">Cookie Policy</Link>).</li>
-          <li>The SmithBot chat. SmithBot runs inside your browser using pre-written answers. What you type into it is not sent to us or stored by us, and it disappears when you close the page.</li>
+          <li>The {brand.botName} chat. {brand.botName} runs inside your browser using pre-written answers. What you type into it is not sent to us or stored by us, and it disappears when you close the page.</li>
         </ul>
         <p>
           <strong>Which details are required:</strong> on the booking form, your name, email, phone number and type of

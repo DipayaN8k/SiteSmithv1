@@ -5,9 +5,26 @@ import { useEffect, useRef, useState } from "react";
 import { createBot, initialState, type BotConfig, type BotMessage, type BotState, type Button } from "@/lib/bot/engine";
 import raw from "@/lib/bot/smithbot.json";
 import { OPEN_BOT_EVENT } from "@/components/AskBotButton";
+import { brand } from "@/lib/site";
 
-// Everything SmithBot says lives in src/lib/bot/smithbot.json (see README.md next to it).
-const bot = createBot(raw as unknown as BotConfig);
+// Everything the bot says lives in src/lib/bot/smithbot.json (see README.md next to it).
+// Name and contact details always come from `brand` in lib/site.ts, so a rename is one edit.
+const rawConfig = raw as unknown as BotConfig;
+const bot = createBot({
+  ...rawConfig,
+  settings: { ...rawConfig.settings, bot_name: brand.botName },
+  contact: {
+    ...rawConfig.contact,
+    brand: brand.name,
+    email: brand.email,
+    instagram: brand.instagram,
+    instagram_url: brand.instagramUrl,
+    whatsapp: brand.whatsapp,
+    whatsapp_2: brand.whatsapp2,
+    phone: brand.whatsapp,
+    city: brand.city,
+  },
+});
 const { bot_name: BOT_NAME, typing_delay_ms: TYPING_MS, max_input_length: MAX_LEN } = bot.config.settings;
 
 type Msg = { id: number; from: "bot" | "me"; text: string; buttons?: Button[] };
@@ -146,7 +163,7 @@ export function ChatBot() {
               placeholder="Type your question…" onChange={(e) => setInput(e.target.value)} />
             <button type="submit" className="btn btn--grad btn--sm" disabled={!input.trim() || typing}>Send</button>
           </form>
-          <p className="bot__note">Automated answers for general guidance, not a quote. Chats aren&apos;t saved. <Link href="/terms#smithbot">Terms</Link></p>
+          <p className="bot__note">Automated answers for general guidance, not a quote. Chats aren&apos;t saved. <Link href="/terms#chat-assistant">Terms</Link></p>
         </section>
       )}
     </>
