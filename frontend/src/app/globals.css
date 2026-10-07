@@ -588,7 +588,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .nav__links { gap: 12px; font-size: 0.72rem; letter-spacing: 0.03em; }
 }
 
-/* ---------- LoopBot (src/components/ChatBot.tsx) ---------- */
+/* ---------- SparrowBot (src/components/ChatBot.tsx) ---------- */
 /* White text sits on this gradient, so it is deepened (>= 4.5:1) and shared by every theme. */
 .bot, .bot__launch { --bot-grad: linear-gradient(90deg, #c4480c 0%, #b3145c 42%, #7d1fa6 72%, #3b46c0 100%); }
 .bot__launch { position: fixed; right: 18px; bottom: 18px; z-index: 60; display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px; border: 0; border-radius: 999px; background: var(--bot-grad); color: #fff; font: inherit; font-weight: 600; cursor: pointer; box-shadow: var(--glow); transition: transform 0.15s ease; }

@@ -1,16 +1,16 @@
 // Single source of truth for brand + copy. Change the name here and it updates everywhere.
 // Renaming or buying the domain? Follow REBRAND.md in the repo root: it lists every place to update.
 export const brand = {
-  name: "Loopgen",
-  botName: "LoopBot", // the chat assistant's name
+  name: "Sparrowgen",
+  botName: "SparrowBot", // the chat assistant's name
   website: "", // the live address once the domain is bought, e.g. "https://yourname.in" (no trailing slash)
   tagline: "More customers. Not more templates.",
   tabTitle: "Websites & Automation, Engineered", // shown in the browser tab on the home page
-  email: "hello@loopgen.in", // create this inbox once loopgen.in is bought
+  email: "hello@sparrowgen.in", // create this inbox once sparrowgen.in is bought
   whatsapp: "+91 62918 45804",
   whatsapp2: "+91 80178 12091", // second WhatsApp line, shown alongside the main one
-  instagram: "@loopgen.in",
-  instagramUrl: "https://instagram.com/loopgen.in",
+  instagram: "@sparrowgen.in",
+  instagramUrl: "https://instagram.com/sparrowgen.in",
   city: "Kolkata, India",
 };
 

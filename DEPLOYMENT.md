@@ -237,7 +237,7 @@ No emails or notifications are sent. Decide who checks the Leads page and how of
 
 All in `frontend/src/lib/site.ts` unless noted. Search for these before launch:
 
-- Brand name **"Loopgen"** (final), email, WhatsApp number, Instagram
+- Brand name **"Sparrowgen"** (final), email, WhatsApp number, Instagram
   handle, city. ⚠️ The "WhatsApp us" button builds a `wa.me` link from the placeholder number.
 - Claims: "Live in 1 week", "Landing pages in 2 days", "Free trial included" on every budget, and the
   "get back to you within 24 hours" line on the form's thank-you screen. Confirm each is true and deliverable.

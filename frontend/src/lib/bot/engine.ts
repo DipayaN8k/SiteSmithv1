@@ -1,4 +1,4 @@
-// LoopBot engine: turns a visitor's text into a reply using only loopbot.json.
+// SparrowBot engine: turns a visitor's text into a reply using only sparrowbot.json.
 // Pure functions, no imports, so it is easy to test (see frontend/tests/bot.test.mjs).
 
 type ButtonSpec = string | { label: string; href: string };

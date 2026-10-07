@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createBot, initialState, normalize } from "../src/lib/bot/engine.ts";
 
-const config = JSON.parse(readFileSync(new URL("../src/lib/bot/loopbot.json", import.meta.url), "utf8"));
+const config = JSON.parse(readFileSync(new URL("../src/lib/bot/sparrowbot.json", import.meta.url), "utf8"));
 const bot = createBot(config, () => 0); // rand=0 -> always the first canned reply
 
 const ask = (text, state = initialState) => bot.reply(text, state);
@@ -32,7 +32,7 @@ test("config is internally consistent", () => {
 
 test("welcome shows quick replies", () => {
   const w = bot.welcome();
-  assert.match(w.text, /LoopBot/);
+  assert.match(w.text, /SparrowBot/);
   assert.equal(w.buttons.length, config.welcome.quick_replies.length);
 });
 
@@ -66,7 +66,7 @@ test("changing topic mid-question works", () => {
 
 test("contact, social, budgets and services include the details", () => {
   assert.match(ask("contact number please").message.text, /\+91 62918 45804/);
-  assert.match(ask("do you have instagram").message.text, /@loopgen\.in/);
+  assert.match(ask("do you have instagram").message.text, /@sparrowgen\.in/);
   assert.match(ask("what budget do you work with").message.text, /Under ₹5k/);
   const services = ask("what services do you offer").message.text;
   assert.match(services, /Domain and hosting/);
@@ -76,9 +76,9 @@ test("contact, social, budgets and services include the details", () => {
 test("contact answer offers WhatsApp, email, call, instagram buttons with real links", () => {
   const hrefs = ask("how do i contact you").message.buttons.map((b) => b.href);
   assert.ok(hrefs.some((h) => h.startsWith("https://wa.me/916291845804?text=")));
-  assert.ok(hrefs.includes("mailto:hello@loopgen.in"));
+  assert.ok(hrefs.includes("mailto:hello@sparrowgen.in"));
   assert.ok(hrefs.includes("tel:+916291845804"));
-  assert.ok(hrefs.includes("https://instagram.com/loopgen.in"));
+  assert.ok(hrefs.includes("https://instagram.com/sparrowgen.in"));
 });
 
 test("answers right away when the question already names the project type", () => {
@@ -93,8 +93,8 @@ test("common questions land on the right topic", () => {
     "is hosting included": /domain and hosting/i,
     "how do i pay": /payment schedule/i,
     "do you give gst invoice": /payment schedule/i,
-    "who are you": /LoopBot/,
-    "are you a bot": /LoopBot/,
+    "who are you": /SparrowBot/,
+    "are you a bot": /SparrowBot/,
     "can i see a sample": /free preview/i,
     "where is your office": /Kolkata/,
     "will you maintain it after launch": /after launch/i,
@@ -212,8 +212,8 @@ test("phrases also match their plural", () => {
 
 test("a first-time visitor gets context: the welcome says who we are, buttons make sense alone", () => {
   const w = bot.welcome();
-  assert.match(w.text, /LoopBot/);
-  assert.match(w.text, /Loopgen/, "brand is filled in");
+  assert.match(w.text, /SparrowBot/);
+  assert.match(w.text, /Sparrowgen/, "brand is filled in");
   assert.match(w.text, /websites/i, "says what we build");
   assert.doesNotMatch(w.text, /[{}]/, "no unfilled placeholders");
   for (const b of w.buttons) {

@@ -1,11 +1,11 @@
-# LoopBot: how to add and change rules
+# SparrowBot: how to add and change rules
 
-LoopBot is the chat assistant on the public website (the "Ask LoopBot" button, bottom-right of every page).
+SparrowBot is the chat assistant on the public website (the "Ask SparrowBot" button, bottom-right of every page).
 It is a **rule-based bot**: no AI, no server, no API key, no running cost. It runs in the visitor's browser and
 only says what is written in one file:
 
 ```
-frontend/src/lib/bot/loopbot.json
+frontend/src/lib/bot/sparrowbot.json
 ```
 
 You can add, change or remove answers there **without touching any code**. This guide explains how.
@@ -17,7 +17,7 @@ You can add, change or remove answers there **without touching any code**. This 
 
 | File | What it is |
 | --- | --- |
-| `frontend/src/lib/bot/loopbot.json` | **The only file you normally edit.** All answers and settings |
+| `frontend/src/lib/bot/sparrowbot.json` | **The only file you normally edit.** All answers and settings |
 | `frontend/src/lib/bot/engine.ts` | The matching logic. Has no content of its own |
 | `frontend/src/components/ChatBot.tsx` | The chat bubble and window, mounted in `frontend/src/app/layout.tsx` |
 | `frontend/tests/bot.test.mjs` | Automated checks. Run them after every edit (section 8) |
@@ -41,7 +41,7 @@ You can add, change or remove answers there **without touching any code**. This 
 
 ## 3. Adding a new question and answer
 
-Open `loopbot.json`, find the `"topics"` list and add an object. Mind the commas between items.
+Open `sparrowbot.json`, find the `"topics"` list and add an object. Mind the commas between items.
 
 ```json
 {
@@ -205,7 +205,7 @@ expensive" goes to WhatsApp instead of back into the pricing question.
 4. **Wrong answer?** If a question goes to the wrong topic, add more specific keywords (prefer phrases) to the
    right one, or move it earlier in the list so it wins ties. If a topic steals questions, remove its vaguest
    keywords. Add the failing question to `frontend/tests/bot.test.mjs` so it stays fixed.
-5. **Commit** `loopbot.json` with the rest of your changes. Nothing else needs a rebuild step beyond the
+5. **Commit** `sparrowbot.json` with the rest of your changes. Nothing else needs a rebuild step beyond the
    normal website deploy.
 
 ## 9. What the bot cannot do
@@ -230,4 +230,4 @@ refreshing the page starts fresh.
 
 The window, bubbles and buttons use the website's theme colours, so it looks right in **Night, Cream and
 Lavender**. The header and the visitor's message bubbles use a slightly deeper gradient so white text stays
-readable on every theme. The styles are in `frontend/src/app/globals.css` under "LoopBot".
+readable on every theme. The styles are in `frontend/src/app/globals.css` under "SparrowBot".

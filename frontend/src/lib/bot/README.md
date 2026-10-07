@@ -1,12 +1,12 @@
-# LoopBot
+# SparrowBot
 
 A small rule-based chat assistant that runs entirely in the visitor's browser. No server, no API key, no cost.
-Everything it says comes from **`loopbot.json`**. You can change answers, prices, timelines and add new questions
+Everything it says comes from **`sparrowbot.json`**. You can change answers, prices, timelines and add new questions
 without touching any code.
 
 | File | What it is |
 | --- | --- |
-| `loopbot.json` | **The only file you normally edit.** All answers, contact details, budgets, greetings |
+| `sparrowbot.json` | **The only file you normally edit.** All answers, contact details, budgets, greetings |
 | `engine.ts` | The matching logic. Reads the JSON, no content of its own |
 | `../../components/ChatBot.tsx` | The chat bubble and window (mounted in `app/layout.tsx`) |
 | `../../../tests/bot.test.mjs` | Tests. Run with `npm run test:bot` from `frontend/` |
@@ -27,7 +27,7 @@ without touching any code.
 4. **Everything else** (gibberish, off-topic, empty or too long): the `fallback` reply, which sends them to
    **WhatsApp / Book a project**. If a visitor ignores a question twice, they also get the fallback.
 
-## loopbot.json sections
+## sparrowbot.json sections
 
 | Section | Purpose |
 | --- | --- |

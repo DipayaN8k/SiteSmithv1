@@ -3,11 +3,11 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { createBot, initialState, type BotConfig, type BotMessage, type BotState, type Button } from "@/lib/bot/engine";
-import raw from "@/lib/bot/loopbot.json";
+import raw from "@/lib/bot/sparrowbot.json";
 import { OPEN_BOT_EVENT } from "@/components/AskBotButton";
 import { brand } from "@/lib/site";
 
-// Everything the bot says lives in src/lib/bot/loopbot.json (see README.md next to it).
+// Everything the bot says lives in src/lib/bot/sparrowbot.json (see README.md next to it).
 // Name and contact details always come from `brand` in lib/site.ts, so a rename is one edit.
 const rawConfig = raw as unknown as BotConfig;
 const bot = createBot({
@@ -62,7 +62,7 @@ export function ChatBot() {
   useEffect(() => { logRef.current?.scrollTo({ top: logRef.current.scrollHeight }); }, [msgs, typing]);
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
-  // Other parts of the page (e.g. the "Ask LoopBot" button in the FAQ) open the chat with this event.
+  // Other parts of the page (e.g. the "Ask SparrowBot" button in the FAQ) open the chat with this event.
   useEffect(() => {
     const onOpen = () => setOpen(true);
     window.addEventListener(OPEN_BOT_EVENT, onOpen);
