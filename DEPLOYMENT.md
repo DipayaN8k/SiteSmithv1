@@ -1,3 +1,8 @@
+> **Obsolete for Hostinger.** This guide describes the original Python/FastAPI + PostgreSQL backend on Render.
+> Hostinger cannot run Python. For Hostinger (Node.js backend, MariaDB/MySQL, the database and the admin account
+> step by step) use **[DEPLOYMENT_MIGRATION.md](DEPLOYMENT_MIGRATION.md)**; how the two backends relate is in
+> [MIGRATION.md](MIGRATION.md) and [BACKEND_SWITCH.md](BACKEND_SWITCH.md).
+
 # Deployment guide
 
 For the engineer taking the site live. Written from reading the code in all three projects and

@@ -19,3 +19,6 @@ __pycache__/
 .ruff_cache/
 *.tsbuildinfo
 next-env.d.ts
+
+# upload archives built by tools/package.mjs
+dist/

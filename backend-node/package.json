@@ -1,0 +1,23 @@
+{
+  "name": "sparrowgen-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend API for the agency website and team dashboard (Node.js + MySQL)",
+  "type": "module",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18.18"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test",
+    "test:mysql": "node --test --test-concurrency=1 tests/auth.test.js tests/contact.test.js tests/leads.test.js tests/http.test.js",
+    "migrate": "node scripts/migrate.js",
+    "schema": "node scripts/print-schema.js",
+    "users": "node scripts/manage-users.js"
+  },
+  "dependencies": {
+    "mysql2": "^3.11.0"
+  }
+}
